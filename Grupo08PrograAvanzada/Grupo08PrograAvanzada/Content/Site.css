@@ -19,3 +19,130 @@ textarea {
         padding: 0;
     }
 }
+
+/* Inicio Sidebar*/
+.app-layout {
+    display: flex;
+}
+
+.app-content {
+    flex: 1;
+    padding: 24px;
+}
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #0f1115;
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    box-sizing: border-box;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.sidebar-logo {
+    width: 38px;
+    height: 38px;
+    background: #16a34a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.sidebar-title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.sidebar-subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.sidebar-label {
+    font-size: 11px;
+    color: #6b7280;
+    letter-spacing: .05em;
+    margin: 18px 8px 8px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+    .sidebar-item:hover {
+        background: #1a1d23;
+    }
+
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid #1f2937;
+}
+
+.sidebar-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #374151;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sidebar-user-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sidebar-user-role {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px;
+    background: #1a1d23;
+    border-radius: 8px;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+}
+
+    .sidebar-logout:hover {
+        background: #262a32;
+    }
+/* Fin Sidebar*/

@@ -11,7 +11,13 @@ namespace Grupo08PrograAvanzada.Componentes
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
+
+        protected void btnCerrar_Click(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
