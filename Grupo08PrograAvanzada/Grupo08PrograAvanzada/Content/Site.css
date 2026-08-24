@@ -146,3 +146,64 @@ textarea {
         background: #262a32;
     }
 /* Fin Sidebar*/
+
+/* Inicio Button */
+
+.btn {
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Inicio de Tipo de botones */
+
+.btn-save {
+    background-color: green;
+    border-color: green;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: darkgreen;
+}
+
+.btn-cancel {
+    background-color: ghostwhite;
+    border-color: ghostwhite;
+    color: black;
+}
+
+.btn-cancel:hover {
+    background-color: lightgrey;
+}
+
+.btn-alert {
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+.btn-alert:hover {
+    background-color: darkred;
+}
+/* Fin de Tipos de Botones */
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+/* Fin de Botones */
