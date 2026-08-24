@@ -208,7 +208,7 @@ textarea {
 }
 /* Fin de Botones */
 
-/* Inicio DDL */
+/* Inicio Drop Dawn List */
 .combo-ocupamas {
     display: flex;
     flex-direction: column;
@@ -245,4 +245,60 @@ textarea {
         border-color: #22b573;
         box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
     }
-/* Fin DDL */
+/* Fin Drop Dawn List */
+
+/* Inicio Input */
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.input-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.input-text {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .input-text:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+
+/* Tamaños */
+.input-small {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-height: 32px;
+}
+
+.input-large {
+    font-size: 15px;
+    padding: 11px 14px;
+    min-height: 42px;
+}
+
+/* Mensaje de error */
+.input-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Fin Input */
