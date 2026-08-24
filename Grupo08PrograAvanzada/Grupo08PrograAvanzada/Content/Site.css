@@ -207,3 +207,42 @@ textarea {
     border-radius: 4px;
 }
 /* Fin de Botones */
+
+/* Inicio DDL */
+.combo-ocupamas {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.combo-enfila {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.combo-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.combo-select {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+}
+
+    .combo-select:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+/* Fin DDL */

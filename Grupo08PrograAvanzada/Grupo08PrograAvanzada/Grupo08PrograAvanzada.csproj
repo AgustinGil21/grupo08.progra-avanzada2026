@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Componentes\Button.ascx" />
+    <Content Include="Componentes\DropdownList.ascx" />
     <Content Include="Componentes\Sidebar.ascx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -201,6 +202,13 @@
     </Compile>
     <Compile Include="Componentes\Button.ascx.designer.cs">
       <DependentUpon>Button.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\DropdownList.ascx.cs">
+      <DependentUpon>DropdownList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\DropdownList.ascx.designer.cs">
+      <DependentUpon>DropdownList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Componentes\Sidebar.ascx.cs">
       <DependentUpon>Sidebar.ascx</DependentUpon>
