@@ -372,3 +372,27 @@ textarea {
     }
 
     /* Fin barra de busqueda */
+
+/* Inicio Card */
+
+.card-caja {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card-titulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e7ecf2;
+    margin-bottom: 16px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Fin card */
