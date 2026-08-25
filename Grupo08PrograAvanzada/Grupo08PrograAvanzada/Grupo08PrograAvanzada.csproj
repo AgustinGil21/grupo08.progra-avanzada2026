@@ -99,6 +99,7 @@
   <ItemGroup>
     <Content Include="Componentes\Buscar.ascx" />
     <Content Include="Componentes\Button.ascx" />
+    <Content Include="Componentes\Card.ascx" />
     <Content Include="Componentes\Checkbox.ascx" />
     <Content Include="Componentes\DropdownList.ascx" />
     <Content Include="Componentes\Input.ascx" />
@@ -212,6 +213,13 @@
     </Compile>
     <Compile Include="Componentes\Button.ascx.designer.cs">
       <DependentUpon>Button.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\Card.ascx.cs">
+      <DependentUpon>Card.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\Card.ascx.designer.cs">
+      <DependentUpon>Card.ascx</DependentUpon>
     </Compile>
     <Compile Include="Componentes\Checkbox.ascx.cs">
       <DependentUpon>Checkbox.ascx</DependentUpon>
