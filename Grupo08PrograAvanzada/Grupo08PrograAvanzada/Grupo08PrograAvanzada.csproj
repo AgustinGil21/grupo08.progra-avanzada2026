@@ -97,6 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Componentes\Buscar.ascx" />
     <Content Include="Componentes\Button.ascx" />
     <Content Include="Componentes\Checkbox.ascx" />
     <Content Include="Componentes\DropdownList.ascx" />
@@ -198,6 +199,13 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Componentes\Buscar.ascx.cs">
+      <DependentUpon>Buscar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\Buscar.ascx.designer.cs">
+      <DependentUpon>Buscar.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Componentes\Button.ascx.cs">
       <DependentUpon>Button.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

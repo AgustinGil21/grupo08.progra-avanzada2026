@@ -331,3 +331,44 @@ textarea {
 }
 
 /* Fin Checkbox */
+
+/* Inicio barra de busqueda */
+
+.busqueda-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.busqueda-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.busqueda-fila {
+    display: flex;
+    gap: 10px;
+}
+
+.busqueda-input {
+    flex: 1;
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+}
+
+    .busqueda-input:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+
+    /* Fin barra de busqueda */
