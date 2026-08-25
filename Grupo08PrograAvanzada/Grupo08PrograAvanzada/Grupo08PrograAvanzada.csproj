@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Componentes\Button.ascx" />
+    <Content Include="Componentes\Checkbox.ascx" />
     <Content Include="Componentes\DropdownList.ascx" />
     <Content Include="Componentes\Input.ascx" />
     <Content Include="Componentes\Sidebar.ascx" />
@@ -203,6 +204,13 @@
     </Compile>
     <Compile Include="Componentes\Button.ascx.designer.cs">
       <DependentUpon>Button.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\Checkbox.ascx.cs">
+      <DependentUpon>Checkbox.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\Checkbox.ascx.designer.cs">
+      <DependentUpon>Checkbox.ascx</DependentUpon>
     </Compile>
     <Compile Include="Componentes\DropdownList.ascx.cs">
       <DependentUpon>DropdownList.ascx</DependentUpon>

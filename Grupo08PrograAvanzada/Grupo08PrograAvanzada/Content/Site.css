@@ -302,3 +302,32 @@ textarea {
 }
 
 /* Fin Input */
+
+/* Inicio Checkbox */
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.checkbox-input {
+    width: 16px;
+    height: 16px;
+    accent-color: #22b573; /* verde consistente con focus */
+    cursor: pointer;
+}
+
+.checkbox-label {
+    font-size: 13px;
+    color: #e7ecf2;
+}
+
+.checkbox-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Fin Checkbox */
