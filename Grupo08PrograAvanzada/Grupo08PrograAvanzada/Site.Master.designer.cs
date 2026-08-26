@@ -15,6 +15,15 @@ namespace Grupo08PrograAvanzada
     {
 
         /// <summary>
+        /// Control Sidebar1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::Grupo08PrograAvanzada.Componentes.Sidebar Sidebar1;
+
+        /// <summary>
         /// Control MainContent.
         /// </summary>
         /// <remarks>

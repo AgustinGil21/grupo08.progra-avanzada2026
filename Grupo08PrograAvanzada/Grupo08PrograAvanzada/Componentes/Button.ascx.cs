@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Grupo08PrograAvanzada.Componentes
+{
+    public enum TypeButton
+    {
+        Save,
+        Cancel,
+        Alert
+    }
+
+    public enum ButtonSize
+    {
+        Small,
+        Large
+    }
+    public partial class Button : System.Web.UI.UserControl
+    {
+        public event EventHandler ButtonClick;
+
+        public string TextButton
+        {
+            get { return lit_texto_btn.Text; }
+            set { lit_texto_btn.Text = value; }
+        }
+
+        public TypeButton TypeButton { get; set; } = TypeButton.Save;
+        public ButtonSize ButtonSize { get; set; } = ButtonSize.Large;
+
+        public bool Enabled
+        {
+            get { return btn_interno.Enabled; }
+            set { btn_interno.Enabled = value; }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                ApplyStyle();
+            }
+        }
+
+        private void ApplyStyle()
+        {
+            string css = "btn ";
+
+            switch (TypeButton)
+            {
+                case TypeButton.Save:
+                    css = css + "btn-save";
+                    break;
+                case TypeButton.Cancel:
+                    css = css + "btn-cancel";
+                    break;
+                case TypeButton.Alert:
+                    css = css + "btn-alert";
+                    break;
+            }
+
+            if (ButtonSize == ButtonSize.Small)
+            {
+                css = css + " btn-small";
+            }
+            
+            btn_interno.CssClass = css;
+        }
+
+        protected void btn_interno_Click(object sender, EventArgs e)
+        {
+            if (ButtonClick != null)
+            {
+                ButtonClick(this, e);
+            }
+        }
+    }
+}

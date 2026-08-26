@@ -19,3 +19,380 @@ textarea {
         padding: 0;
     }
 }
+
+/* Inicio Sidebar*/
+.app-layout {
+    display: flex;
+}
+
+.app-content {
+    flex: 1;
+    padding: 24px;
+}
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #0f1115;
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    box-sizing: border-box;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.sidebar-logo {
+    width: 38px;
+    height: 38px;
+    background: #16a34a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.sidebar-title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.sidebar-subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.sidebar-label {
+    font-size: 11px;
+    color: #6b7280;
+    letter-spacing: .05em;
+    margin: 18px 8px 8px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+    .sidebar-item:hover {
+        background: #1a1d23;
+    }
+
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid #1f2937;
+}
+
+.sidebar-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #374151;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sidebar-user-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sidebar-user-role {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px;
+    background: #1a1d23;
+    border-radius: 8px;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+}
+
+    .sidebar-logout:hover {
+        background: #262a32;
+    }
+/* Fin Sidebar*/
+
+/* Inicio Button */
+
+.btn {
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Inicio de Tipo de botones */
+
+.btn-save {
+    background-color: green;
+    border-color: green;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: darkgreen;
+}
+
+.btn-cancel {
+    background-color: ghostwhite;
+    border-color: ghostwhite;
+    color: black;
+}
+
+.btn-cancel:hover {
+    background-color: lightgrey;
+}
+
+.btn-alert {
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+.btn-alert:hover {
+    background-color: darkred;
+}
+/* Fin de Tipos de Botones */
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+/* Fin de Botones */
+
+/* Inicio Drop Dawn List */
+.combo-ocupamas {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.combo-enfila {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.combo-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.combo-select {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+}
+
+    .combo-select:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+/* Fin Drop Dawn List */
+
+/* Inicio Input */
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.input-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.input-text {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .input-text:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+
+/* Tamaños */
+.input-small {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-height: 32px;
+}
+
+.input-large {
+    font-size: 15px;
+    padding: 11px 14px;
+    min-height: 42px;
+}
+
+/* Mensaje de error */
+.input-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Fin Input */
+
+/* Inicio Checkbox */
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.checkbox-input {
+    width: 16px;
+    height: 16px;
+    accent-color: #22b573; /* verde consistente con focus */
+    cursor: pointer;
+}
+
+.checkbox-label {
+    font-size: 13px;
+    color: #e7ecf2;
+}
+
+.checkbox-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Fin Checkbox */
+
+/* Inicio barra de busqueda */
+
+.busqueda-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.busqueda-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin-bottom: 6px;
+}
+
+.busqueda-fila {
+    display: flex;
+    gap: 10px;
+}
+
+.busqueda-input {
+    flex: 1;
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+}
+
+    .busqueda-input:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
+
+    /* Fin barra de busqueda */
+
+/* Inicio Card */
+
+.card-box {
+    background-color: #131a23;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card-tittle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e7ecf2;
+    margin-bottom: 16px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Fin card */
