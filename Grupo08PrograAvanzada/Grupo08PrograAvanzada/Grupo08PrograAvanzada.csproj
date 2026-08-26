@@ -103,6 +103,7 @@
     <Content Include="Componentes\Checkbox.ascx" />
     <Content Include="Componentes\DropdownList.ascx" />
     <Content Include="Componentes\Input.ascx" />
+    <Content Include="Componentes\Modal.ascx" />
     <Content Include="Componentes\Sidebar.ascx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -241,6 +242,13 @@
     </Compile>
     <Compile Include="Componentes\Input.ascx.designer.cs">
       <DependentUpon>Input.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\Modal.ascx.cs">
+      <DependentUpon>Modal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\Modal.ascx.designer.cs">
+      <DependentUpon>Modal.ascx</DependentUpon>
     </Compile>
     <Compile Include="Componentes\Sidebar.ascx.cs">
       <DependentUpon>Sidebar.ascx</DependentUpon>
