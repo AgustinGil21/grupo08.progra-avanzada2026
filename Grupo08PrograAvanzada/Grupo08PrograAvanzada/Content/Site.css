@@ -375,14 +375,14 @@ textarea {
 
 /* Inicio Card */
 
-.card-caja {
+.card-box {
     background-color: #131a23;
     border: 1px solid #2e3846;
     border-radius: 8px;
     padding: 20px;
 }
 
-.card-titulo {
+.card-tittle {
     font-size: 1.1rem;
     font-weight: 600;
     color: #e7ecf2;

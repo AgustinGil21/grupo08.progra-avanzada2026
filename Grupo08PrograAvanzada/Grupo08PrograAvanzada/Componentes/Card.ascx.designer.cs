@@ -24,13 +24,13 @@ namespace Grupo08PrograAvanzada.Componentes
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_titulo;
 
         /// <summary>
-        /// Control lit_titulo.
+        /// Control lit_tittle.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lit_titulo;
+        protected global::System.Web.UI.WebControls.Literal lit_tittle;
 
         /// <summary>
         /// Control ph_body.
