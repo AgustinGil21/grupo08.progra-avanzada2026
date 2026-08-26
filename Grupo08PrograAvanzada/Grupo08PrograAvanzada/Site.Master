@@ -58,5 +58,22 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
+
+    <script type="text/javascript">
+        function mostrarModal(idOverlay) {
+            var overlay = document.getElementById(idOverlay);
+            if (overlay) {
+                overlay.classList.add('activo');
+            }
+        }
+
+        function cerrarModal(idOverlay) {
+            var overlay = document.getElementById(idOverlay);
+            if (overlay) {
+                overlay.classList.remove('activo');
+            }
+        }
+    </script>
+
 </body>
 </html>
