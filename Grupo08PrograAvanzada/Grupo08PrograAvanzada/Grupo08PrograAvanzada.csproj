@@ -105,6 +105,7 @@
     <Content Include="Componentes\Input.ascx" />
     <Content Include="Componentes\Modal.ascx" />
     <Content Include="Componentes\Sidebar.ascx" />
+    <Content Include="Componentes\Table.ascx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -229,6 +230,7 @@
     <Compile Include="Componentes\Checkbox.ascx.designer.cs">
       <DependentUpon>Checkbox.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Componentes\ColumnName.cs" />
     <Compile Include="Componentes\DropdownList.ascx.cs">
       <DependentUpon>DropdownList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -256,6 +258,13 @@
     </Compile>
     <Compile Include="Componentes\Sidebar.ascx.designer.cs">
       <DependentUpon>Sidebar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\Table.ascx.cs">
+      <DependentUpon>Table.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\Table.ascx.designer.cs">
+      <DependentUpon>Table.ascx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

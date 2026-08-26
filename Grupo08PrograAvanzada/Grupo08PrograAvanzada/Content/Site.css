@@ -469,3 +469,24 @@ textarea {
 }
 
 /* Fin Modal */
+
+/* Inicio Table */
+.table-container {
+    margin: 1.5rem 0;
+}
+
+.table-container table thead th {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #6c757d;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-container-empty {
+    display: block;
+    text-align: center;
+    padding: 2rem 0;
+    font-style: italic;
+}
+/* Fin TablaGenerica */
