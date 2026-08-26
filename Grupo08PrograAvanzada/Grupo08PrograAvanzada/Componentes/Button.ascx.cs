@@ -29,6 +29,11 @@ namespace Grupo08PrograAvanzada.Componentes
             get { return lit_texto_btn.Text; }
             set { lit_texto_btn.Text = value; }
         }
+        public string OnClientClick
+        {
+            get { return btn_interno.OnClientClick; }
+            set { btn_interno.OnClientClick = value; }
+        }
 
         public TypeButton TypeButton { get; set; } = TypeButton.Save;
         public ButtonSize ButtonSize { get; set; } = ButtonSize.Large;
