@@ -12,7 +12,8 @@ namespace Grupo08PrograAvanzada.Componentes
         Text,
         Email,
         Password,
-        Number
+        Number,
+        Date
     }
 
     public enum InputSize
@@ -91,6 +92,9 @@ namespace Grupo08PrograAvanzada.Componentes
                 case InputType.Number:
                     css += "input-number";
                     break;
+                case InputType.Date:
+                    css += "input-date";
+                    break;
                 default:
                     css += "input-text";
                     break;
@@ -114,6 +118,9 @@ namespace Grupo08PrograAvanzada.Componentes
                     break;
                 case InputType.Number:
                     txt_interno.TextMode = TextBoxMode.Number;
+                    break;
+                case InputType.Date:
+                    txt_interno.TextMode = TextBoxMode.Date;
                     break;
                 default:
                     txt_interno.TextMode = TextBoxMode.SingleLine;
