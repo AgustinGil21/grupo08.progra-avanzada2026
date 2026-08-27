@@ -97,6 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Componentes\AgregarItems.ascx" />
     <Content Include="Componentes\Buscar.ascx" />
     <Content Include="Componentes\Button.ascx" />
     <Content Include="Componentes\Card.ascx" />
@@ -202,6 +203,12 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Componentes\AgregarItems.ascx.cs">
+      <DependentUpon>AgregarItems.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\AgregarItems.ascx.designer.cs">
+      <DependentUpon>AgregarItems.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Componentes\Buscar.ascx.cs">
       <DependentUpon>Buscar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
