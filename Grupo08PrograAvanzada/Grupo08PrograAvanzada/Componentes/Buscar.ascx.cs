@@ -14,16 +14,31 @@ namespace Grupo08PrograAvanzada.Componentes
         public TextBox Input => txtBuscar;
 
         public event EventHandler BuscarClick;
+
+        [TemplateContainer(typeof(FiltersContainer))]
+        [PersistenceMode(PersistenceMode.InnerProperty)]
+        public ITemplate Filters { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             lblTitulo.Text = Titulo;
             lblTitulo.Visible = !string.IsNullOrEmpty(Titulo);
             txtBuscar.Attributes["placeholder"] = Placeholder;
 
+            if (Filters != null && ph_filtros.Controls.Count == 0)
+            {
+                var container = new FiltersContainer();
+                Filters.InstantiateIn(container);
+                ph_filtros.Controls.Add(container);
+            }
         }
         protected void btnBuscar_ButtonClick(object sender, EventArgs e)
         {
             BuscarClick?.Invoke(this, e);
+        }
+
+        public class FiltersContainer : PlaceHolder, INamingContainer
+        {
+
         }
     }
 }
