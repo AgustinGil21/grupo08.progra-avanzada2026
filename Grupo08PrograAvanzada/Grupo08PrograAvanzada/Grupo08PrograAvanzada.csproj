@@ -97,6 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AccesoDenegado.aspx" />
     <Content Include="Componentes\AgregarItems.ascx" />
     <Content Include="Componentes\AvisoEstado.ascx" />
     <Content Include="Componentes\Buscar.ascx" />
@@ -131,6 +132,7 @@
     <Content Include="GaritasAccesos.aspx" />
     <Content Include="Global.asax" />
     <Content Include="HistorialMovimientos.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="Lotes.aspx" />
     <Content Include="LotesAdmin.aspx" />
     <Content Include="PadronPersonas.aspx" />
@@ -193,7 +195,6 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
-    <Content Include="TableroGeneral.aspx" />
     <Content Include="UsuariosAccesos.aspx" />
     <Content Include="Vehiculos.aspx" />
     <Content Include="ViewSwitcher.ascx" />
@@ -203,6 +204,13 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccesoDenegado.aspx.cs">
+      <DependentUpon>AccesoDenegado.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AccesoDenegado.aspx.designer.cs">
+      <DependentUpon>AccesoDenegado.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Componentes\AgregarItems.ascx.cs">
@@ -289,6 +297,7 @@
     <Compile Include="Componentes\Table.ascx.designer.cs">
       <DependentUpon>Table.ascx</DependentUpon>
     </Compile>
+    <Compile Include="ControlFinder.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -312,6 +321,13 @@
     </Compile>
     <Compile Include="HistorialMovimientos.aspx.designer.cs">
       <DependentUpon>HistorialMovimientos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Lotes.aspx.cs">
       <DependentUpon>Lotes.aspx</DependentUpon>
@@ -341,6 +357,9 @@
     <Compile Include="PadronPersonasAdmin.aspx.designer.cs">
       <DependentUpon>PadronPersonasAdmin.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PaginaBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ParametrosSistema.aspx.cs">
       <DependentUpon>ParametrosSistema.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -369,13 +388,6 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
-    </Compile>
-    <Compile Include="TableroGeneral.aspx.cs">
-      <DependentUpon>TableroGeneral.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TableroGeneral.aspx.designer.cs">
-      <DependentUpon>TableroGeneral.aspx</DependentUpon>
     </Compile>
     <Compile Include="UsuariosAccesos.aspx.cs">
       <DependentUpon>UsuariosAccesos.aspx</DependentUpon>

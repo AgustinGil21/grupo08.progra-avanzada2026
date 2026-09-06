@@ -12,12 +12,14 @@ namespace Grupo08PrograAvanzada.Componentes
         [TemplateContainer (typeof(CardContenedor))]
         [PersistenceMode(PersistenceMode.InnerProperty)]
         public ITemplate Contenido { get; set; }
-
-        protected void Page_Load(object sender, EventArgs e)
+        protected override void OnInit(EventArgs e)
         {
+            base.OnInit(e);
+
             if (Contenido != null && ph_body.Controls.Count == 0)
             {
                 var contenedor = new CardContenedor();
+                contenedor.ID = "contenedorInterno";   // ← ID fijo y estable
                 Contenido.InstantiateIn(contenedor);
                 ph_body.Controls.Add(contenedor);
             }
