@@ -594,3 +594,28 @@ textarea {
     color: #b71c1c;
 }
 /* Fin AvisoEstado */
+
+/* Inicio Login */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #0f1115;
+}
+
+.login-page .card-caja {
+    width: 100%;
+    max-width: 360px;
+}
+
+.login-page h2 {
+    color: #e7ecf2;
+    margin: 0 0 4px;
+}
+
+.login-page p {
+    color: #8a97a8;
+    margin: 0 0 16px;
+}
+/* Fin Login */

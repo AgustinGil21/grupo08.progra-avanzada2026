@@ -7,8 +7,12 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    public partial class PadronPersonasAdmin : System.Web.UI.Page
+    public partial class PadronPersonasAdmin : PaginaBase
     {
+        protected override string RolRequerido
+        {
+            get { return "Administrador"; }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
 

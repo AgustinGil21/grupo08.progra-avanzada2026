@@ -7,8 +7,13 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    public partial class Lotes : System.Web.UI.Page
+    public partial class Lotes : PaginaBase
     {
+        protected override string RolRequerido
+        {
+            get { return "Guardia"; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 

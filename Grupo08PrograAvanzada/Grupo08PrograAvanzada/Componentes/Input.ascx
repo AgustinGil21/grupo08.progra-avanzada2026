@@ -3,7 +3,7 @@
 <div class="input-wrapper input-<%= Size.ToString().ToLower() %>">
     <asp:Label ID="lblLabel" runat="server" CssClass="input-label" />
     <asp:TextBox ID="txt_interno" runat="server" CssClass="input-text" 
-                 OnTextChanged="txt_interno_TextChanged" AutoPostBack="true" />
+                 OnTextChanged="txt_interno_TextChanged" AutoPostBack="false" />
     <div class="input-error">
         <asp:Literal ID="litMensajeError" runat="server" Visible="false" />
     </div>
