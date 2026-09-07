@@ -19,7 +19,7 @@
                     <p> Login </p>
 
                     <div id="login_datos1" runat="server">
-                        <uc:Input ID="input_usuario" runat="server" Label="Usuario" Type="Text" />
+                        <uc:Input ID="input_usuario" runat="server" Label="Correo" Type="Email" />
                         <uc:Input ID="input_password" runat="server" Label="Contraseña" Type="Password" />
                         <uc:Button ID="btn_login_1" runat="server" TextButton="Iniciar Sesión" 
                             TypeButton="Save" OnButtonClick="btn_login_1_ButtonClick" />
