@@ -11,7 +11,7 @@ namespace BIZ
     {
         public static string ObtenerCadenaDeConexion()
         {
-            return ConfigurationManager.ConnectionStrings["practica"].ConnectionString;
+            return ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
         }
 
         public static System.Data.SqlClient.SqlConnection AbrirConexion()
