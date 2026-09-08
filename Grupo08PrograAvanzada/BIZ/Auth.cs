@@ -272,5 +272,30 @@ namespace BIZ
                 throw new Exception("No se pudo dar de alta la persona: " + ex.Message);
             }
         }
+
+        public static bool PuedeAcceder(int idUsuario, string ruta)
+        {
+            string q = @"
+            SELECT 1
+            FROM Usuario u
+            INNER JOIN NivelAcceso na ON na.id_nivel_acceso = u.id_nivel_acceso
+            INNER JOIN NivelAccesoUrl nau ON nau.id_nivel_acceso = na.id_nivel_acceso
+            INNER JOIN Url url ON url.id_url = nau.id_url
+            WHERE u.id_usuario = @idUsuario AND url.descripcion = @ruta;";
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@ruta", ruta);
+                    return cmd.ExecuteScalar() != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo comprobar el acceso: " + ex.Message);
+            }
+        }
     }
 }
