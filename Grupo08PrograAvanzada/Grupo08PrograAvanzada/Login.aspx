@@ -26,6 +26,7 @@
                     </div>
 
                     <div id="login_datos_guardia" runat="server" visible="false">
+                        <asp:Label ID="lbl_error_guardia" runat="server" CssClass="input-error" Visible="false" />
                         <uc:DropdownList ID="ddl_garita" Titulo="Garita" runat="server" />
                         <uc:DropdownList ID="ddl_turno" Titulo="Turno" runat="server" />
                         <uc:Button ID="btn_login_2" TextButton="Iniciar Turno" 
