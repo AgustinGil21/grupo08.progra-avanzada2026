@@ -25,18 +25,22 @@ namespace Grupo08PrograAvanzada
             string user = inpUsuario.Value;
             string password = inpPassword.Value;
 
-            DataTable dtUsuario = ValidarLoginTemporal(user, password);
+            DataSet dsUsuario;
 
-            if (dtUsuario == null || dtUsuario.Rows.Count == 0)
+            try
             {
-                inpPassword.MensajeError = "Usuario o contraseña incorrectos.";
+                dsUsuario = BIZ.Auth.IniciarSesion(user, password);
+            }
+            catch (Exception)
+            {
+                inpPassword.MensajeError = "Correo o contraseña incorrectos";
                 return;
             }
 
-            DataRow fila = dtUsuario.Rows[0];
-            Session["IdUsuario"] = fila["IdUsuario"];
-            Session["Usuario"] = fila["Usuario"];
-            Session["RolRequerido"] = fila["RolRequerido"].ToString();
+            DataRow fila = dsUsuario.Tables[0].Rows[0];
+            Session["Id_usuario"] = fila["id_usuario"];
+            Session["Usuario"] = fila["correo_electronico"];
+            Session["RolRequerido"] = fila["rol"].ToString();
 
             if (Session["RolRequerido"].ToString() == "Administrador")
             {
@@ -44,40 +48,63 @@ namespace Grupo08PrograAvanzada
             }
             else if (Session["RolRequerido"].ToString() == "Guardia")
             {
+                
+                Session["PasswordTemporal"] = password;
+
                 inpUsuario.Enabled = false;
                 inpPassword.Enabled = false;
                 btnLogin1.Visible = false;
                 divGuardia.Visible = true;
+
+                CargarGaritasYTurnos();
             }
+        }
+
+        private void CargarGaritasYTurnos()
+        {
+            var ddlGarita = (Componentes.DropdownList)ControlFinder.BuscarControl(this, "ddl_garita");
+            var ddlTurno = (Componentes.DropdownList)ControlFinder.BuscarControl(this, "ddl_turno");
+
+            DataSet dsGaritas = BIZ.Garita.ListarGaritas();
+            ddlGarita.Combo.DataSource = dsGaritas.Tables[0];
+            ddlGarita.Combo.DataTextField = "descripcion";
+            ddlGarita.Combo.DataValueField = "id_garita";
+            ddlGarita.Combo.DataBind();
+
+            DataSet dsTurnos = BIZ.Turno.ListarTurnos();
+            ddlTurno.Combo.DataSource = dsTurnos.Tables[0];
+            ddlTurno.Combo.DataTextField = "descripcion";
+            ddlTurno.Combo.DataValueField = "id_turno";
+            ddlTurno.Combo.DataBind();
         }
 
         protected void btn_login_2_ButtonClick(object sender, EventArgs e)
         {
             var ddlGarita = (Componentes.DropdownList)ControlFinder.BuscarControl(this, "ddl_garita");
             var ddlTurno = (Componentes.DropdownList)ControlFinder.BuscarControl(this, "ddl_turno");
+            var lbl_error_guardia = (Label)ControlFinder.BuscarControl(this, "lbl_error_guardia");
 
-            Session["IdGarita"] = ddlGarita.Combo.SelectedValue;
+            string correo = Session["Usuario"].ToString();
+            string password = Session["PasswordTemporal"].ToString();
+            int idGarita = Convert.ToInt32(ddlGarita.Combo.SelectedValue);
+            int idTurno = Convert.ToInt32(ddlTurno.Combo.SelectedValue);
+
+            try
+            {
+                BIZ.Auth.IniciarSesion(correo, password, idGarita, idTurno);
+            }
+            catch (Exception ex)
+            {
+                lbl_error_guardia.Visible = true;
+                lbl_error_guardia.Text = "No se pudo registrar el turno en esta sesion: " + ex.Message;
+                return;
+            }
+
+            Session.Remove("PasswordTemporal");
+
+            Session["IdGarita"] = idGarita;
             Session["Turno"] = ddlTurno.Combo.SelectedItem.Text;
             Response.Redirect("PadronPersonas.aspx");
-        }
-
-        private DataTable ValidarLoginTemporal(string user, string password)
-        {
-            var dt = new DataTable();
-            dt.Columns.Add("IdUsuario");
-            dt.Columns.Add("Usuario");
-            dt.Columns.Add("RolRequerido");
-
-            if (user == "rgutierrez@gmail.com" && password == "1234")
-            {
-                dt.Rows.Add(3, "rgutierrez@gmail.com", "Guardia");
-            }
-            else if (user == "sferrer@gmail.com" && password == "1234")
-            {
-                dt.Rows.Add(1, "sferrer@gmail.com", "Administrador");
-            }
-
-            return dt;
         }
     }
 }

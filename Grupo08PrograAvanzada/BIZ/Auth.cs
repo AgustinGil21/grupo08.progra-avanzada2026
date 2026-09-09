@@ -47,9 +47,14 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@correo", correo);
 
                     var resultado = cmd.ExecuteScalar();
-                    return resultado == null || resultado == DBNull.Value
-                        ? null
-                        : (string)resultado;
+
+                    if (resultado == null || resultado == DBNull.Value)
+                        return null;
+
+                    if (resultado is byte[] bytes)
+                        return System.Text.Encoding.Unicode.GetString(bytes);
+
+                    return (string)resultado;
                 }
             }
             catch (Exception ex)
@@ -119,8 +124,13 @@ namespace BIZ
             int idUsuario = Convert.ToInt32(datosUsuario.Tables[0].Rows[0]["id_usuario"]);
 
             string q = @"
-            INSERT INTO GaritaUsuario(id_garita_usuario, id_usuario, id_garita, id_turno, fecha)
-            VALUES((SELECT ISNULL(MAX(id_garita_usuario), 0) + 1 FROM GaritaUsuario), @idUsuario, @idGarita, @idTurno, GETDATE())";
+            IF NOT EXISTS (
+                SELECT 1 FROM GaritaUsuario
+                WHERE id_garita = @idGarita AND id_usuario = @idUsuario
+                  AND fecha = CAST(GETDATE() AS date) AND id_turno = @idTurno
+            )
+            INSERT INTO GaritaUsuario(id_garita, id_usuario, fecha, id_turno)
+            VALUES(@idGarita, @idUsuario, CAST(GETDATE() AS date), @idTurno)";
 
             try
             {
@@ -132,12 +142,9 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@idGarita", idGarita);
                     cmd.Parameters.AddWithValue("@idTurno", idTurno);
 
-                    if (cmd.ExecuteNonQuery() > 0)
-                    {
-                        return datosUsuario;
-                    }
+                    cmd.ExecuteNonQuery();
 
-                    throw new Exception("No se pudo iniciar sesion debido a un problema desconocido");
+                    return datosUsuario;
                 }
             }
             catch (Exception ex)
@@ -198,6 +205,7 @@ namespace BIZ
         nroDocumento);
 
             var hashContrasenia = Hash.HashearContrasenia(contrasenia);
+            byte[] hashContraseniaBytes = System.Text.Encoding.Unicode.GetBytes(hashContrasenia);
 
             string q = @"
       SET XACT_ABORT ON;
@@ -227,7 +235,7 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@idCuenta", idCuenta);
                     cmd.Parameters.AddWithValue("@idNivelAcceso", idNivelAcceso);
                     cmd.Parameters.AddWithValue("@correo", correo);
-                    cmd.Parameters.AddWithValue("@hashContrasenia", hashContrasenia);
+                    cmd.Parameters.Add("@hashContrasenia", System.Data.SqlDbType.VarBinary).Value = hashContraseniaBytes;
                     return (int)cmd.ExecuteScalar();
                 }
             }
