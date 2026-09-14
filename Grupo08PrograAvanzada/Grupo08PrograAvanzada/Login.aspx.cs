@@ -68,13 +68,13 @@ namespace Grupo08PrograAvanzada
             dt.Columns.Add("Usuario");
             dt.Columns.Add("RolRequerido");
 
-            if (user == "rgutierrez" && password == "1234")
+            if (user == "rgutierrez@gmail.com" && password == "1234")
             {
-                dt.Rows.Add(3, "rgutierrez", "Guardia");
+                dt.Rows.Add(3, "rgutierrez@gmail.com", "Guardia");
             }
-            else if (user == "sferrer" && password == "1234")
+            else if (user == "sferrer@gmail.com" && password == "1234")
             {
-                dt.Rows.Add(1, "sferrer", "Administrador");
+                dt.Rows.Add(1, "sferrer@gmail.com", "Administrador");
             }
 
             return dt;
