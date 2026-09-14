@@ -23,7 +23,7 @@ namespace Grupo08PrograAvanzada
             
             if (RolRequerido != null && Session["RolRequerido"].ToString() != RolRequerido)
             {
-                Response.Redirect("~/AccessDenied.aspx");
+                Response.Redirect("~/AccesoDenegado.aspx");
             }
         }
     }
