@@ -11,7 +11,7 @@ namespace BIZ
     [Serializable]
     public class Auth
     {
-        private static bool CuentaExiste(string correo)
+        private static bool UsuarioExiste(string correo)
         {
             string q = @"SELECT TOP 1 1 FROM dbo.Usuario WHERE correo_electronico = @correo;";
 
@@ -27,6 +27,26 @@ namespace BIZ
             catch (Exception ex)
             {
                 throw new Exception("No se pudo comprobar si la cuenta ya existe: " + ex.Message);
+            }
+        }
+
+        private static bool PersonaExiste(string nroDocumento)
+        {
+            string q = @"SELECT TOP 1 1 FROM dbo.Persona p
+                         INNER JOIN dbo.Cuenta c ON p.id_cuenta = c.id_cuenta
+                         WHERE c.nro_documento = @nroDocumento;";
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@nroDocumento", nroDocumento);
+                    return cmd.ExecuteScalar() != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo comprobar si la persona ya existe: " + ex.Message);
             }
         }
 
@@ -82,7 +102,7 @@ namespace BIZ
             LEFT JOIN TipoDocumento td ON td.id_tipo_documento = c.id_tipo_documento
             WHERE u.correo_electronico = @correo AND c.id_estado = 1";
 
-            if (!CuentaExiste(correo))
+            if (!UsuarioExiste(correo))
             {
                 throw new Exception("La cuenta no existe");
             }
@@ -196,7 +216,7 @@ namespace BIZ
      DateTime fechaNacimiento, int idTipoDocumento, string nroDocumento,
      string correo, string contrasenia, int idNivelAcceso)
         {
-            if (CuentaExiste(correo))
+            if (UsuarioExiste(correo))
             {
                 throw new Exception("La cuenta ya existe");
             }
@@ -248,6 +268,11 @@ namespace BIZ
         public static int DarDeAltaPersona(string nombre, string apellido, int idPais, string telefono,
             DateTime fechaNacimiento, int idTipoDocumento, string nroDocumento, string fotoReferencia)
         {
+            if (PersonaExiste(nroDocumento))
+            {
+                return ObtenerIdPersonaPorNroDocumento(nroDocumento);
+            }
+
             int idCuenta = DarDeAltaCuenta(nombre, apellido, idPais, telefono, fechaNacimiento, idTipoDocumento,
         nroDocumento);
 
@@ -278,6 +303,35 @@ namespace BIZ
             catch (Exception ex)
             {
                 throw new Exception("No se pudo dar de alta la persona: " + ex.Message);
+            }
+        }
+
+        public static int ObtenerIdPersonaPorNroDocumento(string nroDocumento)
+        {
+            string q = @"
+            SELECT p.id_persona
+            FROM Persona p
+            INNER JOIN Cuenta c ON c.id_cuenta = p.id_cuenta
+            WHERE c.nro_documento = @nroDocumento;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@nroDocumento", nroDocumento);
+
+                    var resultado = cmd.ExecuteScalar();
+
+                    if (resultado == null || resultado == DBNull.Value)
+                        throw new Exception("No existe una persona con ese numero de documento");
+
+                    return Convert.ToInt32(resultado);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo obtener la persona: " + ex.Message);
             }
         }
 
