@@ -11,7 +11,7 @@ namespace Grupo08PrograAvanzada
 {
 
 
-    public partial class LotesAdmin
+    public partial class NuevaPersona
     {
     }
 }

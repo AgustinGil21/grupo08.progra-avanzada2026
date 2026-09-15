@@ -7,12 +7,8 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    public partial class HistorialMovimientos : PaginaBase
+    public partial class NuevaPersonaAdmin : System.Web.UI.Page
     {
-        protected override string RolRequerido
-        {
-            get { return "Guardia"; }
-        }
         protected void Page_Load(object sender, EventArgs e)
         {
 

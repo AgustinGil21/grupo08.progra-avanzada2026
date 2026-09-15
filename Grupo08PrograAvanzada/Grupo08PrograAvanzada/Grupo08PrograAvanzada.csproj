@@ -98,7 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AccesoDenegado.aspx" />
-    <Content Include="Componentes\AgregarItems.ascx" />
     <Content Include="Componentes\AvisoEstado.ascx" />
     <Content Include="Componentes\Buscar.ascx" />
     <Content Include="Componentes\Button.ascx" />
@@ -129,12 +128,11 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
-    <Content Include="GaritasAccesos.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="HistorialMovimientos.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Lotes.aspx" />
-    <Content Include="LotesAdmin.aspx" />
+    <Content Include="NuevaPersona.aspx" />
+    <Content Include="NuevaPersonaAdmin.aspx" />
     <Content Include="PadronPersonas.aspx" />
     <Content Include="PadronPersonasAdmin.aspx" />
     <Content Include="ParametrosSistema.aspx" />
@@ -213,12 +211,6 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Componentes\AgregarItems.ascx.cs">
-      <DependentUpon>AgregarItems.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Componentes\AgregarItems.ascx.designer.cs">
-      <DependentUpon>AgregarItems.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Componentes\AvisoEstado.ascx.cs">
       <DependentUpon>AvisoEstado.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -305,22 +297,8 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GaritasAccesos.aspx.cs">
-      <DependentUpon>GaritasAccesos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GaritasAccesos.aspx.designer.cs">
-      <DependentUpon>GaritasAccesos.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="HistorialMovimientos.aspx.cs">
-      <DependentUpon>HistorialMovimientos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HistorialMovimientos.aspx.designer.cs">
-      <DependentUpon>HistorialMovimientos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -336,12 +314,19 @@
     <Compile Include="Lotes.aspx.designer.cs">
       <DependentUpon>Lotes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="LotesAdmin.aspx.cs">
-      <DependentUpon>LotesAdmin.aspx</DependentUpon>
+    <Compile Include="NuevaPersona.aspx.cs">
+      <DependentUpon>NuevaPersona.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="LotesAdmin.aspx.designer.cs">
-      <DependentUpon>LotesAdmin.aspx</DependentUpon>
+    <Compile Include="NuevaPersona.aspx.designer.cs">
+      <DependentUpon>NuevaPersona.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NuevaPersonaAdmin.aspx.cs">
+      <DependentUpon>NuevaPersonaAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NuevaPersonaAdmin.aspx.designer.cs">
+      <DependentUpon>NuevaPersonaAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="PadronPersonas.aspx.cs">
       <DependentUpon>PadronPersonas.aspx</DependentUpon>
