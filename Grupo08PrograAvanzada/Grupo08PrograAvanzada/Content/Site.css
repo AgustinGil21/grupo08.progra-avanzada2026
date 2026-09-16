@@ -619,3 +619,99 @@ textarea {
     margin: 0 0 16px;
 }
 /* Fin Login */
+
+/* Inicio Nueva Persona y Nuevo Usuario*/
+.page-sub {
+    color: #8a97a8;
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+
+.form-card {
+    background: #131a23;
+    border: 1px solid #232c38;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.form-card h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin: 20px 0 12px;
+}
+
+.form-card h3:first-child {
+    margin-top: 0;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-row > * {
+    flex: 1;
+}
+
+.input-generico {
+    background-color: #0f1520;
+    border: 1px solid #2e3846;
+    border-radius: 8px;
+    color: #e7ecf2;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    min-height: 38px;
+    width: 100%;
+}
+
+.input-generico:focus {
+    outline: none;
+    border-color: #22b573;
+    box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+}
+
+.categorias-list label {
+    color: #e7ecf2;
+    font-size: 13.5px;
+    margin-right: 16px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.filtros-toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-usuarios th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #8a97a8;
+    padding: 10px 12px;
+    border-bottom: 1px solid #232c38;
+}
+
+.tabla-usuarios td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a2230;
+    font-size: 13.5px;
+    color: #e7ecf2;
+}
+/* Fin Nueva Persona y Nuevo Usuario*/
