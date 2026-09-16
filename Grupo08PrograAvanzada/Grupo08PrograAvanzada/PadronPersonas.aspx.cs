@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BIZ;
 
 namespace Grupo08PrograAvanzada
 {
@@ -31,7 +32,7 @@ namespace Grupo08PrograAvanzada
             ddl_categoria.Items.Clear();
             ddl_categoria.Items.Add(new ListItem("Seleccione una categoria", ""));
 
-            foreach (DataRow fila Categoria.ListarCategorias().Rows)
+            foreach (DataRow fila in Persona.ListarCategorias().Tables[0].Rows)
             {
                 ddl_categoria.Items.Add(new ListItem(fila["descripcion"].ToString(), fila["id_categoria"].ToString()));
             }

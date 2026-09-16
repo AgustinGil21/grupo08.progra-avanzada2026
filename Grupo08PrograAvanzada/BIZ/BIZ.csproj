@@ -43,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth.cs" />
+    <Compile Include="Cuenta.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="Garita.cs" />
+    <Compile Include="Pais.cs" />
+    <Compile Include="Persona.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Turno.cs" />
   </ItemGroup>
