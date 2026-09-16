@@ -620,6 +620,18 @@ textarea {
 }
 /* Fin Login */
 
+/* --- FONDO PRINCIPAL DE LA PÁGINA (Reemplaza el fondo blanco) --- */
+/* Fijate si tu contenedor usa ID #MainContent, o aplicáselo al body o a .main-content */
+body, #MainContent, .main-content {
+    background-color: #1e2733; /* El color de la sidebar pero un toque más claro */
+    color: #e7ecf2; /* Color de texto general claro */
+}
+
+/* Para que el título "Nueva Persona Categoría" se vea en blanco y resalte */
+h1, h2, .page-header h2 {
+    color: #ffffff;
+}
+
 /* Inicio Nueva Persona y Nuevo Usuario*/
 .page-sub {
     color: #8a97a8;
@@ -628,33 +640,33 @@ textarea {
 }
 
 .form-card {
-    background: #131a23;
+    background: #131a23; /* <-- Vuelve al color original que me pasaste */
     border: 1px solid #232c38;
     border-radius: 12px;
     padding: 20px 24px;
     margin-bottom: 20px;
 }
 
-.form-card h3 {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: .03em;
-    color: #8a97a8;
-    margin: 20px 0 12px;
-}
+    .form-card h3 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        color: #8a97a8;
+        margin: 20px 0 12px;
+    }
 
-.form-card h3:first-child {
-    margin-top: 0;
-}
+        .form-card h3:first-child {
+            margin-top: 0;
+        }
 
 .form-row {
     display: flex;
     gap: 16px;
 }
 
-.form-row > * {
-    flex: 1;
-}
+    .form-row > * {
+        flex: 1;
+    }
 
 .input-generico {
     background-color: #0f1520;
@@ -667,11 +679,11 @@ textarea {
     width: 100%;
 }
 
-.input-generico:focus {
-    outline: none;
-    border-color: #22b573;
-    box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
-}
+    .input-generico:focus {
+        outline: none;
+        border-color: #22b573;
+        box-shadow: 0 0 0 3px rgba(34,181,115,0.12);
+    }
 
 .categorias-list label {
     color: #e7ecf2;
@@ -699,19 +711,19 @@ textarea {
     border-collapse: collapse;
 }
 
-.tabla-usuarios th {
-    text-align: left;
-    font-size: 11px;
-    text-transform: uppercase;
-    color: #8a97a8;
-    padding: 10px 12px;
-    border-bottom: 1px solid #232c38;
-}
+    .tabla-usuarios th {
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #8a97a8;
+        padding: 10px 12px;
+        border-bottom: 1px solid #232c38;
+    }
 
-.tabla-usuarios td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #1a2230;
-    font-size: 13.5px;
-    color: #e7ecf2;
-}
+    .tabla-usuarios td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #1a2230;
+        font-size: 13.5px;
+        color: #e7ecf2;
+    }
 /* Fin Nueva Persona y Nuevo Usuario*/

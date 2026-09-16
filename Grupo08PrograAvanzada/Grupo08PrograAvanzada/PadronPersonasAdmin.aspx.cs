@@ -51,7 +51,7 @@ namespace Grupo08PrograAvanzada
                 new ColumnName { CampoDato = "Estado",    Titulo = "ESTADO" }
             };
 
-            ucTablaPersonas.CargarDatosColumnas(datos, columnas);
+             ucTablaPersonas.CargarDatosColumnas(datos, columnas);
         }
 
         protected void ucBuscar_BuscarClick()
