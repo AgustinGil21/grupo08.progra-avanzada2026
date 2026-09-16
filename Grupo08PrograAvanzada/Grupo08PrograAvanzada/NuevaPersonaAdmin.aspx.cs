@@ -11,7 +11,54 @@ namespace Grupo08PrograAvanzada
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                CargarCombos();
+                pnlVehiculo.Visible = chkTieneVehiculo.Checked;
+            }
         }
+        private void CargarCombos()
+        {
+            cbTipoDocumento.Combo.Items.Add(new ListItem("DNI", "DNI"));
+            cbTipoDocumento.Combo.Items.Add(new ListItem("LC", "LC"));
+            cbTipoDocumento.Combo.Items.Add(new ListItem("CI", "CI"));
+
+            cbNacionalidad.Combo.Items.Add(new ListItem("Argentina", "ARG"));
+            cbNacionalidad.Combo.Items.Add(new ListItem("Otra", "OTRA"));
+
+            cbLote.Combo.Items.Add(new ListItem("Seleccioná un lote...", ""));
+            cbLote.Combo.Items.Add(new ListItem("A14 — Sendero de los Tilos 1400", "A14"));
+        }
+
+        protected void chkTieneVehiculo_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlVehiculo.Visible = chkTieneVehiculo.Checked;
+        }
+
+        protected void btnGuardar_ButtonClick(object sender, EventArgs e)
+        {
+            // TODO: guardar CUENTA + PERSONA + PERSONA_CATEGORIA
+            string tipoDocumento = cbTipoDocumento.Combo.SelectedValue;
+            string numeroDocumento = txtNumeroDocumento.Text;
+            string apellido = txtApellido.Text;
+            string nombres = txtNombres.Text;
+            string lote = cbLote.Combo.SelectedValue;
+
+            if (chkTieneVehiculo.Checked)
+            {
+                // TODO: guardar VEHICULO
+                string patente = txtPatente.Text;
+                string marcaModelo = txtMarcaModelo.Text;
+            }
+
+            // Response.Redirect("~/Administracion/PadronDePersonas.aspx");
+        }
+
+        protected void btnCancelar_ButtonClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Administracion/PadronDePersonas.aspx");
+        }
+
     }
 }
+ 
