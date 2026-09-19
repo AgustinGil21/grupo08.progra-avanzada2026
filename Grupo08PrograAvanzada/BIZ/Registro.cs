@@ -16,11 +16,12 @@ namespace BIZ
     /// rutas hasta que un administrador le asigne el nivel real desde
     /// UsuariosAccesos.aspx.
     ///
-    /// Nota sobre el acceso a datos: las tres consultas de abajo vivian en Auth
-    /// (VerificarDni, UsuarioExiste, DarDeAltaUsuarioSobreCuentaExistente) y se
-    /// borraron en la rama backend por no tener llamadores. En vez de reponerlas
-    /// ahi -- Auth lo esta editando el resto del equipo -- el registro se lleva
-    /// su propio acceso a datos y queda autocontenido.
+    /// Nota sobre el acceso a datos: dos de las consultas de abajo vivian en Auth
+    /// (VerificarDni y DarDeAltaUsuarioSobreCuentaExistente) y se borraron en la
+    /// rama backend por no tener llamadores. La tercera (UsuarioExiste) sigue en
+    /// Auth pero es privada. En vez de reponer o abrir codigo ajeno -- Auth lo
+    /// esta editando el resto del equipo -- el registro se lleva su propio acceso
+    /// a datos y queda autocontenido.
     /// </summary>
     public class Registro
     {
