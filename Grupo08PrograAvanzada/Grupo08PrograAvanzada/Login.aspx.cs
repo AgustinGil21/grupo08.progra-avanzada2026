@@ -58,6 +58,18 @@ namespace Grupo08PrograAvanzada
 
                 CargarGaritasYTurnos();
             }
+            else
+            {
+                // Usuario recien registrado: existe y la contrasenia es correcta,
+                // pero todavia no tiene un nivel de acceso con pantallas asignadas.
+                // Sin este caso la pagina no hacia nada y parecia que el login fallaba.
+                Session.Clear();
+
+                var lblErrorLogin = (Label)ControlFinder.BuscarControl(this, "lbl_error_login");
+                lblErrorLogin.Visible = true;
+                lblErrorLogin.Text = "Tu usuario todavia no esta habilitado. " +
+                    "Un administrador del barrio te tiene que asignar un nivel de acceso.";
+            }
         }
 
         private void CargarGaritasYTurnos()

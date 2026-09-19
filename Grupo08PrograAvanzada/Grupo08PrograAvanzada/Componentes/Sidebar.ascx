@@ -45,6 +45,9 @@
             <div class="sidebar-user-role"><asp:Literal ID="litDetalle" runat="server" /></div>
         </div>
     </div>
+    <a runat="server" href="~/CambiarContrasenia.aspx" class="sidebar-item">
+        <i class="bi bi-key"></i> Cambiar mi contraseña
+    </a>
     <asp:LinkButton ID="btnCerrar" runat="server" CssClass="sidebar-logout" OnClick="btnCerrar_Click">
         <i class="bi bi-box-arrow-right"></i> Cerrar sesión
     </asp:LinkButton>

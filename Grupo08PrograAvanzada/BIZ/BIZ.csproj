@@ -44,7 +44,11 @@
   <ItemGroup>
     <Compile Include="Auth.cs" />
     <Compile Include="CompaniaSeguro.cs" />
+    <Compile Include="Contrasenia.cs" />
     <Compile Include="Cuenta.cs" />
+    <Compile Include="Mailer.cs" />
+    <Compile Include="Recuperacion.cs" />
+    <Compile Include="Registro.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="Garita.cs" />

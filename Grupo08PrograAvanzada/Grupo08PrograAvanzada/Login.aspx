@@ -19,10 +19,18 @@
                     <p> Login </p>
 
                     <div id="login_datos1" runat="server">
+                        <asp:Label ID="lbl_error_login" runat="server" CssClass="input-error" Visible="false" />
                         <uc:Input ID="input_usuario" runat="server" Label="Correo" Type="Email" />
                         <uc:Input ID="input_password" runat="server" Label="Contraseña" Type="Password" />
                         <uc:Button ID="btn_login_1" runat="server" TextButton="Iniciar Sesión" 
                             TypeButton="Save" OnButtonClick="btn_login_1_ButtonClick" />
+
+                        <p class="page-sub">
+                            <a href="OlvideContrasenia.aspx">Olvidé mi contraseña</a>
+                        </p>
+                        <p class="page-sub">
+                            ¿Todavía no tenés usuario? <a href="Registrarse.aspx">Creá el tuyo</a>
+                        </p>
                     </div>
 
                     <div id="login_datos_guardia" runat="server" visible="false">
