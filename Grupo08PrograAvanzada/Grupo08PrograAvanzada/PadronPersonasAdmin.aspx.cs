@@ -16,6 +16,7 @@ namespace Grupo08PrograAvanzada
         {
             get { return "Administrador"; }
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -27,39 +28,39 @@ namespace Grupo08PrograAvanzada
 
         private void CargarDDL()
         {
-            DropDownList ddl_categoria = (DropDownList)FindControl("ddlCategoria");
-            ddl_categoria.Items.Clear();
-            ddl_categoria.Items.Add(new ListItem("Seleccione una categoria", ""));
+            DropdownList ddl_categoria = (DropdownList)ControlFinder.BuscarControl(this, "ddlCategoria");
+            ddl_categoria.Combo.Items.Clear();
+            ddl_categoria.Combo.Items.Add(new ListItem("Seleccione una categoria", ""));
 
             foreach (DataRow fila in Persona.ListarCategorias().Tables[0].Rows)
             {
-                ddl_categoria.Items.Add(new ListItem(fila["descripcion"].ToString(), fila["id_categoria"].ToString()));
+                ddl_categoria.Combo.Items.Add(new ListItem(fila["descripcion"].ToString(), fila["id_categoria"].ToString()));
             }
         }
 
         private void LlenarTabla()
         {
             string texto = ucBuscar.Input.Text;
-            string idCategoria = ((DropdownList)FindControl("ddlCategoria")).Combo.SelectedValue;
+            string idCategoria = ((DropdownList)ControlFinder.BuscarControl(this, "ddlCategoria")).Combo.SelectedValue;
 
             DataTable datos = Persona.BuscarPadron(texto, idCategoria);
 
             List<ColumnName> columnas = new List<ColumnName>
-            {
-                new ColumnName { CampoDato = "Persona",   Titulo = "PERSONA" },
-                new ColumnName { CampoDato = "Categoria", Titulo = "CATEGORÍA" },
-                new ColumnName { CampoDato = "Estado",    Titulo = "ESTADO" }
-            };
+    {
+        new ColumnName { CampoDato = "Persona",   Titulo = "PERSONA" },
+        new ColumnName { CampoDato = "Categoria", Titulo = "CATEGORÍA" },
+        new ColumnName { CampoDato = "Estado",    Titulo = "ESTADO" }
+    };
 
-             ucTablaPersonas.CargarDatosColumnas(datos, columnas);
+            ucTablaPersonas.CargarDatosColumnas(datos, columnas);
         }
 
-        protected void ucBuscar_BuscarClick()
+        protected void ucBuscar_BuscarClick(object sender, EventArgs e)
         {
             LlenarTabla();
         }
 
-        protected void btnNuevaPersona_ButtonClick()
+        protected void btnNuevaPersona_ButtonClick(object sender, EventArgs e)
         {
             Response.Redirect("~/NuevaPersonaAdmin.aspx");
         }

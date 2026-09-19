@@ -16,7 +16,7 @@ namespace Grupo08PrograAvanzada.Componentes
         //el titulo que se mostrara en el header
         private List<ColumnName> column_Names;
 
-        public void CargarDatosColumnas (DataTable dataTable, List<ColumnName> columnNames)
+        public void CargarDatosColumnas(DataTable dataTable, List<ColumnName> columnNames)
         {
             column_Names = columnNames;
 
@@ -25,7 +25,6 @@ namespace Grupo08PrograAvanzada.Componentes
             rpt_header.DataBind();
 
             // para las filas
-            rpt_filas.DataSource = dataTable.Rows.Count == 0;
             rpt_filas.DataSource = dataTable;
             rpt_filas.DataBind();
         }
@@ -36,7 +35,7 @@ namespace Grupo08PrograAvanzada.Componentes
                 return;
 
             DataRowView fila = (DataRowView)e.Item.DataItem;
-            PlaceHolder ph = (PlaceHolder)e.Item.FindControl("phCeldas");
+            PlaceHolder ph = (PlaceHolder)e.Item.FindControl("ph_celdas");
 
             foreach (var col in column_Names)
             {

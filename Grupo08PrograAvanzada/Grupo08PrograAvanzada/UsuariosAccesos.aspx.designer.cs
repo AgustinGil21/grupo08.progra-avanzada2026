@@ -15,6 +15,15 @@ namespace Grupo08PrograAvanzada.Administracion
     {
 
         /// <summary>
+        /// btnMostrarNuevoUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Grupo08PrograAvanzada.Componentes.Button btnMostrarNuevoUsuario;
+
+        /// <summary>
         /// buscarUsuario control.
         /// </summary>
         /// <remarks>
@@ -33,15 +42,6 @@ namespace Grupo08PrograAvanzada.Administracion
         protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbFiltroNivel;
 
         /// <summary>
-        /// cbFiltroGarita control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbFiltroGarita;
-
-        /// <summary>
         /// cbFiltroEstado control.
         /// </summary>
         /// <remarks>
@@ -58,6 +58,15 @@ namespace Grupo08PrograAvanzada.Administracion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptUsuarios;
+
+        /// <summary>
+        /// pnlNuevoUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNuevoUsuario;
 
         /// <summary>
         /// txtDniPersona control.
@@ -87,6 +96,24 @@ namespace Grupo08PrograAvanzada.Administracion
         protected global::System.Web.UI.WebControls.Label lblMensajeVerificacion;
 
         /// <summary>
+        /// hdnIdCuenta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIdCuenta;
+
+        /// <summary>
+        /// pnlDatosUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlDatosUsuario;
+
+        /// <summary>
         /// txtCorreo control.
         /// </summary>
         /// <remarks>
@@ -94,15 +121,6 @@ namespace Grupo08PrograAvanzada.Administracion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCorreo;
-
-        /// <summary>
-        /// cbNivelAcceso control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbNivelAcceso;
 
         /// <summary>
         /// txtContrasena control.
@@ -121,33 +139,6 @@ namespace Grupo08PrograAvanzada.Administracion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRepetirContrasena;
-
-        /// <summary>
-        /// cbGaritaAsignada control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbGaritaAsignada;
-
-        /// <summary>
-        /// cbTurno control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbTurno;
-
-        /// <summary>
-        /// cbEstadoUsuario control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbEstadoUsuario;
 
         /// <summary>
         /// lblError control.

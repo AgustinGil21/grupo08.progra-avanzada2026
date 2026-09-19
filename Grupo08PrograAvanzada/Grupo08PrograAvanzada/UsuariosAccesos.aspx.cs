@@ -1,19 +1,10 @@
 ﻿using BIZ;
 using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada.Administracion
 {
-    public class UsuarioFila
-    {
-        public string Usuario { get; set; }
-        public string NivelAcceso { get; set; }
-        public string Garita { get; set; }
-        public string UltimoAcceso { get; set; }
-        public string Estado { get; set; }
-    }
-
     public partial class UsuarioAccesos : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
@@ -21,76 +12,128 @@ namespace Grupo08PrograAvanzada.Administracion
             if (!IsPostBack)
             {
                 CargarCombosFiltro();
-                CargarCombosFormulario();
-                CargarUsuarios(null);
+                CargarUsuarios(null, "", "");
             }
         }
 
         private void CargarCombosFiltro()
         {
             cbFiltroNivel.Combo.Items.Add(new ListItem("Todos los niveles", ""));
-            cbFiltroNivel.Combo.Items.Add(new ListItem("Administrador", "ADMIN"));
-            cbFiltroNivel.Combo.Items.Add(new ListItem("Guardia", "GUARDIA"));
+            cbFiltroNivel.Combo.DataSource = NivelAcceso.ListarNiveles();
+            cbFiltroNivel.Combo.DataTextField = "descripcion";
+            cbFiltroNivel.Combo.DataValueField = "id_nivel_acceso";
+            cbFiltroNivel.Combo.DataBind();
 
-            cbFiltroGarita.Combo.Items.Add(new ListItem("Todas", ""));
-            // TODO: cargar garitas reales desde la tabla GARITA
-
-            cbFiltroEstado.Combo.Items.Add(new ListItem("Activos", "ACTIVO"));
-            cbFiltroEstado.Combo.Items.Add(new ListItem("Suspendidos", "SUSPENDIDO"));
+            cbFiltroEstado.Combo.Items.Add(new ListItem("Activos", "1"));
+            cbFiltroEstado.Combo.Items.Add(new ListItem("Todos", ""));
         }
 
-        private void CargarCombosFormulario()
+        private void CargarUsuarios(string dni, string idNivelAcceso, string idEstado)
         {
-            cbNivelAcceso.Combo.Items.Add(new ListItem("Administrador", "ADMIN"));
-            cbNivelAcceso.Combo.Items.Add(new ListItem("Guardia", "GUARDIA"));
-
-            cbGaritaAsignada.Combo.Items.Add(new ListItem("Sin asignar", ""));
-            // TODO: cargar garitas reales
-
-            cbTurno.Combo.Items.Add(new ListItem("Mañana", "MANANA"));
-            cbTurno.Combo.Items.Add(new ListItem("Tarde", "TARDE"));
-            cbTurno.Combo.Items.Add(new ListItem("Noche", "NOCHE"));
-
-            cbEstadoUsuario.Combo.Items.Add(new ListItem("Activo", "ACTIVO"));
-            cbEstadoUsuario.Combo.Items.Add(new ListItem("Suspendido", "SUSPENDIDO"));
-        }
-
-        private void CargarUsuarios(string filtroTexto)
-        {
-            // TODO: reemplazar por consulta real a USUARIO + NIVEL_ACCESO + GARITA_USUARIO
-            var usuarios = new List<UsuarioFila>
-            {
-                new UsuarioFila { Usuario = "sferrer", NivelAcceso = "Administradora", Garita = "Todas", UltimoAcceso = "Hoy 21:10", Estado = "Activo" },
-                new UsuarioFila { Usuario = "rgutierrez", NivelAcceso = "Guardia", Garita = "Garita 1", UltimoAcceso = "Hoy 22:00", Estado = "En turno" }
-            };
-
+            DataTable usuarios = Usuario.BuscarUsuarios(dni, idNivelAcceso, idEstado);
             rptUsuarios.DataSource = usuarios;
             rptUsuarios.DataBind();
         }
 
+        protected void rptUsuarios_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
+                return;
+
+            var fila = (DataRowView)e.Item.DataItem;
+            var cbNivel = (DropDownList)e.Item.FindControl("cbNivelAccesoFila");
+
+            cbNivel.DataSource = NivelAcceso.ListarNiveles();
+            cbNivel.DataTextField = "descripcion";
+            cbNivel.DataValueField = "id_nivel_acceso";
+            cbNivel.DataBind();
+
+            // BuscarUsuarios devuelve el NOMBRE del nivel, no el id: se preselecciona por texto.
+            ListItem actual = cbNivel.Items.FindByText(fila["NivelAcceso"].ToString());
+            if (actual != null)
+            {
+                cbNivel.ClearSelection();
+                actual.Selected = true;
+            }
+        }
+
+        protected void rptUsuarios_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName != "CambiarNivel")
+                return;
+
+            try
+            {
+                int idUsuario = int.Parse(e.CommandArgument.ToString());
+                var cbNivel = (DropDownList)e.Item.FindControl("cbNivelAccesoFila");
+                int idNivelAcceso = int.Parse(cbNivel.SelectedValue);
+
+                Usuario.CambiarNivelAcceso(idUsuario, idNivelAcceso);
+                CargarUsuarios(buscarUsuario.Input.Text, cbFiltroNivel.Combo.SelectedValue, cbFiltroEstado.Combo.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "No se pudo cambiar el nivel de acceso: " + ex.Message;
+            }
+        }
+
         protected void buscarUsuario_BuscarClick(object sender, EventArgs e)
         {
-            CargarUsuarios(buscarUsuario.Input.Text);
+            CargarUsuarios(buscarUsuario.Input.Text, cbFiltroNivel.Combo.SelectedValue, cbFiltroEstado.Combo.SelectedValue);
+        }
+
+        protected void btnMostrarNuevoUsuario_Click(object sender, EventArgs e)
+        {
+            pnlNuevoUsuario.Visible = true;
         }
 
         protected void btnVerificarDni_ButtonClick(object sender, EventArgs e)
         {
-            // TODO: buscar en CUENTA por DNI y chequear si ya tiene USUARIO
-            string dni = txtDniPersona.Text;
+            lblMensajeVerificacion.Text = "";
+            pnlDatosUsuario.Visible = false;
+            hdnIdCuenta.Value = "";
 
+            string dni = txtDniPersona.Text;
             if (string.IsNullOrWhiteSpace(dni))
             {
                 lblMensajeVerificacion.Text = "Ingresá un número de documento.";
                 return;
             }
 
-            // ejemplo de resultado, reemplazar por la consulta real
-            lblMensajeVerificacion.Text = "Esta persona no tiene correo asociado todavía. Se puede crear.";
+            DataTable resultado = Auth.VerificarDni(dni);
+
+            if (resultado.Rows.Count == 0)
+            {
+                lblMensajeVerificacion.Text = "No está en el padrón. Primero hay que darla de alta como persona.";
+                return;
+            }
+
+            DataRow fila = resultado.Rows[0];
+            bool tieneUsuario = fila["correo_electronico"] != DBNull.Value;
+
+            if (tieneUsuario)
+            {
+                lblMensajeVerificacion.Text = string.Format(
+                    "{0}, {1} ya tiene un usuario creado ({2}). Si necesitás cambiarle el nivel de acceso, hacelo desde la tabla de arriba.",
+                    fila["apellido"], fila["nombre"], fila["correo_electronico"]);
+                return;
+            }
+
+            hdnIdCuenta.Value = fila["id_cuenta"].ToString();
+            lblMensajeVerificacion.Text = string.Format(
+                "{0}, {1} está en el padrón y no tiene usuario. Se puede crear.", fila["apellido"], fila["nombre"]);
+            pnlDatosUsuario.Visible = true;
         }
 
         protected void btnCrearUsuario_ButtonClick(object sender, EventArgs e)
         {
             lblError.Text = "";
+
+            if (string.IsNullOrWhiteSpace(hdnIdCuenta.Value))
+            {
+                lblError.Text = "Primero verificá el DNI de la persona.";
+                return;
+            }
 
             if (txtContrasena.Text != txtRepetirContrasena.Text)
             {
@@ -98,8 +141,16 @@ namespace Grupo08PrograAvanzada.Administracion
                 return;
             }
 
-            // TODO: crear USUARIO + CONTRASENIA (hash) + GARITA_USUARIO
-            // Response.Redirect("~/Administracion/UsuarioAccesos.aspx");
+            try
+            {
+                int idCuenta = int.Parse(hdnIdCuenta.Value);
+                Auth.DarDeAltaUsuarioSobreCuentaExistente(idCuenta, txtCorreo.Text, txtContrasena.Text);
+                Response.Redirect("~/Administracion/UsuarioAccesos.aspx");
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "No se pudo crear el usuario: " + ex.Message;
+            }
         }
 
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)

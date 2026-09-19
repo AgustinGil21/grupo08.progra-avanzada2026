@@ -18,11 +18,10 @@ namespace Grupo08PrograAvanzada.Componentes
         [TemplateContainer(typeof(FiltersContainer))]
         [PersistenceMode(PersistenceMode.InnerProperty)]
         public ITemplate Filters { get; set; }
-        protected void Page_Load(object sender, EventArgs e)
+
+        protected override void OnInit(EventArgs e)
         {
-            lblTitulo.Text = Titulo;
-            lblTitulo.Visible = !string.IsNullOrEmpty(Titulo);
-            txtBuscar.Attributes["placeholder"] = Placeholder;
+            base.OnInit(e);
 
             if (Filters != null && ph_filtros.Controls.Count == 0)
             {
@@ -31,14 +30,19 @@ namespace Grupo08PrograAvanzada.Componentes
                 ph_filtros.Controls.Add(container);
             }
         }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            lblTitulo.Text = Titulo;
+            lblTitulo.Visible = !string.IsNullOrEmpty(Titulo);
+            txtBuscar.Attributes["placeholder"] = Placeholder;
+        }
+
         protected void btnBuscar_ButtonClick(object sender, EventArgs e)
         {
             BuscarClick?.Invoke(this, e);
         }
 
-        public class FiltersContainer : PlaceHolder, INamingContainer
-        {
-
-        }
+        public class FiltersContainer : PlaceHolder, INamingContainer { }
     }
 }

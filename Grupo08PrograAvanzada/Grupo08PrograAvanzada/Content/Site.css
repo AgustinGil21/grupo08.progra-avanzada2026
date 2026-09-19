@@ -492,6 +492,10 @@ textarea {
     border-bottom: 2px solid #dee2e6;
 }
 
+.table-container table tbody td {
+        color: #e9ecef;
+}
+
 .table-container-empty {
     display: block;
     text-align: center;

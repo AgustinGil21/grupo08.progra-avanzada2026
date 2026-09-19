@@ -114,7 +114,7 @@ namespace Grupo08PrograAvanzada
                     Persona.DarDeAltaLicencia(idPersona, txtNumeroLicencia.Text, DateTime.Parse(txtVigenciaLicencia.Text));
                 }
 
-                Response.Redirect("~/Administracion/PadronDePersonas.aspx");
+                Response.Redirect("~/PadronPersonasAdmin.aspx");
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace Grupo08PrograAvanzada
 
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/Administracion/PadronDePersonas.aspx");
+            Response.Redirect("~/PadronPersonasAdmin.aspx");
         }
 
 
