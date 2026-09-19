@@ -15,8 +15,14 @@ namespace BIZ
     public class Mailer
     {
         /// <summary>
-        /// Si esta en false, Enviar() no manda nada y no falla. Sirve para que la
-        /// app arranque en una maquina de desarrollo sin servidor de mail.
+        /// Interruptor general del envio de mails. Mientras este en false,
+        /// Enviar() corta con una excepcion clara en vez de intentar conectarse
+        /// a un SMTP que no existe: es preferible que la pantalla de "olvide mi
+        /// contrasenia" diga que el mail esta apagado a que se quede esperando
+        /// el timeout de la conexion, o peor, a que se trague el codigo en
+        /// silencio y el usuario nunca lo reciba.
+        ///
+        /// Se pone en true recien cuando el relay de correo este levantado.
         /// </summary>
         public static bool Habilitado
         {
