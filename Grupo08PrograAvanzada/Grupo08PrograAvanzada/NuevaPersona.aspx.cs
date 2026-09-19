@@ -28,22 +28,18 @@ namespace Grupo08PrograAvanzada
         private void CargarCombos()
         {
             cbTipoDocumento.Combo.DataSource = Cuenta.ListarTiposDeDocumentos().Tables[0];
-            cbTipoDocumento.Combo.DataTextField = "descripcion";        
-            cbTipoDocumento.Combo.DataValueField = "id_tipo_documento"; 
+            cbTipoDocumento.Combo.DataTextField = "descripcion";
+            cbTipoDocumento.Combo.DataValueField = "id_tipo_documento";
             cbTipoDocumento.Combo.DataBind();
 
             cbNacionalidad.Combo.DataSource = Pais.ListarPaises().Tables[0];
-            cbNacionalidad.Combo.DataTextField = "descripcion"; 
-            cbNacionalidad.Combo.DataValueField = "id_pais";    
+            cbNacionalidad.Combo.DataTextField = "descripcion";
+            cbNacionalidad.Combo.DataValueField = "id_pais";
             cbNacionalidad.Combo.DataBind();
 
-            DataTable categorias = Persona.ListarCategorias().Tables[0];
-            DataView categoriasSinStaff = new DataView(categorias);
-            categoriasSinStaff.RowFilter = "descripcion <> 'Staff'";
-
-            chkCategorias.DataSource = categoriasSinStaff;
-            chkCategorias.DataTextField = "descripcion";   
-            chkCategorias.DataValueField = "id_categoria"; 
+            chkCategorias.DataSource = Persona.ListarCategorias().Tables[0];
+            chkCategorias.DataTextField = "descripcion";
+            chkCategorias.DataValueField = "id_categoria";
             chkCategorias.DataBind();
 
             cbCompaniaSeguro.Combo.DataSource = CompaniaSeguro.ListarCompanias();
