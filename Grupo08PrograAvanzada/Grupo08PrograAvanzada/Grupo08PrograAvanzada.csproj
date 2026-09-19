@@ -132,9 +132,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Lotes.aspx" />
     <Content Include="NuevaPersona.aspx" />
-    <Content Include="NuevaPersonaAdmin.aspx" />
     <Content Include="PadronPersonas.aspx" />
-    <Content Include="PadronPersonasAdmin.aspx" />
     <Content Include="ParametrosSistema.aspx" />
     <Content Include="RegistrarMovimientos.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -321,26 +319,12 @@
     <Compile Include="NuevaPersona.aspx.designer.cs">
       <DependentUpon>NuevaPersona.aspx</DependentUpon>
     </Compile>
-    <Compile Include="NuevaPersonaAdmin.aspx.cs">
-      <DependentUpon>NuevaPersonaAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="NuevaPersonaAdmin.aspx.designer.cs">
-      <DependentUpon>NuevaPersonaAdmin.aspx</DependentUpon>
-    </Compile>
     <Compile Include="PadronPersonas.aspx.cs">
       <DependentUpon>PadronPersonas.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PadronPersonas.aspx.designer.cs">
       <DependentUpon>PadronPersonas.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="PadronPersonasAdmin.aspx.cs">
-      <DependentUpon>PadronPersonasAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PadronPersonasAdmin.aspx.designer.cs">
-      <DependentUpon>PadronPersonasAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginaBase.cs">
       <SubType>ASPXCodeBehind</SubType>

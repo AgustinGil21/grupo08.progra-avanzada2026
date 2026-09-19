@@ -2,8 +2,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
    <h1>Nueva persona con categoría</h1>
-    <p class="page-sub">La persona tiene que existir en el padrón para vincularla a un lote y registrarle movimientos. Se crean CUENTA, PERSONA y PERSONA_CATEGORIA.</p>
-
     <div class="form-card">
 
         <h3>Identificación de la persona</h3>
@@ -45,7 +43,6 @@
         </div>
 
         <h3>Categoría de la persona</h3>
-        <p class="page-sub">Una persona puede tener más de una categoría.</p>
         <asp:CheckBoxList ID="chkCategorias" runat="server" CssClass="categorias-list" RepeatDirection="Horizontal" />
 
         <h3>Vehículo de la persona</h3>
@@ -77,7 +74,6 @@
             </div>
 
             <h3>Licencia de conducir</h3>
-            <p class="page-sub">Obligatoria si la persona tiene vehículo.</p>
             <div class="form-row">
                 <div>
                     <label class="busqueda-label">N° de licencia *</label>
@@ -90,7 +86,6 @@
             </div>
         </asp:Panel>
 
-        <p class="page-sub">La persona se crea con estado Activo. El modelo no guarda qué usuario la cargó.</p>
         <asp:Label ID="lblError" runat="server" CssClass="page-sub" ForeColor="#e05252" />
 
         <div class="form-actions">

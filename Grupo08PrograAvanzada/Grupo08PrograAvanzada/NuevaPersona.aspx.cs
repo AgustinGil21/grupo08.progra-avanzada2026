@@ -1,6 +1,7 @@
 ﻿using BIZ;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -8,8 +9,13 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    public partial class NuevaPersona : System.Web.UI.Page
+    public partial class NuevaPersona : PaginaBase
     {
+        protected override string RolRequerido
+        {
+            get { return "Guardia"; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -22,26 +28,29 @@ namespace Grupo08PrograAvanzada
         private void CargarCombos()
         {
             cbTipoDocumento.Combo.DataSource = Cuenta.ListarTiposDeDocumentos().Tables[0];
-            cbTipoDocumento.Combo.DataTextField = "descripcion";        // TODO: confirmar nombre real de columna
-            cbTipoDocumento.Combo.DataValueField = "id_tipo_documento"; // TODO: confirmar nombre real de columna
+            cbTipoDocumento.Combo.DataTextField = "descripcion";        
+            cbTipoDocumento.Combo.DataValueField = "id_tipo_documento"; 
             cbTipoDocumento.Combo.DataBind();
 
             cbNacionalidad.Combo.DataSource = Pais.ListarPaises().Tables[0];
-            cbNacionalidad.Combo.DataTextField = "descripcion"; // TODO: confirmar nombre real de columna en Pais
-            cbNacionalidad.Combo.DataValueField = "id_pais";    // TODO: confirmar nombre real de columna en Pais
+            cbNacionalidad.Combo.DataTextField = "descripcion"; 
+            cbNacionalidad.Combo.DataValueField = "id_pais";    
             cbNacionalidad.Combo.DataBind();
 
-            // Bindeado contra la base real: hoy son 4 categorías (Propietario, Visitante, Proveedor, Obrero).
-            chkCategorias.DataSource = Persona.ListarCategorias().Tables[0];
-            chkCategorias.DataTextField = "descripcion";   // TODO: confirmar nombre real de columna
-            chkCategorias.DataValueField = "id_categoria"; // TODO: confirmar nombre real de columna
+            DataTable categorias = Persona.ListarCategorias().Tables[0];
+            DataView categoriasSinStaff = new DataView(categorias);
+            categoriasSinStaff.RowFilter = "descripcion <> 'Staff'";
+
+            chkCategorias.DataSource = categoriasSinStaff;
+            chkCategorias.DataTextField = "descripcion";   
+            chkCategorias.DataValueField = "id_categoria"; 
             chkCategorias.DataBind();
 
-            cbCompaniaSeguro.Combo.Items.Add(new ListItem("Sin compañía", ""));
             cbCompaniaSeguro.Combo.DataSource = CompaniaSeguro.ListarCompanias();
             cbCompaniaSeguro.Combo.DataTextField = "descripcion";
             cbCompaniaSeguro.Combo.DataValueField = "id_compania_seguro";
             cbCompaniaSeguro.Combo.DataBind();
+            cbCompaniaSeguro.Combo.Items.Insert(0, new ListItem("Sin compañía", ""));
         }
 
         protected void chkTieneVehiculo_CheckedChanged(object sender, EventArgs e)
@@ -85,6 +94,13 @@ namespace Grupo08PrograAvanzada
                     }
                 }
 
+                if (idCategorias.Count == 0)
+                {
+                    lblError.Text = "Elegí al menos una categoría para la persona.";
+                    return;
+                }
+
+                // TODO: confirmar firma exacta de DarDeAltaPersonaConCategorias contra BIZ/Persona.cs
                 int idPersona = Persona.DarDeAltaPersonaConCategorias(
                     txtNombres.Text,
                     txtApellido.Text,
@@ -115,18 +131,18 @@ namespace Grupo08PrograAvanzada
                     Persona.DarDeAltaLicencia(idPersona, txtNumeroLicencia.Text, DateTime.Parse(txtVigenciaLicencia.Text));
                 }
 
-                Response.Redirect("~/PadronDePersonas.aspx");
+                Response.Redirect("~/PadronPersonas.aspx");
             }
             catch (Exception ex)
             {
                 lblError.Text = "No se pudo guardar la persona: " + ex.Message +
-                    " Si la persona ya quedó creada pero falló el vehículo o la licencia, revisá el padrón antes de reintentar (el alta no es transaccional de punta a punta).";
+                    " Si la persona ya quedó creada pero falló el vehículo o la licencia, revisá el padrón antes de reintentar.";
             }
         }
 
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/PadronDePersonas.aspx");
+            Response.Redirect("~/PadronPersonas.aspx");
         }
 
     }

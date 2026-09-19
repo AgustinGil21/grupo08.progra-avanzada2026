@@ -1,19 +1,62 @@
 ﻿using BIZ;
+using Grupo08PrograAvanzada.Componentes;
 using System;
 using System.Data;
 using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada.Administracion
 {
-    public partial class UsuarioAccesos : System.Web.UI.Page
+    public partial class UsuarioAccesos : PaginaBase
     {
+        protected override string RolRequerido
+        {
+            get { return "Administrador"; }
+        }
+
+        private const int ID_NIVEL_ACCESO_SIN_ASIGNAR = 3;
+
+        private DropdownList cbFiltroNivel;
+        private DropdownList cbFiltroEstado;
+        private DropdownList cbTipoDocumento;
+        private DropdownList cbNacionalidad;
+        private TextBox txtNumeroDocumento;
+        private TextBox txtApellido;
+        private TextBox txtNombres;
+        private TextBox txtFechaNacimiento;
+        private TextBox txtTelefono;
+        private TextBox txtCorreo;
+        private TextBox txtContrasena;
+        private TextBox txtRepetirContrasena;
+        private Label lblError;
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            BuscarControlesDeTemplates();
+
             if (!IsPostBack)
             {
                 CargarCombosFiltro();
                 CargarUsuarios(null, "", "");
             }
+
+            CargarCombosFormularioNuevo();
+        }
+
+        private void BuscarControlesDeTemplates()
+        {
+            cbFiltroNivel = (DropdownList)ControlFinder.BuscarControl(this, "cbFiltroNivel");
+            cbFiltroEstado = (DropdownList)ControlFinder.BuscarControl(this, "cbFiltroEstado");
+            cbTipoDocumento = (DropdownList)ControlFinder.BuscarControl(this, "cbTipoDocumento");
+            cbNacionalidad = (DropdownList)ControlFinder.BuscarControl(this, "cbNacionalidad");
+            txtNumeroDocumento = (TextBox)ControlFinder.BuscarControl(this, "txtNumeroDocumento");
+            txtApellido = (TextBox)ControlFinder.BuscarControl(this, "txtApellido");
+            txtNombres = (TextBox)ControlFinder.BuscarControl(this, "txtNombres");
+            txtFechaNacimiento = (TextBox)ControlFinder.BuscarControl(this, "txtFechaNacimiento");
+            txtTelefono = (TextBox)ControlFinder.BuscarControl(this, "txtTelefono");
+            txtCorreo = (TextBox)ControlFinder.BuscarControl(this, "txtCorreo");
+            txtContrasena = (TextBox)ControlFinder.BuscarControl(this, "txtContrasena");
+            txtRepetirContrasena = (TextBox)ControlFinder.BuscarControl(this, "txtRepetirContrasena");
+            lblError = (Label)ControlFinder.BuscarControl(this, "lblError");
         }
 
         private void CargarCombosFiltro()
@@ -26,6 +69,22 @@ namespace Grupo08PrograAvanzada.Administracion
 
             cbFiltroEstado.Combo.Items.Add(new ListItem("Activos", "1"));
             cbFiltroEstado.Combo.Items.Add(new ListItem("Todos", ""));
+        }
+
+        private void CargarCombosFormularioNuevo()
+        {
+            if (cbTipoDocumento.Combo.Items.Count > 0)
+                return;
+
+            cbTipoDocumento.Combo.DataSource = Cuenta.ListarTiposDeDocumentos().Tables[0];
+            cbTipoDocumento.Combo.DataTextField = "descripcion";        
+            cbTipoDocumento.Combo.DataValueField = "id_tipo_documento"; 
+            cbTipoDocumento.Combo.DataBind();
+
+            cbNacionalidad.Combo.DataSource = Pais.ListarPaises().Tables[0];
+            cbNacionalidad.Combo.DataTextField = "descripcion"; 
+            cbNacionalidad.Combo.DataValueField = "id_pais";    
+            cbNacionalidad.Combo.DataBind();
         }
 
         private void CargarUsuarios(string dni, string idNivelAcceso, string idEstado)
@@ -41,14 +100,13 @@ namespace Grupo08PrograAvanzada.Administracion
                 return;
 
             var fila = (DataRowView)e.Item.DataItem;
-            var cbNivel = (DropDownList)e.Item.FindControl("cbNivelAccesoFila");
+            var cbNivel = (System.Web.UI.WebControls.DropDownList)e.Item.FindControl("cbNivelAccesoFila");
 
             cbNivel.DataSource = NivelAcceso.ListarNiveles();
             cbNivel.DataTextField = "descripcion";
             cbNivel.DataValueField = "id_nivel_acceso";
             cbNivel.DataBind();
 
-            // BuscarUsuarios devuelve el NOMBRE del nivel, no el id: se preselecciona por texto.
             ListItem actual = cbNivel.Items.FindByText(fila["NivelAcceso"].ToString());
             if (actual != null)
             {
@@ -65,7 +123,7 @@ namespace Grupo08PrograAvanzada.Administracion
             try
             {
                 int idUsuario = int.Parse(e.CommandArgument.ToString());
-                var cbNivel = (DropDownList)e.Item.FindControl("cbNivelAccesoFila");
+                var cbNivel = (System.Web.UI.WebControls.DropDownList)e.Item.FindControl("cbNivelAccesoFila");
                 int idNivelAcceso = int.Parse(cbNivel.SelectedValue);
 
                 Usuario.CambiarNivelAcceso(idUsuario, idNivelAcceso);
@@ -82,56 +140,14 @@ namespace Grupo08PrograAvanzada.Administracion
             CargarUsuarios(buscarUsuario.Input.Text, cbFiltroNivel.Combo.SelectedValue, cbFiltroEstado.Combo.SelectedValue);
         }
 
-        protected void btnMostrarNuevoUsuario_Click(object sender, EventArgs e)
-        {
-            pnlNuevoUsuario.Visible = true;
-        }
-
-        protected void btnVerificarDni_ButtonClick(object sender, EventArgs e)
-        {
-            lblMensajeVerificacion.Text = "";
-            pnlDatosUsuario.Visible = false;
-            hdnIdCuenta.Value = "";
-
-            string dni = txtDniPersona.Text;
-            if (string.IsNullOrWhiteSpace(dni))
-            {
-                lblMensajeVerificacion.Text = "Ingresá un número de documento.";
-                return;
-            }
-
-            DataTable resultado = Auth.VerificarDni(dni);
-
-            if (resultado.Rows.Count == 0)
-            {
-                lblMensajeVerificacion.Text = "No está en el padrón. Primero hay que darla de alta como persona.";
-                return;
-            }
-
-            DataRow fila = resultado.Rows[0];
-            bool tieneUsuario = fila["correo_electronico"] != DBNull.Value;
-
-            if (tieneUsuario)
-            {
-                lblMensajeVerificacion.Text = string.Format(
-                    "{0}, {1} ya tiene un usuario creado ({2}). Si necesitás cambiarle el nivel de acceso, hacelo desde la tabla de arriba.",
-                    fila["apellido"], fila["nombre"], fila["correo_electronico"]);
-                return;
-            }
-
-            hdnIdCuenta.Value = fila["id_cuenta"].ToString();
-            lblMensajeVerificacion.Text = string.Format(
-                "{0}, {1} está en el padrón y no tiene usuario. Se puede crear.", fila["apellido"], fila["nombre"]);
-            pnlDatosUsuario.Visible = true;
-        }
-
         protected void btnCrearUsuario_ButtonClick(object sender, EventArgs e)
         {
             lblError.Text = "";
 
-            if (string.IsNullOrWhiteSpace(hdnIdCuenta.Value))
+            if (string.IsNullOrWhiteSpace(txtApellido.Text) || string.IsNullOrWhiteSpace(txtNombres.Text) ||
+                string.IsNullOrWhiteSpace(txtFechaNacimiento.Text) || string.IsNullOrWhiteSpace(txtNumeroDocumento.Text))
             {
-                lblError.Text = "Primero verificá el DNI de la persona.";
+                lblError.Text = "Tipo/número de documento, apellido, nombres y fecha de nacimiento son obligatorios.";
                 return;
             }
 
@@ -143,9 +159,35 @@ namespace Grupo08PrograAvanzada.Administracion
 
             try
             {
-                int idCuenta = int.Parse(hdnIdCuenta.Value);
-                Auth.DarDeAltaUsuarioSobreCuentaExistente(idCuenta, txtCorreo.Text, txtContrasena.Text);
-                Response.Redirect("~/Administracion/UsuarioAccesos.aspx");
+                Auth.DarDeAltaUsuario(
+                    txtNombres.Text,
+                    txtApellido.Text,
+                    int.Parse(cbNacionalidad.Combo.SelectedValue),
+                    txtTelefono.Text,
+                    DateTime.Parse(txtFechaNacimiento.Text),
+                    int.Parse(cbTipoDocumento.Combo.SelectedValue),
+                    txtNumeroDocumento.Text,
+                    txtCorreo.Text,
+                    txtContrasena.Text,
+                    ID_NIVEL_ACCESO_SIN_ASIGNAR
+                );
+
+                // Limpio el formulario, recargo la tabla y cierro el modal por JS —
+                // en vez de Response.Redirect, para no perder los filtros ya aplicados.
+                txtNumeroDocumento.Text = "";
+                txtApellido.Text = "";
+                txtNombres.Text = "";
+                txtFechaNacimiento.Text = "";
+                txtTelefono.Text = "";
+                txtCorreo.Text = "";
+                txtContrasena.Text = "";
+                txtRepetirContrasena.Text = "";
+
+                CargarUsuarios(buscarUsuario.Input.Text, cbFiltroNivel.Combo.SelectedValue, cbFiltroEstado.Combo.SelectedValue);
+
+                var mdl = (Modal)ControlFinder.BuscarControl(this, "mdlNuevoUsuario");
+                ClientScript.RegisterStartupScript(GetType(), "cerrarModalNuevoUsuario",
+                    "cerrarModal('" + mdl.OverlayClientID + "');", true);
             }
             catch (Exception ex)
             {
@@ -155,7 +197,7 @@ namespace Grupo08PrograAvanzada.Administracion
 
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/Administracion/UsuarioAccesos.aspx");
+            Response.Redirect("~/UsuariosAccesos.aspx");
         }
     }
 }

@@ -372,6 +372,7 @@ textarea {
     padding: 9px 12px;
     font-size: 13.5px;
     min-height: 38px;
+    width: 100%;
 }
 
 .busqueda-input:focus {
@@ -504,58 +505,6 @@ textarea {
 }
 /* Fin TablaGenerica */
 
-/* Inicio AgregarItems */
-.items-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.items-fila {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 10px 12px;
-}
-
-.items-icono {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    color: #4b5563;
-    font-size: 12px;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-
-.items-textos {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-}
-
-.items-titulo {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #111827;
-}
-
-.items-subtitulo {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-/* Fin Agregar Items */
-
 /* Inicio AvisoEstado */
 .aviso-estado {
     display: flex;
@@ -625,13 +574,11 @@ textarea {
 /* Fin Login */
 
 /* --- FONDO PRINCIPAL DE LA PÁGINA (Reemplaza el fondo blanco) --- */
-/* Fijate si tu contenedor usa ID #MainContent, o aplicáselo al body o a .main-content */
 body, #MainContent, .main-content {
-    background-color: #1e2733; /* El color de la sidebar pero un toque más claro */
-    color: #e7ecf2; /* Color de texto general claro */
+    background-color: #1e2733;
+    color: #e7ecf2;
 }
 
-/* Para que el título "Nueva Persona Categoría" se vea en blanco y resalte */
 h1, h2, .page-header h2 {
     color: #ffffff;
 }
@@ -644,24 +591,24 @@ h1, h2, .page-header h2 {
 }
 
 .form-card {
-    background: #131a23; /* <-- Vuelve al color original que me pasaste */
+    background: #131a23;
     border: 1px solid #232c38;
     border-radius: 12px;
     padding: 20px 24px;
     margin-bottom: 20px;
 }
 
-    .form-card h3 {
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: .03em;
-        color: #8a97a8;
-        margin: 20px 0 12px;
-    }
+.form-card h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #8a97a8;
+    margin: 20px 0 12px;
+}
 
-        .form-card h3:first-child {
-            margin-top: 0;
-        }
+.form-card h3:first-child {
+    margin-top: 0;
+}
 
 .form-row {
     display: flex;
@@ -731,3 +678,16 @@ h1, h2, .page-header h2 {
         color: #e7ecf2;
     }
 /* Fin Nueva Persona y Nuevo Usuario*/
+
+/* Incio Para los aspx que tienen la sidebar */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+/* Fin Para los aspx que tienen la sidebar */

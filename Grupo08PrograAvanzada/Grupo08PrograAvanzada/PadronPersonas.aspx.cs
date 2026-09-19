@@ -46,16 +46,15 @@ namespace Grupo08PrograAvanzada
             DataTable datos = Persona.BuscarPadron(texto, idCategoria);
 
             List<ColumnName> columnas = new List<ColumnName>
-    {
-        new ColumnName { CampoDato = "Persona",   Titulo = "PERSONA" },
-        new ColumnName { CampoDato = "Categoria", Titulo = "CATEGORÍA" },
-        new ColumnName { CampoDato = "Estado",    Titulo = "ESTADO" }
-    };
+            {
+                new ColumnName { CampoDato = "Persona",       Titulo = "PERSONA" },
+                new ColumnName { CampoDato = "nro_documento",  Titulo = "DNI" },
+                new ColumnName { CampoDato = "Categoria",      Titulo = "CATEGORÍA" },
+                new ColumnName { CampoDato = "Estado",         Titulo = "ESTADO" }
+            };
 
-            ucTablaPersonasG.CargarDatosColumnas(datos, columnas);
+            ucTablaPersonasG.CargarDatosColumnas(datos, columnas); // en PadronPersonasAdmin usa ucTablaPersonas, sin la "G"
         }
-
-
 
         protected void btnNuevaPersona_ButtonClick(object sender, EventArgs e)
         {

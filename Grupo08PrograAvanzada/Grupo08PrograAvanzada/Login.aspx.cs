@@ -44,7 +44,7 @@ namespace Grupo08PrograAvanzada
 
             if (Session["RolRequerido"].ToString() == "Administrador")
             {
-                Response.Redirect("PadronPersonasAdmin.aspx");
+                Response.Redirect("~/UsuariosAccesos.aspx");
             }
             else if (Session["RolRequerido"].ToString() == "Guardia")
             {

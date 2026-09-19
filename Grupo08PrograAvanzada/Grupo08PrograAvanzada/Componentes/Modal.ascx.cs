@@ -19,8 +19,12 @@ namespace Grupo08PrograAvanzada.Componentes
             set { lit_tittle.Text = value; }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        public string OverlayClientID => overlay.ClientID;
+
+        protected override void OnInit(EventArgs e)
         {
+            base.OnInit(e);
+
             if (Content != null && ph_body.Controls.Count == 0)
             {
                 var container = new ModalContainer();
@@ -29,9 +33,8 @@ namespace Grupo08PrograAvanzada.Componentes
             }
         }
 
-        public class ModalContainer : Control, INamingContainer
-        {
+        protected void Page_Load(object sender, EventArgs e) { }
 
-        }
-    } 
+        public class ModalContainer : Control, INamingContainer { }
+    }
 }

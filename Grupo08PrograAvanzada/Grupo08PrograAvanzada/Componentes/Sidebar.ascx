@@ -26,24 +26,12 @@
         <a runat="server" href="~/Lotes.aspx" class="sidebar-item">
             <i class="bi bi-arrow-right-square"></i> Lotes
         </a>
-        <a runat="server" href="~/HistorialMovimientos.aspx" class="sidebar-item">
-            <i class="bi bi-arrow-right-square"></i> Historial de movimientos
-        </a>
     </asp:Panel>
 
     <asp:Panel ID="pnlAdmin" runat="server" CssClass="sidebar-section" Visible="false">
         <div class="sidebar-label">ADMINISTRACIÓN</div>
-        <a runat="server" href="~/PadronPersonasAdmin.aspx" class="sidebar-item">
-            <i class="bi bi-grid"></i> Padron de personas
-        </a>
         <a runat="server" href="~/UsuariosAccesos.aspx" class="sidebar-item">
             <i class="bi bi-person-lines-fill"></i> Usuarios y accesos
-        </a>
-        <a runat="server" href="~/GaritasAccesos.aspx" class="sidebar-item">
-            <i class="bi bi-person-lines-fill"></i> Garitas y accesos
-        </a>
-        <a runat="server" href="~/LotesAdmin.aspx" class="sidebar-item">
-            <i class="bi bi-person-lines-fill"></i> Lotes
         </a>
         <a runat="server" href="~/ParametrosSistema.aspx" class="sidebar-item">
             <i class="bi bi-person-lines-fill"></i> Parametros del sistema

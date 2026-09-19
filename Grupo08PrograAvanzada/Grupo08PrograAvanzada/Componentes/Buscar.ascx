@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Buscar.ascx.cs" Inherits="Grupo08PrograAvanzada.Componentes.Buscar" %>
+<%@ Register TagPrefix="uc" TagName="Button" Src="Button.ascx" %>
 
 <div class="busqueda-wrapper">
 
@@ -10,7 +11,7 @@
         </div>
 
         <asp:PlaceHolder ID="ph_filtros" runat="server" />
-        <asp:Button ID="btnBuscar" runat="server" TextButton="Buscar" TypeButton="Save" OnButtonClick="btnBuscar_ButtonClick" />
+        <uc:Button ID="btnBuscar" runat="server" TextButton="Buscar" ButtonSize="Small" TypeButton="Save" OnButtonClick="btnBuscar_ButtonClick" />
     </div>
 
 </div>

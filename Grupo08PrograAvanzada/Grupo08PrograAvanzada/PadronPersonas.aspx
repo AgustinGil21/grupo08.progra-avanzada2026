@@ -4,7 +4,6 @@
 
         <div>
             <h2>Padrón de personas y lotes</h2>
-            <asp:Literal ID="litResumen" runat="server" CssClass="page-subtitle" />
         </div>
 
         <uc:Button ID="btnNuevaPersona" runat="server" TextButton="Nueva persona"
