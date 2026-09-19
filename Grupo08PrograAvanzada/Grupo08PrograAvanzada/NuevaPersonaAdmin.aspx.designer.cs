@@ -78,13 +78,13 @@ namespace Grupo08PrograAvanzada
         protected global::System.Web.UI.WebControls.TextBox txtTelefono;
 
         /// <summary>
-        /// Control txtEmail.
+        /// Control txtFotoReferencia.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+        protected global::System.Web.UI.WebControls.TextBox txtFotoReferencia;
 
         /// <summary>
         /// Control chkCategorias.
@@ -94,24 +94,6 @@ namespace Grupo08PrograAvanzada
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList chkCategorias;
-
-        /// <summary>
-        /// Control cbLote.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbLote;
-
-        /// <summary>
-        /// Control txtPisoDepto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPisoDepto;
 
         /// <summary>
         /// Control chkTieneVehiculo.
@@ -150,13 +132,13 @@ namespace Grupo08PrograAvanzada
         protected global::System.Web.UI.WebControls.TextBox txtMarcaModelo;
 
         /// <summary>
-        /// Control txtCompaniaSeguro.
+        /// Control cbCompaniaSeguro.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCompaniaSeguro;
+        protected global::Grupo08PrograAvanzada.Componentes.DropdownList cbCompaniaSeguro;
 
         /// <summary>
         /// Control txtNumeroPoliza.
@@ -175,6 +157,33 @@ namespace Grupo08PrograAvanzada
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtVigenciaSeguro;
+
+        /// <summary>
+        /// Control txtNumeroLicencia.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumeroLicencia;
+
+        /// <summary>
+        /// Control txtVigenciaLicencia.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtVigenciaLicencia;
+
+        /// <summary>
+        /// Control lblError.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
         /// Control btnCancelar.

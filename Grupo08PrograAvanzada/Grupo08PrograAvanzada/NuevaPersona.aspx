@@ -1,9 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="NuevaPersona.aspx.cs" Inherits="Grupo08PrograAvanzada.NuevaPersona" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h1>Nueva Persona Categoría</h1>
-
-    <p class="page-sub">La persona tiene que existir en el padrón para vincularla a un lote y registrarle movimientos.</p>
+   <h1>Nueva persona con categoría</h1>
+    <p class="page-sub">La persona tiene que existir en el padrón para vincularla a un lote y registrarle movimientos. Se crean CUENTA, PERSONA y PERSONA_CATEGORIA.</p>
 
     <div class="form-card">
 
@@ -31,7 +30,7 @@
 
         <div class="form-row">
             <div>
-                <label class="busqueda-label">Fecha de nacimiento</label>
+                <label class="busqueda-label">Fecha de nacimiento *</label>
                 <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="input-generico" TextMode="Date" />
             </div>
             <div>
@@ -41,28 +40,13 @@
         </div>
 
         <div>
-            <label class="busqueda-label">E-mail</label>
-            <asp:TextBox ID="txtEmail" runat="server" CssClass="input-generico" />
+            <label class="busqueda-label">Foto de referencia</label>
+            <asp:TextBox ID="txtFotoReferencia" runat="server" CssClass="input-generico" placeholder="Ruta o URL de la foto..." />
         </div>
 
         <h3>Categoría de la persona</h3>
-        <asp:CheckBoxList ID="chkCategorias" runat="server" CssClass="categorias-list" RepeatDirection="Horizontal">
-            <asp:ListItem Text="Propietario" Value="PROPIETARIO" />
-            <asp:ListItem Text="Familiar" Value="FAMILIAR" />
-            <asp:ListItem Text="Inquilino" Value="INQUILINO" />
-            <asp:ListItem Text="Visita" Value="VISITA" />
-            <asp:ListItem Text="Proveedor" Value="PROVEEDOR" />
-            <asp:ListItem Text="Servicio doméstico" Value="SERVICIO_DOMESTICO" />
-        </asp:CheckBoxList>
-
-        <h3>Lote de la persona</h3>
-        <div class="form-row">
-            <uc:DropdownList ID="cbLote" runat="server" Titulo="Lote *" Layout="OcupaMas" />
-            <div>
-                <label class="busqueda-label">Piso / Depto.</label>
-                <asp:TextBox ID="txtPisoDepto" runat="server" CssClass="input-generico" />
-            </div>
-        </div>
+        <p class="page-sub">Una persona puede tener más de una categoría.</p>
+        <asp:CheckBoxList ID="chkCategorias" runat="server" CssClass="categorias-list" RepeatDirection="Horizontal" />
 
         <h3>Vehículo de la persona</h3>
         <uc:Checkbox ID="chkTieneVehiculo" runat="server" Label="La persona tiene vehículo" OnCheckedChanged="chkTieneVehiculo_CheckedChanged" />
@@ -79,10 +63,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div>
-                    <label class="busqueda-label">Compañía de seguro</label>
-                    <asp:TextBox ID="txtCompaniaSeguro" runat="server" CssClass="input-generico" />
-                </div>
+                <uc:DropdownList ID="cbCompaniaSeguro" runat="server" Titulo="Compañía de seguro" Layout="OcupaMas" />
                 <div>
                     <label class="busqueda-label">N° de póliza</label>
                     <asp:TextBox ID="txtNumeroPoliza" runat="server" CssClass="input-generico" />
@@ -94,7 +75,23 @@
                     <asp:TextBox ID="txtVigenciaSeguro" runat="server" CssClass="input-generico" TextMode="Date" />
                 </div>
             </div>
+
+            <h3>Licencia de conducir</h3>
+            <p class="page-sub">Obligatoria si la persona tiene vehículo.</p>
+            <div class="form-row">
+                <div>
+                    <label class="busqueda-label">N° de licencia *</label>
+                    <asp:TextBox ID="txtNumeroLicencia" runat="server" CssClass="input-generico" />
+                </div>
+                <div>
+                    <label class="busqueda-label">Vigencia *</label>
+                    <asp:TextBox ID="txtVigenciaLicencia" runat="server" CssClass="input-generico" TextMode="Date" />
+                </div>
+            </div>
         </asp:Panel>
+
+        <p class="page-sub">La persona se crea con estado Activo. El modelo no guarda qué usuario la cargó.</p>
+        <asp:Label ID="lblError" runat="server" CssClass="page-sub" ForeColor="#e05252" />
 
         <div class="form-actions">
             <uc:Button ID="btnCancelar" runat="server" TextButton="Cancelar" TypeButton="Cancel" OnButtonClick="btnCancelar_ButtonClick" />
@@ -102,7 +99,5 @@
         </div>
 
     </div>
-
-
 
 </asp:Content>
