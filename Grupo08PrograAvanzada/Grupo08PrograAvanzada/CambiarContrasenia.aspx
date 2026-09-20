@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CambiarContrasenia.aspx.cs" Inherits="Grupo08PrograAvanzada.CambiarContrasenia" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CambiarContrasenia.aspx.cs" Inherits="Grupo08PrograAvanzada.CambiarContrasenia" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <h1>Cambiar mi contraseña</h1>

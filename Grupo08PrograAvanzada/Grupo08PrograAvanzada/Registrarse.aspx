@@ -1,4 +1,4 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Registrarse.aspx.cs" Inherits="Grupo08PrograAvanzada.Registrarse" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Registrarse.aspx.cs" Inherits="Grupo08PrograAvanzada.Registrarse" %>
 
 <!DOCTYPE html>
 

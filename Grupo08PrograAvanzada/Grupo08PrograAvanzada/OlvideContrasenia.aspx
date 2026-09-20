@@ -1,4 +1,4 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="OlvideContrasenia.aspx.cs" Inherits="Grupo08PrograAvanzada.OlvideContrasenia" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="OlvideContrasenia.aspx.cs" Inherits="Grupo08PrograAvanzada.OlvideContrasenia" %>
 
 <!DOCTYPE html>
 
