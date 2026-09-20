@@ -48,10 +48,5 @@ namespace Grupo08PrograAvanzada
         /// Control btnGuardar.
         /// </summary>
         protected global::Grupo08PrograAvanzada.Componentes.Button btnGuardar;
-
-        /// <summary>
-        /// Control pnlListo.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Panel pnlListo;
     }
 }

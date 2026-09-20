@@ -12,6 +12,12 @@ namespace Grupo08PrograAvanzada
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack && Request.QueryString["cambio"] == "1")
+            {
+                var lblAviso = (Label)ControlFinder.BuscarControl(this, "lbl_aviso_login");
+                lblAviso.Visible = true;
+                lblAviso.Text = "Tu contraseña se cambió. Iniciá sesión con la nueva.";
+            }
         }
 
         protected void btn_login_1_ButtonClick(object sender, EventArgs e)

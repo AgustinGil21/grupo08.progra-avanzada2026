@@ -37,10 +37,6 @@
 
         </asp:Panel>
 
-        <asp:Panel ID="pnlListo" runat="server" Visible="false">
-            <p class="page-sub">Listo, tu contraseña quedó cambiada.</p>
-        </asp:Panel>
-
     </div>
 
 </asp:Content>

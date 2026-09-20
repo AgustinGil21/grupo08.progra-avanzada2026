@@ -20,6 +20,7 @@
                     <p> Login </p>
 
                     <div id="login_datos1" runat="server">
+                        <asp:Label ID="lbl_aviso_login" runat="server" CssClass="page-sub" Visible="false" />
                         <asp:Label ID="lbl_error_login" runat="server" CssClass="input-error" Visible="false" />
                         <uc:Input ID="input_usuario" runat="server" Label="Correo" Type="Email" />
                         <uc:Input ID="input_password" runat="server" Label="Contraseña" Type="Password" />

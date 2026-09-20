@@ -32,8 +32,10 @@ namespace Grupo08PrograAvanzada
                 return;
             }
 
-            pnlFormulario.Visible = false;
-            pnlListo.Visible = true;
+            // Se cierra la sesion a proposito: obliga a entrar de nuevo con la
+            // contrasenia nueva y no queda una sesion vieja dando vueltas.
+            Session.Clear();
+            Response.Redirect("~/Login.aspx?cambio=1");
         }
 
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)
