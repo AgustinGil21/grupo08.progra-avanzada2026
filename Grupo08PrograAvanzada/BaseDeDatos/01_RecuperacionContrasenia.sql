@@ -26,16 +26,14 @@ BEGIN
         fecha_solicitud   DATETIME      NOT NULL,
         fecha_expiracion  DATETIME      NOT NULL,
         fecha_uso         DATETIME      NULL,
-        intentos          INT           NOT NULL,
+        intentos          INT           NOT NULL
+            CONSTRAINT DF_RecuperacionContrasenia_intentos DEFAULT (0),
 
         CONSTRAINT PK_RecuperacionContrasenia
             PRIMARY KEY CLUSTERED (id_recuperacion),
 
         CONSTRAINT FK_RecuperacionContrasenia_Cuenta
-            FOREIGN KEY (id_cuenta) REFERENCES dbo.Cuenta (id_cuenta),
-
-        CONSTRAINT DF_RecuperacionContrasenia_intentos
-            DEFAULT (0) FOR intentos
+            FOREIGN KEY (id_cuenta) REFERENCES dbo.Cuenta (id_cuenta)
     );
 
     /* Busqueda tipica: el codigo pendiente mas nuevo de una cuenta. */
