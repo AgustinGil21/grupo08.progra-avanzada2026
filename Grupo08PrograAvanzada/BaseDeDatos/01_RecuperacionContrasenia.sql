@@ -1,20 +1,5 @@
-/*
-    Tabla de codigos de recuperacion de contrasenia ("Olvide mi contrasenia").
-
-    Ejecutar una sola vez sobre la base BarrioCerradoI. Es idempotente:
-    se puede correr de nuevo sin romper nada.
-
-    Decisiones de diseno:
-      - El codigo NO se guarda en texto plano. Se guarda el mismo formato
-        PBKDF2 que usa BIZ.Hash para las contrasenias. Si alguien lee la
-        tabla, no puede usar los codigos pendientes.
-      - fecha_expiracion se calcula en C# (BIZ.Recuperacion.MinutosDeVigencia)
-        para no depender del reloj del server de base.
-      - intentos limita el fuerza bruta sobre un codigo de 6 digitos.
-      - Esta tabla usa IDENTITY normal + SCOPE_IDENTITY(), no el patron
-        SET IDENTITY_INSERT + MAX(id)+1 del resto del proyecto, que se rompe
-        si dos altas ocurren al mismo tiempo.
-*/
+-- Codigos de "Olvide mi contrasenia". Correr una vez sobre BarrioCerradoI.
+-- El codigo se guarda hasheado igual que las contrasenias, no en texto plano.
 
 IF OBJECT_ID('dbo.RecuperacionContrasenia', 'U') IS NULL
 BEGIN
@@ -36,7 +21,6 @@ BEGIN
             FOREIGN KEY (id_cuenta) REFERENCES dbo.Cuenta (id_cuenta)
     );
 
-    /* Busqueda tipica: el codigo pendiente mas nuevo de una cuenta. */
     CREATE INDEX IX_RecuperacionContrasenia_Cuenta_Pendiente
         ON dbo.RecuperacionContrasenia (id_cuenta, fecha_uso, fecha_expiracion DESC);
 

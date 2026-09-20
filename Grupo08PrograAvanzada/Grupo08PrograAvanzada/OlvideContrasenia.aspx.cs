@@ -4,15 +4,6 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    /// <summary>
-    /// "Olvide mi contrasenia", en dos pasos dentro de la misma pagina:
-    ///   1. Pide el correo y dispara el mail con el codigo.
-    ///   2. Pide codigo + contrasenia nueva y la cambia.
-    ///
-    /// El paso 1 se comporta igual exista o no la cuenta: siempre pasa al paso 2
-    /// con el mismo mensaje. Si la pantalla dijera "ese correo no existe",
-    /// cualquiera podria usarla para averiguar quien esta registrado.
-    /// </summary>
     public partial class OlvideContrasenia : System.Web.UI.Page
     {
         private string CorreoIngresado
@@ -60,8 +51,8 @@ namespace Grupo08PrograAvanzada
             }
             catch (Exception ex)
             {
-                // Un fallo de SMTP o de base si se muestra: sin esto el usuario
-                // esperaria un mail que nunca va a llegar.
+                // El error de SMTP si se muestra, si no el usuario espera un mail
+                // que nunca le va a llegar.
                 MostrarError(ex.Message);
                 return;
             }

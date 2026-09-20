@@ -4,26 +4,10 @@ using System.Net.Mail;
 
 namespace BIZ
 {
-    /// <summary>
-    /// Envio de mails del sistema.
-    ///
-    /// No hay credenciales aca adentro: el host, el puerto y el remitente salen
-    /// de Web.config (seccion system.net/mailSettings/smtp y la clave de appSettings
-    /// "MailHabilitado"). Asi el mismo binario sirve para el LXC de Postfix del
-    /// barrio y para un proveedor externo, cambiando solo configuracion.
-    /// </summary>
+    // Host, puerto y remitente salen de Web.config. No hay credenciales aca.
     public class Mailer
     {
-        /// <summary>
-        /// Interruptor general del envio de mails. Mientras este en false,
-        /// Enviar() corta con una excepcion clara en vez de intentar conectarse
-        /// a un SMTP que no existe: es preferible que la pantalla de "olvide mi
-        /// contrasenia" diga que el mail esta apagado a que se quede esperando
-        /// el timeout de la conexion, o peor, a que se trague el codigo en
-        /// silencio y el usuario nunca lo reciba.
-        ///
-        /// Se pone en true recien cuando el relay de correo este levantado.
-        /// </summary>
+        // Ponerlo en true recien cuando el relay de correo este levantado.
         public static bool Habilitado
         {
             get
@@ -72,8 +56,7 @@ namespace BIZ
                     mensaje.Body = cuerpoHtml;
                     mensaje.IsBodyHtml = true;
 
-                    // Sin parametros, SmtpClient toma host/puerto/credenciales
-                    // de <system.net><mailSettings><smtp> en Web.config.
+                    // Sin parametros toma host y puerto de Web.config.
                     using (var cliente = new SmtpClient())
                     {
                         cliente.Send(mensaje);
@@ -86,11 +69,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Mail de "olvide mi contrasenia". El codigo va en el cuerpo porque el
-        /// usuario lo tipea en la pagina; no mandamos un link para no tener que
-        /// exponer la app a internet.
-        /// </summary>
         public static void EnviarCodigoRecuperacion(string destinatario, string nombre, string codigo, int minutosDeVigencia)
         {
             string asunto = "Codigo para recuperar tu contrasenia - Barrio Cerrado I";
@@ -109,10 +87,7 @@ namespace BIZ
             Enviar(destinatario, asunto, cuerpo);
         }
 
-        /// <summary>
-        /// Escapado minimo para no romper el HTML del mail con un nombre raro.
-        /// BIZ no referencia System.Web, asi que no usamos HttpUtility.
-        /// </summary>
+        // BIZ no referencia System.Web, por eso no usamos HttpUtility.
         private static string CodificarHtml(string texto)
         {
             if (string.IsNullOrEmpty(texto)) return string.Empty;

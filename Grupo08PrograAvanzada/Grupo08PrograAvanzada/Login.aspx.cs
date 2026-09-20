@@ -60,9 +60,8 @@ namespace Grupo08PrograAvanzada
             }
             else
             {
-                // Usuario recien registrado: existe y la contrasenia es correcta,
-                // pero todavia no tiene un nivel de acceso con pantallas asignadas.
-                // Sin este caso la pagina no hacia nada y parecia que el login fallaba.
+                // Recien registrado: la contrasenia esta bien pero todavia no tiene
+                // pantallas asignadas. Sin esto el login no hacia nada.
                 Session.Clear();
 
                 var lblErrorLogin = (Label)ControlFinder.BuscarControl(this, "lbl_error_login");

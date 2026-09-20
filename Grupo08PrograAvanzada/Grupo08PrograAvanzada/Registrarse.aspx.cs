@@ -4,13 +4,6 @@ using System.Web.UI.WebControls;
 
 namespace Grupo08PrograAvanzada
 {
-    /// <summary>
-    /// Auto-registro de usuario, en dos pasos dentro de la misma pagina:
-    ///   1. El visitante ingresa su documento y verificamos que este en el padron.
-    ///   2. Elige correo y contrasenia, y le creamos el usuario.
-    ///
-    /// El id_cuenta que resolvemos en el paso 1 viaja en ViewState hasta el paso 2.
-    /// </summary>
     public partial class Registrarse : System.Web.UI.Page
     {
         private int? IdCuentaVerificada
@@ -19,11 +12,7 @@ namespace Grupo08PrograAvanzada
             set { ViewState["IdCuentaVerificada"] = value; }
         }
 
-        /// <summary>
-        /// Los controles viven adentro de la plantilla del Card, asi que no los
-        /// declara el designer y hay que buscarlos en el arbol (mismo criterio
-        /// que usa Login.aspx.cs).
-        /// </summary>
+        // Los controles estan adentro del Card, el designer no los declara.
         private T Buscar<T>(string id) where T : Control
         {
             var control = ControlFinder.BuscarControl(this, id) as T;

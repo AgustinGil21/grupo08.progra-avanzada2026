@@ -3,21 +3,10 @@ using System.Data.SqlClient;
 
 namespace BIZ
 {
-    /// <summary>
-    /// Politica de contrasenias y cambio de contrasenia de una cuenta.
-    ///
-    /// La tabla Contrasenia guarda el hash como VARBINARY con el texto del hash
-    /// codificado en Unicode: es el formato que ya escribia Auth.DarDeAltaUsuario,
-    /// y lo respetamos para no invalidar las cuentas que ya existen.
-    /// </summary>
     public class Contrasenia
     {
         public const int LargoMinimo = 8;
 
-        /// <summary>
-        /// Reglas minimas. Tira excepcion con un mensaje que se puede mostrar
-        /// tal cual en pantalla.
-        /// </summary>
         public static void ValidarPolitica(string contrasenia)
         {
             if (string.IsNullOrWhiteSpace(contrasenia))
@@ -39,10 +28,8 @@ namespace BIZ
                 throw new Exception("La contrasenia tiene que combinar letras y numeros.");
         }
 
-        /// <summary>
-        /// Convierte el hash guardado (VARBINARY en Unicode) al string del formato
-        /// iteraciones.salt.hash que entiende BIZ.Hash.
-        /// </summary>
+        // El hash se guarda como VARBINARY con el texto en Unicode, igual que lo
+        // escribia Auth.DarDeAltaUsuario. No tocar o se caen las cuentas viejas.
         private static string LeerHashAlmacenado(object valorDeLaColumna)
         {
             if (valorDeLaColumna == null || valorDeLaColumna == DBNull.Value)
@@ -80,10 +67,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Devuelve el id_cuenta asociado a un correo de usuario, o null si no
-        /// hay ninguna cuenta activa con ese correo.
-        /// </summary>
         public static int? ObtenerIdCuentaPorCorreo(string correo)
         {
             const string q = @"
@@ -131,14 +114,8 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Pisa el hash de la contrasenia activa de la cuenta.
-        ///
-        /// Actualiza la fila existente en vez de insertar una nueva y dar de baja
-        /// la vieja: dar de baja requiere saber que id_estado significa "inactiva"
-        /// y ese valor no esta confirmado en la base. Si mas adelante quieren
-        /// historial de contrasenias, el cambio es aca y en el script de BD.
-        /// </summary>
+        // Pisa la fila activa en vez de insertar una nueva, porque no sabemos que
+        // id_estado es "inactiva". Si despues quieren historial, se cambia aca.
         internal static void EscribirHash(int idCuenta, string contraseniaNueva)
         {
             var hash = Hash.HashearContrasenia(contraseniaNueva);
@@ -160,10 +137,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Cambio de contrasenia con sesion iniciada: pide la actual para que
-        /// alguien que agarre la sesion abierta no pueda secuestrar la cuenta.
-        /// </summary>
         public static void Cambiar(int idUsuario, string contraseniaActual, string contraseniaNueva, string repetirContraseniaNueva)
         {
             if (contraseniaNueva != repetirContraseniaNueva)

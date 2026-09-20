@@ -4,32 +4,13 @@ using System.Security.Cryptography;
 
 namespace BIZ
 {
-    /// <summary>
-    /// "Olvide mi contrasenia": el usuario pide un codigo por mail y lo usa para
-    /// elegir una contrasenia nueva sin haber iniciado sesion.
-    ///
-    /// Requiere la tabla dbo.RecuperacionContrasenia
-    /// (ver BaseDeDatos/01_RecuperacionContrasenia.sql).
-    ///
-    /// Cuidados que toma esta clase:
-    ///   - El codigo se guarda hasheado, no en texto plano.
-    ///   - Pedir un codigo nuevo invalida los anteriores de esa cuenta.
-    ///   - Maximo de intentos por codigo, para que 6 digitos no se puedan
-    ///     adivinar a fuerza bruta.
-    ///   - SolicitarCodigo() se comporta igual exista o no la cuenta, asi la
-    ///     pantalla no sirve para averiguar que correos estan registrados.
-    /// </summary>
+    // Necesita la tabla RecuperacionContrasenia (BaseDeDatos/01_RecuperacionContrasenia.sql).
     public class Recuperacion
     {
         public const int MinutosDeVigencia = 15;
         public const int MaximoDeIntentos = 5;
         private const int DigitosDelCodigo = 6;
 
-        /// <summary>
-        /// Genera un codigo numerico de 6 digitos con el generador criptografico.
-        /// Rechaza los valores del final del rango del byte para que todos los
-        /// digitos salgan con la misma probabilidad.
-        /// </summary>
         private static string GenerarCodigo()
         {
             var codigo = new char[DigitosDelCodigo];
@@ -53,9 +34,6 @@ namespace BIZ
             return new string(codigo);
         }
 
-        /// <summary>
-        /// Datos que necesitamos para armar el mail. Null si el correo no existe.
-        /// </summary>
         private static bool BuscarDestinatario(string correo, out int idCuenta, out string nombre)
         {
             idCuenta = 0;
@@ -133,13 +111,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Genera un codigo y lo manda por mail.
-        ///
-        /// No avisa si el correo existe o no: si no existe, no hace nada y vuelve
-        /// como si todo hubiera salido bien. La pantalla siempre muestra
-        /// "si el correo esta registrado, te llega un codigo".
-        /// </summary>
         public static void SolicitarCodigo(string correo)
         {
             if (string.IsNullOrWhiteSpace(correo))
@@ -151,7 +122,7 @@ namespace BIZ
             try
             {
                 if (!BuscarDestinatario(correo.Trim(), out idCuenta, out nombre))
-                    return; // cuenta inexistente: silencio deliberado
+                    return; // no avisamos si el correo existe o no, a proposito
             }
             catch (Exception ex)
             {
@@ -165,11 +136,7 @@ namespace BIZ
             Mailer.EnviarCodigoRecuperacion(correo.Trim(), nombre, codigo, MinutosDeVigencia);
         }
 
-        /// <summary>
-        /// Busca el codigo pendiente de la cuenta y lo valida. Suma un intento
-        /// antes de comparar, asi un error no se puede reintentar gratis.
-        /// Devuelve el id_recuperacion si el codigo es correcto.
-        /// </summary>
+        // Suma el intento antes de comparar, si no se puede reintentar gratis.
         private static int ValidarYObtenerId(int idCuenta, string codigo)
         {
             const string qBuscar = @"
@@ -236,11 +203,7 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Chequeo del codigo sin cambiar nada todavia. Lo usa la pantalla para
-        /// pasar del paso "ingresa el codigo" al paso "elegi tu contrasenia".
-        /// Ojo: consume un intento.
-        /// </summary>
+        // Ojo que consume un intento.
         public static void VerificarCodigo(string correo, string codigo)
         {
             if (string.IsNullOrWhiteSpace(codigo))
@@ -254,10 +217,6 @@ namespace BIZ
             ValidarYObtenerId(idCuenta.Value, codigo.Trim());
         }
 
-        /// <summary>
-        /// Paso final: valida el codigo y escribe la contrasenia nueva.
-        /// El codigo queda quemado aunque el usuario vuelva atras.
-        /// </summary>
         public static void Restablecer(string correo, string codigo, string contraseniaNueva, string repetirContraseniaNueva)
         {
             if (contraseniaNueva != repetirContraseniaNueva)

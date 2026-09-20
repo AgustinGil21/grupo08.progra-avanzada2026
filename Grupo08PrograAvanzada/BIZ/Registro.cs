@@ -4,32 +4,10 @@ using System.Data.SqlClient;
 
 namespace BIZ
 {
-    /// <summary>
-    /// Alta de usuario hecha por la propia persona (auto-registro).
-    ///
-    /// Regla del negocio: no se crea gente nueva desde aca. La persona ya tiene
-    /// que estar en el padron (tabla Cuenta, cargada por un administrador); lo
-    /// que hace el registro es darle credenciales a esa cuenta.
-    ///
-    /// El usuario queda con el nivel de acceso mas bajo. Ese nivel no tiene filas
-    /// en NivelAccesoUrl, asi que Auth.PuedeAcceder devuelve false para todas las
-    /// rutas hasta que un administrador le asigne el nivel real desde
-    /// UsuariosAccesos.aspx.
-    ///
-    /// Nota sobre el acceso a datos: dos de las consultas de abajo vivian en Auth
-    /// (VerificarDni y DarDeAltaUsuarioSobreCuentaExistente) y se borraron en la
-    /// rama backend por no tener llamadores. La tercera (UsuarioExiste) sigue en
-    /// Auth pero es privada. En vez de reponer o abrir codigo ajeno -- Auth lo
-    /// esta editando el resto del equipo -- el registro se lleva su propio acceso
-    /// a datos y queda autocontenido.
-    /// </summary>
     public class Registro
     {
-        /// <summary>
-        /// Nivel "Sin asignar": sin filas en NivelAccesoUrl, asi que PuedeAcceder
-        /// da false para cualquier ruta hasta que un administrador le asigne el
-        /// nivel real.
-        /// </summary>
+        // Sin asignar: no tiene filas en NivelAccesoUrl, asi que PuedeAcceder da
+        // false hasta que un administrador le ponga el nivel real.
         private const int ID_NIVEL_ACCESO_SIN_ASIGNAR = 3;
 
         public class ResultadoVerificacion
@@ -44,10 +22,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Validacion de correo sin expresiones regulares: MailAddress acepta
-        /// exactamente lo que despues vamos a poder usar para mandar el mail.
-        /// </summary>
         public static bool CorreoTieneFormatoValido(string correo)
         {
             if (string.IsNullOrWhiteSpace(correo)) return false;
@@ -64,10 +38,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Busca el documento en el padron. Devuelve la cuenta y, si ya tiene
-        /// usuario, tambien su correo (por eso el LEFT JOIN).
-        /// </summary>
         private static DataTable BuscarEnPadron(string nroDocumento)
         {
             var dt = new DataTable();
@@ -121,13 +91,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Inserta el usuario y su contrasenia en una sola transaccion.
-        ///
-        /// El SET IDENTITY_INSERT + MAX(id)+1 no es idea nuestra: es el patron que
-        /// usa toda la capa BIZ, y mezclarlo con un IDENTITY normal en las mismas
-        /// tablas romperia las altas que ya andan. Se respeta por consistencia.
-        /// </summary>
         private static int InsertarUsuarioConContrasenia(int idCuenta, string correo, string contrasenia)
         {
             var hashContrasenia = Hash.HashearContrasenia(contrasenia);
@@ -171,10 +134,6 @@ namespace BIZ
             }
         }
 
-        /// <summary>
-        /// Paso 1 del registro: confirmar que el documento esta en el padron y
-        /// que esa cuenta todavia no tiene usuario.
-        /// </summary>
         public static ResultadoVerificacion VerificarDocumento(string nroDocumento)
         {
             if (string.IsNullOrWhiteSpace(nroDocumento))
@@ -205,10 +164,6 @@ namespace BIZ
             };
         }
 
-        /// <summary>
-        /// Paso 2 del registro: crear el usuario sobre la cuenta ya verificada.
-        /// Devuelve el id_usuario nuevo.
-        /// </summary>
         public static int CrearUsuario(int idCuenta, string correo, string contrasenia, string repetirContrasenia)
         {
             if (!CorreoTieneFormatoValido(correo))
@@ -227,10 +182,6 @@ namespace BIZ
             return InsertarUsuarioConContrasenia(idCuenta, correoLimpio, contrasenia);
         }
 
-        /// <summary>
-        /// Registro en un solo paso, para cuando la pantalla pide documento,
-        /// correo y contrasenia juntos.
-        /// </summary>
         public static int Registrar(string nroDocumento, string correo, string contrasenia, string repetirContrasenia)
         {
             var cuenta = VerificarDocumento(nroDocumento);

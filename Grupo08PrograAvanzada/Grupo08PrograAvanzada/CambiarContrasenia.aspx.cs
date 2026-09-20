@@ -3,12 +3,7 @@ using System.Web.UI;
 
 namespace Grupo08PrograAvanzada
 {
-    /// <summary>
-    /// Cambio de contrasenia con la sesion ya iniciada.
-    ///
-    /// Hereda de PaginaBase sin declarar RolRequerido: cualquier usuario logueado
-    /// puede cambiar la suya, pero un visitante sin sesion se va al Login.
-    /// </summary>
+    // Sin RolRequerido: cualquiera logueado puede cambiar la suya.
     public partial class CambiarContrasenia : PaginaBase
     {
         protected void Page_Load(object sender, EventArgs e)
