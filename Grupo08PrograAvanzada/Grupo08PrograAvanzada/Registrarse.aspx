@@ -4,6 +4,7 @@
 
 <html>
     <head runat="server">
+        <meta charset="utf-8" />
         <title> Barrio Cerrado I - Crear usuario</title>
         <webopt:bundlereference runat="server" path="~/Content/css" />
         <link href="Content/Site.css" rel="stylesheet" />
