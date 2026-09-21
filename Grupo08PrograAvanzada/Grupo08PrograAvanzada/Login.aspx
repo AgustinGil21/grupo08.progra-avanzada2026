@@ -30,9 +30,9 @@
                         <p class="page-sub">
                             <a href="OlvideContrasenia.aspx">Olvidé mi contraseña</a>
                         </p>
-                        <p class="page-sub">
+                        <%--<p class="page-sub">
                             ¿Todavía no tenés usuario? <a href="Registrarse.aspx">Creá el tuyo</a>
-                        </p>
+                        </p>--%>
                     </div>
 
                     <div id="login_datos_guardia" runat="server" visible="false">
