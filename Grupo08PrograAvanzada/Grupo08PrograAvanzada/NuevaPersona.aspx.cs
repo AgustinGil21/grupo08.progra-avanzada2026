@@ -72,6 +72,14 @@ namespace Grupo08PrograAvanzada
                     return;
                 }
 
+                if (string.IsNullOrWhiteSpace(cbCompaniaSeguro.Combo.SelectedValue) ||
+                    string.IsNullOrWhiteSpace(txtNumeroPoliza.Text) ||
+                    string.IsNullOrWhiteSpace(txtVigenciaSeguro.Text))
+                {
+                    lblError.Text = "La compañía de seguro, el número de póliza y la vigencia son obligatorios si la persona tiene vehículo.";
+                    return;
+                }
+
                 if (Vehiculo.ExistePatente(txtPatente.Text))
                 {
                     lblError.Text = "Ya existe un vehículo registrado con esa patente.";
@@ -98,7 +106,6 @@ namespace Grupo08PrograAvanzada
 
                 string rutaFoto = GuardarFotoYObtenerRuta();
 
-                // TODO: confirmar firma exacta de DarDeAltaPersonaConCategorias contra BIZ/Persona.cs
                 int idPersona = Persona.DarDeAltaPersonaConCategorias(
                     txtNombres.Text,
                     txtApellido.Text,
