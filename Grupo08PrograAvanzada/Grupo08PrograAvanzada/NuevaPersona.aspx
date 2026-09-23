@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="NuevaPersona.aspx.cs" Inherits="Grupo08PrograAvanzada.NuevaPersona" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-   <h1>Nueva persona con categoría</h1>
+    <h1>Nueva persona con categoría</h1>
     <div class="form-card">
 
         <h3>Identificación de la persona</h3>
@@ -39,7 +39,28 @@
 
         <div>
             <label class="busqueda-label">Foto de referencia</label>
-            <asp:TextBox ID="txtFotoReferencia" runat="server" CssClass="input-generico" placeholder="Ruta o URL de la foto..." />
+
+            <div class="foto-tabs">
+                <button type="button" id="btnTabArchivo" class="btn btn-cancel" onclick="mostrarTabFoto('archivo')">Subir archivo</button>
+                <button type="button" id="btnTabCamara" class="btn btn-cancel" onclick="mostrarTabFoto('camara')">Usar cámara</button>
+            </div>
+
+            <div id="panelArchivo">
+                <input type="file" id="inputArchivoFoto" accept="image/*" onchange="cargarArchivoComoFoto(this)" />
+            </div>
+
+            <div id="panelCamara" style="display:none;">
+               <video id="videoCamara" autoplay="autoplay" playsinline="playsinline" muted="muted" style="max-width:320px; border-radius:8px;"></video>
+                <div style="margin-top:8px;">
+                    <button type="button" class="btn btn-cancel" onclick="iniciarCamara()">Activar cámara</button>
+                    <button type="button" class="btn btn-save" onclick="capturarFoto()">Capturar</button>
+                </div>
+                <canvas id="canvasCamara" style="display:none;"></canvas>
+            </div>
+
+            <div id="previewFoto" style="margin-top:10px;"></div>
+
+            <asp:HiddenField ID="hdnFotoBase64" runat="server" />
         </div>
 
         <h3>Categoría de la persona</h3>
@@ -94,5 +115,53 @@
         </div>
 
     </div>
+
+    <script>
+        function mostrarTabFoto(cual) {
+            document.getElementById('panelArchivo').style.display = cual === 'archivo' ? 'block' : 'none';
+            document.getElementById('panelCamara').style.display = cual === 'camara' ? 'block' : 'none';
+        }
+
+        function cargarArchivoComoFoto(input) {
+            if (!input.files || !input.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                guardarFotoBase64(e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        var streamCamara = null;
+
+        function iniciarCamara() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    streamCamara = stream;
+                    document.getElementById('videoCamara').srcObject = stream;
+                })
+                .catch(function () {
+                    alert('No se pudo acceder a la cámara. Revisá los permisos del navegador.');
+                });
+        }
+
+        function capturarFoto() {
+            var video = document.getElementById('videoCamara');
+            var canvas = document.getElementById('canvasCamara');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            guardarFotoBase64(canvas.toDataURL('image/jpeg', 0.85));
+
+            if (streamCamara) {
+                streamCamara.getTracks().forEach(function (t) { t.stop(); });
+            }
+        }
+
+        function guardarFotoBase64(dataUrl) {
+            document.getElementById('<%= hdnFotoBase64.ClientID %>').value = dataUrl;
+            document.getElementById('previewFoto').innerHTML =
+                '<img src="' + dataUrl + '" style="max-width:160px; border-radius:8px;" />';
+        }
+    </script>
 
 </asp:Content>

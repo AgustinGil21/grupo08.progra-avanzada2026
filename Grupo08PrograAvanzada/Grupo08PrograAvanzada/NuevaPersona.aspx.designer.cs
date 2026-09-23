@@ -78,13 +78,13 @@ namespace Grupo08PrograAvanzada
         protected global::System.Web.UI.WebControls.TextBox txtTelefono;
 
         /// <summary>
-        /// Control txtFotoReferencia.
+        /// Control hdnFotoBase64.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFotoReferencia;
+        protected global::System.Web.UI.WebControls.HiddenField hdnFotoBase64;
 
         /// <summary>
         /// Control chkCategorias.

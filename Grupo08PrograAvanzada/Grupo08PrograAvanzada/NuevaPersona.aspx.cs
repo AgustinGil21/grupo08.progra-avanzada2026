@@ -96,6 +96,8 @@ namespace Grupo08PrograAvanzada
                     return;
                 }
 
+                string rutaFoto = GuardarFotoYObtenerRuta();
+
                 // TODO: confirmar firma exacta de DarDeAltaPersonaConCategorias contra BIZ/Persona.cs
                 int idPersona = Persona.DarDeAltaPersonaConCategorias(
                     txtNombres.Text,
@@ -105,7 +107,7 @@ namespace Grupo08PrograAvanzada
                     DateTime.Parse(txtFechaNacimiento.Text),
                     int.Parse(cbTipoDocumento.Combo.SelectedValue),
                     txtNumeroDocumento.Text,
-                    txtFotoReferencia.Text,
+                    rutaFoto,
                     idCategorias
                 );
 
@@ -141,5 +143,40 @@ namespace Grupo08PrograAvanzada
             Response.Redirect("~/PadronPersonas.aspx");
         }
 
+        private string GuardarFotoYObtenerRuta()
+        {
+            string dataUrl = hdnFotoBase64.Value;
+
+            if (string.IsNullOrWhiteSpace(dataUrl))
+            {
+                return null; // la columna admite NULL, así que sin foto no pasa nada
+            }
+
+            int idxComa = dataUrl.IndexOf(',');
+            string encabezado = dataUrl.Substring(0, idxComa);
+            string base64 = dataUrl.Substring(idxComa + 1);
+
+            string extension = encabezado.Contains("png") ? ".png" : ".jpg";
+            byte[] bytes = Convert.FromBase64String(base64);
+
+            string carpeta = Server.MapPath("~/Uploads/Personas/");
+            if (!System.IO.Directory.Exists(carpeta))
+            {
+                System.IO.Directory.CreateDirectory(carpeta);
+            }
+
+            string nombreArchivo = Guid.NewGuid().ToString("N") + extension;
+            string rutaFisica = System.IO.Path.Combine(carpeta, nombreArchivo);
+            System.IO.File.WriteAllBytes(rutaFisica, bytes);
+
+            string rutaRelativa = "/Uploads/Personas/" + nombreArchivo;
+
+            if (rutaRelativa.Length > 500)
+            {
+                throw new Exception("La ruta generada para la foto es demasiado larga.");
+            }
+
+            return rutaRelativa;
+        }
     }
 }
