@@ -48,6 +48,7 @@
     <Compile Include="Cuenta.cs" />
     <Compile Include="Lote.cs" />
     <Compile Include="Mailer.cs" />
+    <Compile Include="Movimiento.cs" />
     <Compile Include="Recuperacion.cs" />
     <Compile Include="Registro.cs" />
     <Compile Include="Hash.cs" />
