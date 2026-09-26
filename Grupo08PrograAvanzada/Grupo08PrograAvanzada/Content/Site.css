@@ -691,3 +691,19 @@ h1, h2, .page-header h2 {
 }
 
 /* Fin Para los aspx que tienen la sidebar */
+
+/* Inicio RegistrarMovimientos */
+
+.movimiento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.movimiento-columna {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Fin RegistrarMovimientos */
