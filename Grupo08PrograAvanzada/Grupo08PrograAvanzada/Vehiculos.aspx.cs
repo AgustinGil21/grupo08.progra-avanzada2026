@@ -41,16 +41,16 @@ namespace Grupo08PrograAvanzada
             if (!IsPostBack)
             {
                 CargarCombos();
-                CargarVehiculos("", "TODOS");
+                CargarVehiculos("", "");
             }
         }
 
         private void CargarCombos()
         {
             cbEstado.Combo.Items.Clear();
-            cbEstado.Combo.Items.Add(new ListItem("Todos", "TODOS"));
-            cbEstado.Combo.Items.Add(new ListItem("Vigente", "VIGENTE"));
-            cbEstado.Combo.Items.Add(new ListItem("Vencido", "VENCIDO"));
+            cbEstado.Combo.Items.Add(new ListItem("Todos", ""));
+            cbEstado.Combo.Items.Add(new ListItem("Vigente", "Vigente"));
+            cbEstado.Combo.Items.Add(new ListItem("Vencido", "Vencido"));
 
             cbCompaniaSeguroModal.Combo.DataSource = CompaniaSeguro.ListarCompanias();
             cbCompaniaSeguroModal.Combo.DataTextField = "descripcion";
@@ -70,7 +70,7 @@ namespace Grupo08PrograAvanzada
 
         protected void ucBuscar_BuscarClick(object sender, EventArgs e)
         {
-            string filtro = chkVerSoloVencidos.Checked ? "VENCIDO" : cbEstado.Combo.SelectedValue;
+            string filtro = chkVerSoloVencidos.Checked ? "Vencido" : cbEstado.Combo.SelectedValue;
             CargarVehiculos(ucBuscar.Input.Text, filtro);
         }
 
@@ -113,7 +113,7 @@ namespace Grupo08PrograAvanzada
                     DateTime.Parse(txtVigenciaSeguroModal.Value)
                 );
 
-                string filtro = chkVerSoloVencidos.Checked ? "VENCIDO" : cbEstado.Combo.SelectedValue;
+                string filtro = chkVerSoloVencidos.Checked ? "Vencido" : cbEstado.Combo.SelectedValue;
                 CargarVehiculos(ucBuscar.Input.Text, filtro);
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "cerrarModalPoliza",

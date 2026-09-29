@@ -29,13 +29,13 @@
                         <tr>
                             <td><%# Eval("patente") %></td>
                             <td><%# Eval("descripcion") %></td>
-                            <td><%# Eval("Persona") %></td>
+                            <td><%# Eval("Titular") %></td>
                             <td><%# Eval("CompaniaSeguro") %></td>
-                            <td><%# Eval("PolizaSeguro") %></td>
-                            <td><%# Eval("VigenciaSeguro", "{0:dd/MM/yyyy}") %></td>
+                            <td><%# Eval("poliza_seguro") %></td>
+                            <td><%# Eval("vigencia_poliza_seguro", "{0:dd/MM/yyyy}") %></td>
                             <td>
-                                <span class='<%# (string)Eval("EstadoSeguro") == "Vigente" ? "aviso-ok" : "aviso-alerta" %>'>
-                                    <%# Eval("EstadoSeguro") %>
+                                <span class='<%# (string)Eval("EstadoPoliza") == "Vigente" ? "aviso-ok" : "aviso-alerta" %>'>
+                                    <%# Eval("EstadoPoliza") %>
                                 </span>
                             </td>
                             <td>
