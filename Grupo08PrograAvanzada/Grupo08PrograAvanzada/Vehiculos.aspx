@@ -39,9 +39,8 @@
                                 </span>
                             </td>
                             <td>
-                                <asp:HiddenField ID="hdnIdVehiculoFila" runat="server" Value='<%# Eval("id_vehiculo") %>' />
                                 <uc:Button ID="btnActualizarFila" runat="server" TextButton="Actualizar" TypeButton="Save" ButtonSize="Small"
-                                    OnButtonClick="btnActualizarFila_ButtonClick" />
+                                    OnClientClick='<%# "abrirModalPoliza(" + Eval("id_vehiculo") + "); return false;" %>' />
                             </td>
                         </tr>
                     </ItemTemplate>

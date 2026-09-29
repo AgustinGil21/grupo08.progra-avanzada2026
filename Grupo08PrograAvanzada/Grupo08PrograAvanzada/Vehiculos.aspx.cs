@@ -15,11 +15,6 @@ namespace Grupo08PrograAvanzada
             get { return "Guardia"; }
         }
 
-        // Controles dentro de <Filters> de uc:Buscar y <Content> de uc:Modal.
-        // No generan campo en el .designer.cs porque viven dentro de un ITemplate
-        // (ver "BUG CONOCIDO: ITemplate + Page_Load" en las reglas del proyecto).
-        // Confirmado: Buscar.ascx.cs y Modal.ascx.cs ya instancian su ITemplate en
-        // OnInit, así que ControlFinder acá en Page_Load funciona sin problema.
         private DropdownList cbEstado;
         private Checkbox chkVerSoloVencidos;
         private HiddenField hdnIdVehiculo;
@@ -74,21 +69,6 @@ namespace Grupo08PrograAvanzada
             CargarVehiculos(ucBuscar.Input.Text, filtro);
         }
 
-        protected void btnActualizarFila_ButtonClick(object sender, EventArgs e)
-        {
-            var boton = (Button)sender;
-            var fila = (RepeaterItem)boton.NamingContainer;
-            var hdnFila = (HiddenField)fila.FindControl("hdnIdVehiculoFila");
-
-            hdnIdVehiculo.Value = hdnFila.Value;
-            lblErrorModal.Text = "";
-            txtNumeroPolizaModal.Value = "";
-            txtVigenciaSeguroModal.Value = "";
-
-            ScriptManager.RegisterStartupScript(this, GetType(), "abrirModalPoliza",
-                "mostrarModal('" + mdlActualizarPoliza.OverlayClientID + "');", true);
-        }
-
         protected void btnGuardarPoliza_ButtonClick(object sender, EventArgs e)
         {
             lblErrorModal.Text = "";
@@ -117,7 +97,7 @@ namespace Grupo08PrograAvanzada
                 CargarVehiculos(ucBuscar.Input.Text, filtro);
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "cerrarModalPoliza",
-                    "cerrarModal('" + mdlActualizarPoliza.OverlayClientID + "');", true);
+                    "document.addEventListener('DOMContentLoaded', function() { cerrarModal('" + mdlActualizarPoliza.OverlayClientID + "'); });", true);
             }
             catch (Exception ex)
             {
