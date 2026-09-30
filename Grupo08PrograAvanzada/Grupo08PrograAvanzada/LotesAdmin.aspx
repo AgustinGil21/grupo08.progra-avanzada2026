@@ -1,16 +1,22 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="LotesAdmin.aspx.cs" Inherits="Grupo08PrograAvanzada.LotesAdmin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
+    <div>
+        <h1>Lotes del barrio</h1>
+    </div>
+
     <uc:Card ID="cardLotes" runat="server" Tittle="Lotes del barrio">
         <Contenido>
             <p class="card-subtitulo">
                 <asp:Literal ID="litResumen" runat="server" />
             </p>
 
-            <uc:Button ID="btnNuevoLote" runat="server" TextButton="Nuevo lote"
-                       TypeButton="Save" OnButtonClick="btnNuevoLote_ButtonClick" />
+            <div class="acciones-header">
+                <uc:Button ID="btnNuevoLote" runat="server" TextButton="Nuevo lote" TypeButton="Save" />
+                <uc:Button ID="btnVerPlano" runat="server" TextButton="Ver plano completo" />
+            </div>
 
-            <uc:Buscar ID="ucBuscar" runat="server" Placeholder="Número de lote, descripción o apellido..."
+            <uc:Buscar ID="ucBuscar" runat="server" Placeholder="Número de lote, descripción o apellido..." Titulo="Buscar por descripcion de lote"
                        OnBuscarClick="ucBuscar_BuscarClick">
                 <Filters>
                     <uc:DropdownList ID="ddlEstadoFiltro" runat="server" Titulo="Estado del lote" />
@@ -50,19 +56,6 @@
         </Contenido>
     </uc:Card>
 
-    <!-- Vista chica del plano -->
-    <div class="plano-preview">
-        <div>
-            <p class="plano-titulo">Plano del barrio</p>
-            <p class="plano-subtitulo">
-                Los 412 lotes tienen latitud y longitud tomadas del mapa: alcanza para dibujar los marcadores sobre el plano.
-            </p>
-        </div>
-        <uc:Button ID="btnVerPlano" runat="server" TextButton="Ver plano completo"
-                   OnClientClick="verPlanoCompleto(); return false;" />
-    </div>
-    <div id="divMapaChico" class="mapa-chico"></div>
-
     <!-- Modal: Nuevo lote -->
     <uc:Modal ID="mdlNuevoLote" runat="server" Tittle="Nuevo lote">
         <Content>
@@ -76,8 +69,11 @@
                        OnButtonClick="btnNuevoBuscarDni_ButtonClick" />
             <asp:Literal ID="litNuevoPersonaEncontrada" runat="server" />
 
-            <uc:Button ID="btnCrearLote" runat="server" TextButton="Crear lote"
-                       TypeButton="Save" OnButtonClick="btnCrearLote_ButtonClick" />
+            <div class="form-actions">
+                <uc:Button ID="btnCancelarCrearNuevoLote" runat="server" TextButton="Cancelar" TypeButton="Cancel" OnButtonClick="btnCancelarCrearNuevoLote_ButtonClick" />
+                <uc:Button ID="btnCrearLote" runat="server" TextButton="Crear lote" TypeButton="Save" OnButtonClick="btnCrearLote_ButtonClick" />
+            </div>
+            
             <asp:Literal ID="litErrorNuevoLote" runat="server" />
         </Content>
     </uc:Modal>
@@ -95,8 +91,11 @@
             <uc:Button ID="btnCambiarTitular" runat="server" TextButton="Cambiar titular"
                        OnButtonClick="btnCambiarTitular_ButtonClick" />
 
-            <uc:Button ID="btnGuardarEdicion" runat="server" TextButton="Guardar cambios"
-                       TypeButton="Save" OnButtonClick="btnGuardarEdicion_ButtonClick" />
+            <div class="form-actions">
+                <uc:Button ID="btnCancelarGuardarEdicion" runat="server" TextButton="Cancelar" TypeButton="Cancel" OnButtonClick="btnCancelarGuardarEdicion_ButtonClick" />
+                <uc:Button ID="btnGuardarEdicion" runat="server" TextButton="Guardar cambios" TypeButton="Save" OnButtonClick="btnGuardarEdicion_ButtonClick" />
+            </div>
+            
             <asp:Literal ID="litErrorEditarLote" runat="server" />
         </Content>
     </uc:Modal>
@@ -111,25 +110,32 @@
             <asp:Literal ID="litPersonaEncontradaTitular" runat="server" />
             <asp:HiddenField ID="hdnIdPersonaTitular" runat="server" />
 
-            <uc:Button ID="btnConfirmarTitular" runat="server" TextButton="Asignar titular"
-                       TypeButton="Save" OnButtonClick="btnConfirmarTitular_ButtonClick" />
+            <div class="form-actions">
+                <uc:Button ID="btnCancelarConfirmarTitular" runat="server" TextButton="Cancelar" TypeButton="Cancel" OnButtonClick="btnCancelarConfirmarTitular_ButtonClick" />
+                <uc:Button ID="btnConfirmarTitular" runat="server" TextButton="Asignar titular" TypeButton="Save" OnButtonClick="btnConfirmarTitular_ButtonClick" />
+            </div>
         </Content>
     </uc:Modal>
 
     <!-- Modal: Plano completo (solo lectura) -->
     <uc:Modal ID="mdlPlano" runat="server" Tittle="Plano del barrio" Tamanio="grande">
         <Content>
-            <div id="divMapaGrande" class="mapa-grande"></div>
-            <div class="plano-leyenda">
-                <span class="leyenda-activo">●</span> Activo
-                <span class="leyenda-bloqueado">●</span> Bloqueado
-                <span class="leyenda-inactivo">●</span> Inactivo
+            <div class="mapa-wrapper">
+                <div id="divMapaGrande" class="mapa-grande"></div>
+                <div class="plano-leyenda-flotante">
+                    <span class="leyenda-activo">●</span> Activo
+                    <span class="leyenda-bloqueado">●</span> Bloqueado
+                    <span class="leyenda-inactivo">●</span> Inactivo
+                </div>
+            </div>
+            <div class="form-actions">
+                <uc:Button ID="btnCerrarPlano" runat="server" TextButton="Cerrar" TypeButton="Cancel" OnButtonClick="btnCerrarPlano_ButtonClick"/>
             </div>
         </Content>
     </uc:Modal>
 
     <script>
-        var mapaChico, mapaGrande, mapaGrandeIniciado = false;
+        var mapaGrande, mapaGrandeIniciado = false;
 
         function colorPorEstado(estado) {
             if (estado === "Activo") return "green";
@@ -144,13 +150,6 @@
                     .bindPopup("<b>" + l.descripcion + "</b><br>" + l.estado + "<br>" + l.titular);
             });
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof lotesParaMapa === "undefined" || lotesParaMapa.length === 0) return;
-            mapaChico = L.map('divMapaChico').setView([lotesParaMapa[0].lat, lotesParaMapa[0].lng], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapaChico);
-            pintarMarcadores(mapaChico);
-        });
 
         function verPlanoCompleto() {
             mostrarModal('<%= mdlPlano.OverlayClientID %>');

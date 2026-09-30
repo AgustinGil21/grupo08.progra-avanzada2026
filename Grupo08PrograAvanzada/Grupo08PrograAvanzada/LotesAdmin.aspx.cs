@@ -45,6 +45,9 @@ namespace Grupo08PrograAvanzada
         private Repeater rptLotes;
         private Label lblSinResultados;
 
+        private Componentes.Button btnNuevoLoteReal;
+        private Componentes.Button btnVerPlanoReal;
+
         private int? idPersonaEncontradaNuevoLote
         {
             get { return ViewState["idPersonaEncontradaNuevoLote"] as int?; }
@@ -81,6 +84,12 @@ namespace Grupo08PrograAvanzada
             ucBuscar = (Buscar)ControlFinder.BuscarControl(this, "ucBuscar");
             rptLotes = (Repeater)ControlFinder.BuscarControl(this, "rptLotes");
             lblSinResultados = (Label)ControlFinder.BuscarControl(this, "lblSinResultados");
+
+            btnNuevoLoteReal = (Componentes.Button)ControlFinder.BuscarControl(this, "btnNuevoLote");
+            btnVerPlanoReal = (Componentes.Button)ControlFinder.BuscarControl(this, "btnVerPlano");
+
+            btnNuevoLoteReal.OnClientClick = $"mostrarModal('{mdlNuevoLote.OverlayClientID}'); return false;";
+            btnVerPlanoReal.OnClientClick = "verPlanoCompleto(); return false;";
 
             // Leaflet se agrega en cada request (no solo !IsPostBack) para que el <head> siempre lo tenga.
             if (Page.Header != null)
@@ -169,13 +178,7 @@ namespace Grupo08PrograAvanzada
             ClientScript.RegisterStartupScript(GetType(), "lotesMapa", $"var lotesParaMapa = {json};", true);
         }
 
-        protected void btnNuevoLote_ButtonClick()
-        {
-            ClientScript.RegisterStartupScript(GetType(), "abrirNuevo",
-                $"mostrarModal('{mdlNuevoLote.OverlayClientID}');", true);
-        }
-
-        protected void ucBuscar_BuscarClick()
+        protected void ucBuscar_BuscarClick(object sender, EventArgs e)
         {
             DataTable dt = ViewState["dtLotes"] as DataTable;
             if (dt == null) { CargarLotes(); dt = ViewState["dtLotes"] as DataTable; }
@@ -218,7 +221,7 @@ namespace Grupo08PrograAvanzada
             btnAccion.CommandArgument = fila["id_lote"].ToString();
         }
 
-        protected void btnCrearLote_ButtonClick()
+        protected void btnCrearLote_ButtonClick(object sender, EventArgs e)
         {
             string descripcion = txtNuevoDescripcionReal.Value?.Trim();
 
@@ -242,7 +245,7 @@ namespace Grupo08PrograAvanzada
                 Lote.DarDeAltaLote(descripcion, latitud, longitud, idPersonaEncontradaNuevoLote);
                 CargarLotes();
                 ClientScript.RegisterStartupScript(GetType(), "cerrarNuevo",
-                    $"cerrarModal('{mdlNuevoLote.OverlayClientID}');", true);
+                "document.addEventListener('DOMContentLoaded', function() { cerrarModal('" + mdlNuevoLote.OverlayClientID + "'); });", true);
             }
             catch (Exception ex)
             {
@@ -250,7 +253,7 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        protected void btnNuevoBuscarDni_ButtonClick()
+        protected void btnNuevoBuscarDni_ButtonClick(object sender, EventArgs e)
         {
             string dni = txtNuevoDniReal.Value?.Trim();
             DataTable resultado = Persona.BuscarPersonaPorDocumento(dni);
@@ -267,12 +270,12 @@ namespace Grupo08PrograAvanzada
             idPersonaEncontradaNuevoLote = Convert.ToInt32(p["id_persona"]);
         }
 
-        protected void btnCambiarTitular_ButtonClick()
+        protected void btnCambiarTitular_ButtonClick(object sender, EventArgs e)
         {
             AbrirModalAsignarTitular(int.Parse(hdnIdLoteEditarReal.Value));
         }
 
-        protected void btnGuardarEdicion_ButtonClick()
+        protected void btnGuardarEdicion_ButtonClick(object sender, EventArgs e)
         {
             int idLote = int.Parse(hdnIdLoteEditarReal.Value);
             string descripcion = txtEditarDescripcionReal.Value?.Trim();
@@ -292,7 +295,7 @@ namespace Grupo08PrograAvanzada
                 Lote.ActualizarLote(idLote, descripcion, idEstado, latitud, longitud);
                 CargarLotes();
                 ClientScript.RegisterStartupScript(GetType(), "cerrarEditar",
-                    $"cerrarModal('{mdlEditarLote.OverlayClientID}');", true);
+                "document.addEventListener('DOMContentLoaded', function() { cerrarModal('" + mdlEditarLote.OverlayClientID + "'); });", true);
             }
             catch (Exception ex)
             {
@@ -300,7 +303,7 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        protected void btnBuscarDniTitular_ButtonClick()
+        protected void btnBuscarDniTitular_ButtonClick(object sender, EventArgs e)
         {
             string dni = txtTitularDniReal.Value?.Trim();
             DataTable resultado = Persona.BuscarPersonaPorDocumento(dni);
@@ -315,9 +318,12 @@ namespace Grupo08PrograAvanzada
             DataRow p = resultado.Rows[0];
             litPersonaEncontradaTitularReal.Text = $"{p["apellido"]}, {p["nombre"]} · {p["Categoria"]} · en el padrón";
             hdnIdPersonaTitularReal.Value = p["id_persona"].ToString();
+
+            ClientScript.RegisterStartupScript(GetType(), "reabrirAsignar",
+            "document.addEventListener('DOMContentLoaded', function() { mostrarModal('" + mdlAsignarTitular.OverlayClientID + "'); });", true);
         }
 
-        protected void btnConfirmarTitular_ButtonClick()
+        protected void btnConfirmarTitular_ButtonClick(object sender, EventArgs e)
         {
             int idLote = int.Parse(hdnIdLoteTitularReal.Value);
             if (string.IsNullOrEmpty(hdnIdPersonaTitularReal.Value))
@@ -330,7 +336,7 @@ namespace Grupo08PrograAvanzada
             Lote.AsignarTitular(idLote, idPersona);
             CargarLotes();
             ClientScript.RegisterStartupScript(GetType(), "cerrarAsignar",
-                $"cerrarModal('{mdlAsignarTitular.OverlayClientID}');", true);
+            "document.addEventListener('DOMContentLoaded', function() { cerrarModal('" + mdlAsignarTitular.OverlayClientID + "'); });", true);
         }
 
         protected void rptLotes_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -359,14 +365,39 @@ namespace Grupo08PrograAvanzada
             litEditarTitularActualReal.Text = fila["Titular"].ToString();
 
             ClientScript.RegisterStartupScript(GetType(), "abrirEditar",
-                $"mostrarModal('{mdlEditarLote.OverlayClientID}');", true);
+                "document.addEventListener('DOMContentLoaded', function() { mostrarModal('" + mdlEditarLote.OverlayClientID + "'); });", true);
         }
 
         private void AbrirModalAsignarTitular(int idLote)
         {
             hdnIdLoteTitularReal.Value = idLote.ToString();
+            txtTitularDniReal.Value = "";
+            litPersonaEncontradaTitularReal.Text = "";
+            hdnIdPersonaTitularReal.Value = "";
+
             ClientScript.RegisterStartupScript(GetType(), "abrirAsignar",
-                $"mostrarModal('{mdlAsignarTitular.OverlayClientID}');", true);
+                "document.addEventListener('DOMContentLoaded', function() { mostrarModal('" + mdlAsignarTitular.OverlayClientID + "'); });", true);
+
+        }
+
+        protected void btnCancelarGuardarEdicion_ButtonClick(object source, EventArgs e)
+        {
+            Response.Redirect("~/LotesAdmin.aspx");
+        }
+
+        protected void btnCancelarCrearNuevoLote_ButtonClick(object source, EventArgs e)
+        {
+            Response.Redirect("~/LotesAdmin.aspx");
+        }
+
+        protected void btnCancelarConfirmarTitular_ButtonClick(object source, EventArgs e)
+        {
+            Response.Redirect("~/LotesAdmin.aspx");
+        }
+
+        protected void btnCerrarPlano_ButtonClick(object source, EventArgs e)
+        {
+            Response.Redirect("~/LotesAdmin.aspx");
         }
     }
 }

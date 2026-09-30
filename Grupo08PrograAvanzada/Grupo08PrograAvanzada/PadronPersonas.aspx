@@ -3,7 +3,7 @@
     <div class="page-header">
 
         <div>
-            <h2>Padrón de personas y lotes</h2>
+            <h1>Padron de personas</h1>
         </div>
 
         <uc:Button ID="btnNuevaPersona" runat="server" TextButton="Nueva persona"

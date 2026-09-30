@@ -2,6 +2,10 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
+    <div>
+        <h1>Vehiculos</h1>
+    </div>
+
     <uc:Buscar ID="ucBuscar" runat="server" Titulo="Vehículos" Placeholder="Buscar por patente..." OnBuscarClick="ucBuscar_BuscarClick">
         <Filters>
             <uc:DropdownList ID="cbEstado" runat="server" Titulo="Estado del seguro" Layout="EnFila" />
@@ -57,7 +61,12 @@
             <uc:Input ID="txtNumeroPolizaModal" runat="server" Label="Número de póliza" />
             <uc:Input ID="txtVigenciaSeguroModal" runat="server" Label="Vigencia" Type="Date" />
             <asp:Label ID="lblErrorModal" runat="server" CssClass="text-danger" />
-            <uc:Button ID="btnGuardarPoliza" runat="server" TextButton="Guardar" TypeButton="Save" OnButtonClick="btnGuardarPoliza_ButtonClick" />
+
+            <div class="form-actions">
+                <uc:Button ID="btnCancelarPoliza" runat="server" TextButton="Cancelar" TypeButton="Cancel" OnClientClick='<%= "cerrarModal(\"" + mdlActualizarPoliza.OverlayClientID + "\"); return false;" %>' />
+                <uc:Button ID="btnGuardarPoliza" runat="server" TextButton="Guardar" TypeButton="Save" OnButtonClick="btnGuardarPoliza_ButtonClick" />
+            </div>
+
         </Content>
     </uc:Modal>
 

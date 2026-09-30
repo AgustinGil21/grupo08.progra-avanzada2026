@@ -24,15 +24,6 @@ namespace Grupo08PrograAvanzada
         protected global::Grupo08PrograAvanzada.Componentes.Card cardLotes;
 
         /// <summary>
-        /// Control btnVerPlano.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.Button btnVerPlano;
-
-        /// <summary>
         /// Control mdlPlano.
         /// </summary>
         /// <remarks>

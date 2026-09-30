@@ -33,6 +33,9 @@
         <a runat="server" href="~/UsuariosAccesos.aspx" class="sidebar-item">
             <i class="bi bi-person-lines-fill"></i> Usuarios y accesos
         </a>
+        <a runat="server" href="~/LotesAdmin.aspx" class="sidebar-item">
+            <i class="bi bi-person-lines-fill"></i> Lotes
+        </a>
         <a runat="server" href="~/ParametrosSistema.aspx" class="sidebar-item">
             <i class="bi bi-person-lines-fill"></i> Parametros del sistema
         </a>

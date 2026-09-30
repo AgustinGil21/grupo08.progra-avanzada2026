@@ -1,14 +1,22 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Lotes.aspx.cs" Inherits="Grupo08PrograAvanzada.Lotes" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
+    <div>
+        <h1>Lotes del barrio</h1>
+    </div>
+
     <uc:Card ID="cardLotes" runat="server" Tittle="Lotes del barrio">
         <Contenido>
             <p class="card-subtitulo">
                 Sólo consulta
             </p>
 
+            <div class="acciones-header">
+                <uc:Button ID="btnVerPlano" runat="server" TextButton="Ver plano completo" />
+            </div>
+
             <uc:Buscar ID="ucBuscar" runat="server" Placeholder="Número de lote, descripción o apellido..."
-                       OnBuscarClick="ucBuscar_BuscarClick">
+                       Titulo="Buscar por descripcion de lote" OnBuscarClick="ucBuscar_BuscarClick">
                 <Filters>
                     <uc:DropdownList ID="ddlEstadoFiltro" runat="server" Titulo="Estado del lote" />
                 </Filters>
@@ -18,7 +26,7 @@
                 <thead>
                     <tr>
                         <th>Descripción</th>
-                        <th>Titular</th>
+                        <th>Persona de referencia</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -39,33 +47,26 @@
         </Contenido>
     </uc:Card>
 
-    <!-- Vista chica del plano -->
-    <div class="plano-preview">
-        <div>
-            <p class="plano-titulo">Plano del barrio</p>
-            <p class="plano-subtitulo">
-                Los 412 lotes tienen latitud y longitud tomadas del mapa: alcanza para dibujar los marcadores sobre el plano.
-            </p>
-        </div>
-        <uc:Button ID="btnVerPlano" runat="server" TextButton="Ver plano completo"
-                   OnClientClick="verPlanoCompleto(); return false;" />
-    </div>
-    <div id="divMapaChico" class="mapa-chico"></div>
-
     <!-- Modal: Plano completo (solo lectura, sin acciones) -->
     <uc:Modal ID="mdlPlano" runat="server" Tittle="Plano del barrio" Tamanio="grande">
         <Content>
-            <div id="divMapaGrande" class="mapa-grande"></div>
-            <div class="plano-leyenda">
-                <span class="leyenda-activo">●</span> Activo
-                <span class="leyenda-bloqueado">●</span> Bloqueado
-                <span class="leyenda-inactivo">●</span> Inactivo
+            <div class="mapa-wrapper">
+                <div id="divMapaGrande" class="mapa-grande"></div>
+                <div class="plano-leyenda-flotante">
+                    <span class="leyenda-activo">●</span> Activo
+                    <span class="leyenda-bloqueado">●</span> Bloqueado
+                    <span class="leyenda-inactivo">●</span> Inactivo
+                </div>
+            </div>
+            <div class="form-actions">
+                <uc:Button ID="btnCerrarPlano" runat="server" TextButton="Cerrar" TypeButton="Cancel"
+                           OnButtonClick="btnCerrarPlano_ButtonClick" />
             </div>
         </Content>
     </uc:Modal>
 
     <script>
-        var mapaChico, mapaGrande, mapaGrandeIniciado = false;
+        var mapaGrande, mapaGrandeIniciado = false;
 
         function colorPorEstado(estado) {
             if (estado === "Activo") return "green";
@@ -80,13 +81,6 @@
                     .bindPopup("<b>" + l.descripcion + "</b><br>" + l.estado + "<br>" + l.titular);
             });
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof lotesParaMapa === "undefined" || lotesParaMapa.length === 0) return;
-            mapaChico = L.map('divMapaChico').setView([lotesParaMapa[0].lat, lotesParaMapa[0].lng], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapaChico);
-            pintarMarcadores(mapaChico);
-        });
 
         function verPlanoCompleto() {
             mostrarModal('<%= mdlPlano.OverlayClientID %>');

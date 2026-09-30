@@ -21,9 +21,16 @@ namespace Grupo08PrograAvanzada.Componentes
 
         public string OverlayClientID => overlay.ClientID;
 
+        public string Tamanio { get; set; } = "normal";
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
+
+            if (Tamanio == "grande")
+            {
+                overlay.Attributes["class"] = "modal-overlay modal-grande";
+            }
 
             if (Content != null && ph_body.Controls.Count == 0)
             {

@@ -17,20 +17,21 @@ namespace Grupo08PrograAvanzada
             get { return "Guardia"; }
         }
 
-        private DropdownList ddlEstadoFiltro;
-        private Literal litResumen;
-        private Buscar ucBuscar;
-        private Repeater rptLotes;
-        private Label lblSinResultados;
+        private DropdownList ddlEstadoFiltroReal;
+        private Buscar ucBuscarReal;
+        private Repeater rptLotesReal;
+        private Label lblSinResultadosReal;
+        private Componentes.Button btnVerPlanoReal;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            litResumen = (Literal)ControlFinder.BuscarControl(this, "litResumen");
-            ucBuscar = (Buscar)ControlFinder.BuscarControl(this, "ucBuscar");
-            rptLotes = (Repeater)ControlFinder.BuscarControl(this, "rptLotes");
-            lblSinResultados = (Label)ControlFinder.BuscarControl(this, "lblSinResultados");
+            ddlEstadoFiltroReal = (DropdownList)ControlFinder.BuscarControl(this, "ddlEstadoFiltro");
+            ucBuscarReal = (Buscar)ControlFinder.BuscarControl(this, "ucBuscar");
+            rptLotesReal = (Repeater)ControlFinder.BuscarControl(this, "rptLotes");
+            lblSinResultadosReal = (Label)ControlFinder.BuscarControl(this, "lblSinResultados");
+            btnVerPlanoReal = (Componentes.Button)ControlFinder.BuscarControl(this, "btnVerPlano");
 
-            ddlEstadoFiltro = (DropdownList)ControlFinder.BuscarControl(this, "ddlEstadoFiltro");
+            btnVerPlanoReal.OnClientClick = "verPlanoCompleto(); return false;";
 
             if (Page.Header != null)
             {
@@ -49,47 +50,36 @@ namespace Grupo08PrograAvanzada
         private void CargarComboEstado()
         {
             DataTable todosLosEstados = Estado.ListarEstados();
-
             int[] idsParaLote = { 1, 2, 3 };
 
             var dv = new DataView(todosLosEstados);
             dv.RowFilter = $"id_estado IN ({string.Join(",", idsParaLote)})";
 
-            foreach (var ddl in new[] { ddlEstadoFiltro.Combo })
-            {
-                ddl.DataSource = dv;
-                ddl.DataTextField = "descripcion";
-                ddl.DataValueField = "id_estado";
-                ddl.DataBind();
-            }
+            ddlEstadoFiltroReal.Combo.DataSource = dv;
+            ddlEstadoFiltroReal.Combo.DataTextField = "descripcion";
+            ddlEstadoFiltroReal.Combo.DataValueField = "id_estado";
+            ddlEstadoFiltroReal.Combo.DataBind();
 
-            ddlEstadoFiltro.Combo.SelectedValue = "1";
-            ddlEstadoFiltro.Combo.Enabled = false;
+            ddlEstadoFiltroReal.Combo.Items.Insert(0, new ListItem("Todos los estados", "0"));
         }
 
         private void CargarLotes()
         {
             DataSet ds = Lote.ListarLotes();
             DataTable dt = ds.Tables[0];
-            dt.PrimaryKey = new[] { dt.Columns["id_lote"] };
 
             ViewState["dtLotes"] = dt;
 
             var dv = new DataView(dt);
             AplicarBind(dv);
-
             RegistrarDatosMapa(dt);
         }
 
         private void AplicarBind(DataView dv)
         {
-            rptLotes.DataSource = dv;
-            rptLotes.DataBind();
-
-            lblSinResultados.Visible = dv.Count == 0;
-
-            int sinTitular = dv.Cast<DataRowView>().Count(r => r["id_persona_titular"] == DBNull.Value);
-            litResumen.Text = $"{dv.Count} lotes · {sinTitular} sin titular asignado · alta y edición desde administración";
+            rptLotesReal.DataSource = dv;
+            rptLotesReal.DataBind();
+            lblSinResultadosReal.Visible = dv.Count == 0;
         }
 
         private void RegistrarDatosMapa(DataTable dt)
@@ -109,7 +99,7 @@ namespace Grupo08PrograAvanzada
             ClientScript.RegisterStartupScript(GetType(), "lotesMapa", $"var lotesParaMapa = {json};", true);
         }
 
-        protected void ucBuscar_BuscarClick()
+        protected void ucBuscar_BuscarClick(object sender, EventArgs e)
         {
             DataTable dt = ViewState["dtLotes"] as DataTable;
             if (dt == null) { CargarLotes(); dt = ViewState["dtLotes"] as DataTable; }
@@ -117,14 +107,14 @@ namespace Grupo08PrograAvanzada
             var dv = new DataView(dt);
             var filtros = new System.Collections.Generic.List<string>();
 
-            string texto = ucBuscar.Input.Text?.Trim();
+            string texto = ucBuscarReal.Input.Text?.Trim();
             if (!string.IsNullOrEmpty(texto))
             {
                 string textoEscapado = texto.Replace("'", "''");
                 filtros.Add($"(descripcion LIKE '%{textoEscapado}%' OR Titular LIKE '%{textoEscapado}%')");
             }
 
-            string idEstado = ddlEstadoFiltro.Combo.SelectedValue;
+            string idEstado = ddlEstadoFiltroReal.Combo.SelectedValue;
             if (idEstado != "0")
                 filtros.Add($"id_estado = {idEstado}");
 
@@ -140,6 +130,11 @@ namespace Grupo08PrograAvanzada
             var fila = (DataRowView)e.Item.DataItem;
             var litEstado = (Literal)e.Item.FindControl("litEstado");
             litEstado.Text = fila["EstadoDescripcion"].ToString();
+        }
+
+        protected void btnCerrarPlano_ButtonClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Lotes.aspx");
         }
     }
 }
