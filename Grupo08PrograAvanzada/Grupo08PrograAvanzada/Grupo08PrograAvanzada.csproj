@@ -131,6 +131,7 @@
     <Content Include="Global.asax" />
     <Content Include="CambiarContrasenia.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="LotesAdmin.aspx" />
     <Content Include="OlvideContrasenia.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Lotes.aspx" />
@@ -314,6 +315,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LotesAdmin.aspx.cs">
+      <DependentUpon>LotesAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LotesAdmin.aspx.designer.cs">
+      <DependentUpon>LotesAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="OlvideContrasenia.aspx.cs">
       <DependentUpon>OlvideContrasenia.aspx</DependentUpon>

@@ -40,7 +40,7 @@
                             </td>
                             <td>
                                 <uc:Button ID="btnActualizarFila" runat="server" TextButton="Actualizar" TypeButton="Save" ButtonSize="Small"
-                                    OnClientClick='<%# "abrirModalPoliza(" + Eval("id_vehiculo") + "); return false;" %>' />
+                                OnClientClick='<%# "abrirModalPoliza(" + Eval("id_vehiculo") + "); return false;" %>' />
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -60,5 +60,12 @@
             <uc:Button ID="btnGuardarPoliza" runat="server" TextButton="Guardar" TypeButton="Save" OnButtonClick="btnGuardarPoliza_ButtonClick" />
         </Content>
     </uc:Modal>
+
+    <script type="text/javascript">
+    function abrirModalPoliza(idVehiculo) {
+        document.getElementById('<%= HdnIdVehiculoClientId %>').value = idVehiculo;
+        mostrarModal('<%= mdlActualizarPoliza.OverlayClientID %>');
+    }
+    </script>
 
 </asp:Content>

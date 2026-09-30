@@ -15,6 +15,11 @@ namespace Grupo08PrograAvanzada
             get { return "Guardia"; }
         }
 
+        public string HdnIdVehiculoClientId
+        {
+            get { return hdnIdVehiculo.ClientID; }
+        }
+
         private DropdownList cbEstado;
         private Checkbox chkVerSoloVencidos;
         private HiddenField hdnIdVehiculo;
