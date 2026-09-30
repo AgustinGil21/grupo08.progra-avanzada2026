@@ -87,6 +87,181 @@ namespace BIZ
             }
         }
 
+        public static DataTable BuscarPersonaPorDocumento(string nroDocumento)
+        {
+            var dt = new DataTable();
+            string q = @"
+            SELECT  p.id_persona,
+                    c.apellido,
+                    c.nombre,
+                    pa.descripcion AS Nacionalidad,
+                    ISNULL(STUFF((SELECT ', ' + cat.descripcion
+                                  FROM PersonaCategoria pc
+                                  INNER JOIN Categoria cat ON cat.id_categoria = pc.id_categoria
+                                  WHERE pc.id_persona = p.id_persona
+                                  ORDER BY cat.descripcion
+                                  FOR XML PATH(''), TYPE).value('.', 'nvarchar(max)'), 1, 2, ''), '') AS Categoria
+            FROM Persona p
+            INNER JOIN Cuenta c ON c.id_cuenta = p.id_cuenta
+            LEFT JOIN Pais pa   ON pa.id_pais  = c.id_pais
+            WHERE c.nro_documento = @nroDocumento;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@nroDocumento", nroDocumento ?? "");
+
+                    using (var da = new System.Data.SqlClient.SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo buscar la persona por documento: " + ex.Message);
+            }
+        }
+
+        public static DataTable ListarCategoriasDePersona(int idPersona)
+        {
+            var dt = new DataTable();
+            string q = @"
+            SELECT cat.id_categoria, cat.descripcion
+            FROM PersonaCategoria pc
+            INNER JOIN Categoria cat ON cat.id_categoria = pc.id_categoria
+            WHERE pc.id_persona = @idPersona
+              AND cat.descripcion <> 'Propietario'
+            ORDER BY cat.descripcion;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@idPersona", idPersona);
+
+                    using (var da = new System.Data.SqlClient.SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudieron listar las categorías de la persona: " + ex.Message);
+            }
+        }
+
+        // El COALESCE es para que un campo vacio no pise un dato que ya estaba cargado.
+        public static void ActualizarDatosDeContacto(int idPersona, string telefono, string fotoReferencia)
+        {
+            string q = @"
+            SET XACT_ABORT ON;
+            BEGIN TRANSACTION;
+
+                UPDATE c
+                SET c.telefono = COALESCE(@telefono, c.telefono)
+                FROM Cuenta c
+                INNER JOIN Persona p ON p.id_cuenta = c.id_cuenta
+                WHERE p.id_persona = @idPersona;
+
+                UPDATE Persona
+                SET foto_referencia = COALESCE(@fotoReferencia, foto_referencia)
+                WHERE id_persona = @idPersona;
+
+            COMMIT TRANSACTION;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@idPersona", idPersona);
+                    cmd.Parameters.AddWithValue("@telefono",
+                        string.IsNullOrWhiteSpace(telefono) ? (object)DBNull.Value : telefono);
+                    cmd.Parameters.AddWithValue("@fotoReferencia",
+                        string.IsNullOrWhiteSpace(fotoReferencia) ? (object)DBNull.Value : fotoReferencia);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudieron actualizar los datos de contacto: " + ex.Message);
+            }
+        }
+
+        public static bool TieneLicenciaVigente(int idPersona)
+        {
+            string q = @"
+            SELECT TOP 1 1
+            FROM PersonaLicencia
+            WHERE id_persona = @idPersona
+              AND vigencia_licencia >= CAST(GETDATE() AS date);";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@idPersona", idPersona);
+                    return cmd.ExecuteScalar() != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo comprobar la licencia: " + ex.Message);
+            }
+        }
+
+        public static DataTable BuscarVisitasIngresadasHoy(string textoBusqueda)
+        {
+            var dt = new DataTable();
+            string q = @"
+            SELECT  m.id_movimiento,
+                    p.id_persona,
+                    c.apellido + ', ' + c.nombre AS Persona,
+                    c.nro_documento,
+                    m.fecha_hora_ingreso,
+                    ISNULL(lo.descripcion, '') AS Lote,
+                    o.descripcion AS Estado
+            FROM Movimiento m
+            INNER JOIN Persona p ON p.id_persona = m.id_persona
+            INNER JOIN Cuenta c  ON c.id_cuenta  = p.id_cuenta
+            LEFT JOIN Lote lo    ON lo.id_lote   = m.id_lote
+            LEFT JOIN Estado e   ON e.id_estado  = m.id_estado
+            LEFT JOIN Objeto o   ON o.id_objeto  = e.id_objeto
+            WHERE CAST(m.fecha_hora_ingreso AS date) = CAST(GETDATE() AS date)
+              AND (@texto = '' OR c.nro_documento LIKE '%' + @texto + '%')
+            ORDER BY m.fecha_hora_ingreso DESC;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@texto", textoBusqueda ?? "");
+
+                    using (var da = new System.Data.SqlClient.SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudieron buscar las visitas de hoy: " + ex.Message);
+            }
+        }
+
         public static int DarDeAltaLicencia(int idPersona, string nroLicencia, DateTime vigenciaLicencia)
         {
             string q = @"

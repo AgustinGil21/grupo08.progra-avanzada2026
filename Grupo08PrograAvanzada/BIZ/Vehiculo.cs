@@ -152,6 +152,54 @@ namespace BIZ
             }
         }
 
+        // A diferencia de BuscarVehiculos, no toca el estado de las polizas vencidas:
+        // se llama al abrir un modal y no corresponde escribir en la base ahi.
+        public static DataTable ListarVehiculosDePersona(int idPersona)
+        {
+            var dt = new DataTable();
+            string q = @"
+            SELECT  v.id_vehiculo,
+                    v.patente,
+                    v.descripcion,
+                    cs.descripcion AS CompaniaSeguro,
+                    ps.vigencia_poliza_seguro,
+                    CASE
+                        WHEN ps.vigencia_poliza_seguro IS NULL THEN 'Sin poliza'
+                        WHEN ps.vigencia_poliza_seguro < CAST(GETDATE() AS date) THEN 'Vencido'
+                        ELSE 'Vigente'
+                    END AS EstadoPoliza
+            FROM Vehiculo v
+            OUTER APPLY (
+                SELECT TOP 1 vp.poliza_seguro, vp.vigencia_poliza_seguro, vp.id_compania_seguro
+                FROM VehiculoPolizaSeguro vp
+                WHERE vp.id_vehiculo = v.id_vehiculo
+                ORDER BY vp.vigencia_poliza_seguro DESC, vp.fecha_alta DESC
+            ) ps
+            LEFT JOIN CompaniaSeguro cs ON cs.id_compania_seguro = ps.id_compania_seguro
+            WHERE v.id_persona = @idPersona
+            ORDER BY v.patente;";
+
+            try
+            {
+                var CN = Conexion.AbrirConexion();
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@idPersona", idPersona);
+
+                    using (var da = new System.Data.SqlClient.SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudieron listar los vehiculos de la persona: " + ex.Message);
+            }
+        }
+
         public static int DarDeAltaVehiculo(string patente, string descripcion, int idPersona)
         {
             if (ExistePatente(patente))
