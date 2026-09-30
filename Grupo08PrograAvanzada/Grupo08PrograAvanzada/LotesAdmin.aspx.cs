@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Globalization;
 
 namespace Grupo08PrograAvanzada
 {
@@ -237,8 +238,8 @@ namespace Grupo08PrograAvanzada
                 return;
             }
 
-            decimal? latitud = string.IsNullOrEmpty(txtNuevoLatitudReal.Value) ? (decimal?)null : Convert.ToDecimal(txtNuevoLatitudReal.Value);
-            decimal? longitud = string.IsNullOrEmpty(txtNuevoLongitudReal.Value) ? (decimal?)null : Convert.ToDecimal(txtNuevoLongitudReal.Value);
+            decimal? latitud = string.IsNullOrEmpty(txtNuevoLatitudReal.Value) ? (decimal?)null : decimal.Parse(txtNuevoLatitudReal.Value, CultureInfo.InvariantCulture);
+            decimal? longitud = string.IsNullOrEmpty(txtNuevoLongitudReal.Value) ? (decimal?)null : decimal.Parse(txtNuevoLongitudReal.Value, CultureInfo.InvariantCulture);
 
             try
             {
@@ -262,12 +263,16 @@ namespace Grupo08PrograAvanzada
             {
                 litNuevoPersonaEncontradaReal.Text = "No se encontró a la persona en el padrón.";
                 idPersonaEncontradaNuevoLote = null;
-                return;
+            }
+            else
+            {
+                DataRow p = resultado.Rows[0];
+                litNuevoPersonaEncontradaReal.Text = $"{p["apellido"]}, {p["nombre"]} · {p["Categoria"]} · en el padrón";
+                idPersonaEncontradaNuevoLote = Convert.ToInt32(p["id_persona"]);
             }
 
-            DataRow p = resultado.Rows[0];
-            litNuevoPersonaEncontradaReal.Text = $"{p["apellido"]}, {p["nombre"]} · {p["Categoria"]} · en el padrón";
-            idPersonaEncontradaNuevoLote = Convert.ToInt32(p["id_persona"]);
+            ClientScript.RegisterStartupScript(GetType(), "reabrirNuevo",
+                "document.addEventListener('DOMContentLoaded', function() { mostrarModal('" + mdlNuevoLote.OverlayClientID + "'); });", true);
         }
 
         protected void btnCambiarTitular_ButtonClick(object sender, EventArgs e)
@@ -287,8 +292,8 @@ namespace Grupo08PrograAvanzada
                 return;
             }
 
-            decimal? latitud = string.IsNullOrEmpty(txtEditarLatitudReal.Value) ? (decimal?)null : Convert.ToDecimal(txtEditarLatitudReal.Value);
-            decimal? longitud = string.IsNullOrEmpty(txtEditarLongitudReal.Value) ? (decimal?)null : Convert.ToDecimal(txtEditarLongitudReal.Value);
+            decimal? latitud = string.IsNullOrEmpty(txtEditarLatitudReal.Value) ? (decimal?)null : decimal.Parse(txtEditarLatitudReal.Value, CultureInfo.InvariantCulture);
+            decimal? longitud = string.IsNullOrEmpty(txtEditarLongitudReal.Value) ? (decimal?)null : decimal.Parse(txtEditarLongitudReal.Value, CultureInfo.InvariantCulture);
 
             try
             {
@@ -360,8 +365,8 @@ namespace Grupo08PrograAvanzada
             hdnIdLoteEditarReal.Value = fila["id_lote"].ToString();
             txtEditarDescripcionReal.Value = fila["descripcion"].ToString();
             ddlEditarEstadoReal.Combo.SelectedValue = fila["id_estado"].ToString();
-            txtEditarLatitudReal.Value = fila["latitud"] == DBNull.Value ? "" : fila["latitud"].ToString();
-            txtEditarLongitudReal.Value = fila["longitud"] == DBNull.Value ? "" : fila["longitud"].ToString();
+            txtEditarLatitudReal.Value = fila["latitud"] == DBNull.Value ? "" : Convert.ToDecimal(fila["latitud"]).ToString(CultureInfo.InvariantCulture);
+            txtEditarLongitudReal.Value = fila["longitud"] == DBNull.Value ? "" : Convert.ToDecimal(fila["longitud"]).ToString(CultureInfo.InvariantCulture);
             litEditarTitularActualReal.Text = fila["Titular"].ToString();
 
             ClientScript.RegisterStartupScript(GetType(), "abrirEditar",

@@ -97,8 +97,15 @@ namespace BIZ
                 using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
                 {
                     cmd.Parameters.AddWithValue("@descripcion", descripcion);
-                    cmd.Parameters.AddWithValue("@latitud", (object)latitud ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@longitud", (object)longitud ?? DBNull.Value);
+                    var pLatitud = cmd.Parameters.Add("@latitud", System.Data.SqlDbType.Decimal);
+                    pLatitud.Precision = 9;
+                    pLatitud.Scale = 6;
+                    pLatitud.Value = (object)latitud ?? DBNull.Value;
+
+                    var pLongitud = cmd.Parameters.Add("@longitud", System.Data.SqlDbType.Decimal);
+                    pLongitud.Precision = 9;
+                    pLongitud.Scale = 6;
+                    pLongitud.Value = (object)longitud ?? DBNull.Value;
                     cmd.Parameters.AddWithValue("@idPersonaTitular", (object)idPersonaTitular ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@idEstado", ID_ESTADO_ACTIVO);
                     return (int)cmd.ExecuteScalar();
@@ -135,8 +142,15 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@idLote", idLote);
                     cmd.Parameters.AddWithValue("@descripcion", descripcion);
                     cmd.Parameters.AddWithValue("@idEstado", idEstado);
-                    cmd.Parameters.AddWithValue("@latitud", (object)latitud ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@longitud", (object)longitud ?? DBNull.Value);
+                    var pLatitud = cmd.Parameters.Add("@latitud", System.Data.SqlDbType.Decimal);
+                    pLatitud.Precision = 9;
+                    pLatitud.Scale = 6;
+                    pLatitud.Value = (object)latitud ?? DBNull.Value;
+
+                    var pLongitud = cmd.Parameters.Add("@longitud", System.Data.SqlDbType.Decimal);
+                    pLongitud.Precision = 9;
+                    pLongitud.Scale = 6;
+                    pLongitud.Value = (object)longitud ?? DBNull.Value;
                     cmd.ExecuteNonQuery();
                 }
             }
