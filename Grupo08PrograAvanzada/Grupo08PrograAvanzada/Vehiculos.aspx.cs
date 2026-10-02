@@ -47,10 +47,16 @@ namespace Grupo08PrograAvanzada
 
         private void CargarCombos()
         {
+            DataTable estados = Estado.ListarEstados();
+            DataRow[] filas = estados.Select("id_estado IN (5,6)");
+
             cbEstado.Combo.Items.Clear();
             cbEstado.Combo.Items.Add(new ListItem("Todos", ""));
-            cbEstado.Combo.Items.Add(new ListItem("Vigente", "Vigente"));
-            cbEstado.Combo.Items.Add(new ListItem("Vencido", "Vencido"));
+            foreach (DataRow fila in filas)
+            {
+                string descripcion = fila["descripcion"].ToString();
+                cbEstado.Combo.Items.Add(new ListItem(descripcion, descripcion));
+            }
 
             cbCompaniaSeguroModal.Combo.DataSource = CompaniaSeguro.ListarCompanias();
             cbCompaniaSeguroModal.Combo.DataTextField = "descripcion";
