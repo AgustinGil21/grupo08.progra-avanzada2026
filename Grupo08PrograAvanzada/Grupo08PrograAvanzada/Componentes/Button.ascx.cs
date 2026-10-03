@@ -44,13 +44,15 @@ namespace Grupo08PrograAvanzada.Componentes
             set { btn_interno.Enabled = value; }
         }
 
+        // >>> ARREGLO 5: "Registrar ingreso" se veía como link azul
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                ApplyStyle();
-            }
+            // Antes: if (!IsPostBack) ApplyStyle();
+            // Los botones que se crean después de un postback (los de cada card del Repeater)
+            // se saltaban el estilo. Aplicarlo siempre solo vuelve a poner la misma clase CSS.
+            ApplyStyle();
         }
+        // <<< FIN ARREGLO 5
 
         private void ApplyStyle()
         {
@@ -73,7 +75,7 @@ namespace Grupo08PrograAvanzada.Componentes
             {
                 css = css + " btn-small";
             }
-            
+
             btn_interno.CssClass = css;
         }
 

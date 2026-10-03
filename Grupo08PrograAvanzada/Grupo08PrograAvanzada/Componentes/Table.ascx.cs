@@ -27,6 +27,9 @@ namespace Grupo08PrograAvanzada.Componentes
             // para las filas
             rpt_filas.DataSource = dataTable;
             rpt_filas.DataBind();
+
+            // CAMBIO 1: lb_vacio existía pero nunca se mostraba. Ahora aparece cuando no hay filas.
+            lb_vacio.Visible = dataTable == null || dataTable.Rows.Count == 0;
         }
 
         protected void rpt_filas_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -40,7 +43,13 @@ namespace Grupo08PrograAvanzada.Componentes
             foreach (var col in column_Names)
             {
                 var td = new HtmlGenericControl("td");
-                td.InnerText = fila[col.CampoDato].ToString();
+
+                // CAMBIO 2: si la columna no existe en el DataTable, se muestra "—" en vez de tirar
+                // una excepción (que cortaba la fila después de la primera celda).
+                td.InnerText = fila.DataView.Table.Columns.Contains(col.CampoDato)
+                    ? Convert.ToString(fila[col.CampoDato])
+                    : "\u2014";
+
                 ph.Controls.Add(td);
             }
         }
