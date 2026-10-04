@@ -18,17 +18,9 @@ namespace Grupo08PrograAvanzada
         private const string VALOR_OTRO = "OTRO";
         private const int ID_CATEGORIA_PROPIETARIO = 1;
         private const int ID_ESTADO_ACTIVO = 1;
-        // Diagnóstico temporal: muestra arriba las columnas que devuelve Persona.BuscarVisitasIngresadasHoy
-        // y los valores de la primera fila. Dejar en false cuando ya no haga falta.
         private const bool MOSTRAR_DIAGNOSTICO = false;
 
         private const string MENSAJE_FECHA_HORA = "Ingresá la fecha y hora con el formato dd/mm/aaaa HHmm (ej.: 05/08/2026 0800).";
-
-        // ------------------------------------------------------------------
-        // Controles que viven dentro de un ITemplate (uc:Modal > Content).
-        // No generan campo en el .designer.cs: se buscan con ControlFinder
-        // al principio de Page_Load (ver BuscarControles).
-        // ------------------------------------------------------------------
 
         // Modal 1: buscar persona
         private Componentes.DropdownList cbTipoDocBuscar;
@@ -63,7 +55,7 @@ namespace Grupo08PrograAvanzada
         private Panel pnlPendientes;
         private Componentes.Input inTelefonoIngreso;
         private Panel pnlFotoIngreso;
-        private HiddenField hdnFotoBase64;          // viene del bloque de foto (puede ser null si todavía no se pegó)
+        private HiddenField hdnFotoBase64;
         private RadioButtonList rblVehiculo;
         private Panel pnlVehiculoNuevo;
         private Componentes.Input inPatenteNueva;
@@ -128,10 +120,6 @@ namespace Grupo08PrograAvanzada
             lblErrorIngreso = Ctl<Label>("lblErrorIngreso");
         }
 
-        // ------------------------------------------------------------------
-        // Estado que tiene que sobrevivir entre postbacks
-        // ------------------------------------------------------------------
-
         private T Estado<T>(string clave, T porDefecto)
         {
             object valor = ViewState[clave];
@@ -184,10 +172,6 @@ namespace Grupo08PrograAvanzada
             set { ViewState["LicenciaVigenteIngreso"] = value; }
         }
 
-        // ------------------------------------------------------------------
-        // Carga de la pantalla
-        // ------------------------------------------------------------------
-
         protected void Page_Load(object sender, EventArgs e)
         {
             BuscarControles();
@@ -198,8 +182,6 @@ namespace Grupo08PrograAvanzada
                 CargarPreacreditados();
             }
 
-            // uc:Table arma las celdas en ItemDataBound, así que no sobreviven a un postback:
-            // se vuelve a cargar en cada request, con el texto que haya en el buscador.
             CargarIngresadas(buscarIngresadas.Input.Text);
         }
 
@@ -210,7 +192,6 @@ namespace Grupo08PrograAvanzada
 
             Llenar(cbCompania.Combo, Tabla(CompaniaSeguro.ListarCompanias()), "descripcion", "id_compania_seguro");
 
-            // Categorías para persona nueva: todas menos Propietario (un propietario no necesita pre-acreditación)
             DataView categorias = new DataView(Tabla(Persona.ListarCategorias()));
             categorias.RowFilter = "id_categoria <> " + ID_CATEGORIA_PROPIETARIO;
             rblCategoriaNueva.DataSource = categorias;
@@ -218,19 +199,12 @@ namespace Grupo08PrograAvanzada
             rblCategoriaNueva.DataValueField = "id_categoria";
             rblCategoriaNueva.DataBind();
 
-            // Lotes: solo los activos y con titular. El valor del combo es el id de la persona
-            // titular, porque Preacreditado guarda al autorizante, no el lote (el lote se deduce
-            // del titular). id_estado = 1 (Activo) excluye, entre otros, los lotes Bloqueados.
             DataView lotes = new DataView(Tabla(Lote.ListarLotes()));
             lotes.RowFilter = "id_persona_titular IS NOT NULL AND id_estado = " + ID_ESTADO_ACTIVO;
             Llenar(cbLoteExistente.Combo, lotes, "descripcion", "id_persona_titular");
             Llenar(cbLoteNueva.Combo, lotes, "descripcion", "id_persona_titular");
         }
 
-        // >>> ARREGLO 3: columnas Documento y FranjaHoy que la pantalla necesita
-        // Preacreditado.BuscarPreacreditadosHoy() devuelve nro_documento, hora_desde y hora_hasta.
-        // La pantalla usa "Documento" y "FranjaHoy": se arman acá para no tocar BIZ.
-        // Si BIZ ya trae esas columnas, no se pisan.
         private static DataTable PreacreditadosHoy()
         {
             DataTable dt = Preacreditado.BuscarPreacreditadosHoy();
@@ -258,13 +232,12 @@ namespace Grupo08PrograAvanzada
 
             return dt;
         }
-        // <<< FIN ARREGLO 3
 
         private void CargarPreacreditados()
         {
             try
             {
-                DataTable dt = PreacreditadosHoy();   // [ARREGLO 3: usa el helper]
+                DataTable dt = PreacreditadosHoy();
                 rptPreacreditados.DataSource = dt;
                 rptPreacreditados.DataBind();
                 lblSinPreacreditados.Visible = dt.Rows.Count == 0;
@@ -276,9 +249,6 @@ namespace Grupo08PrograAvanzada
         }
 
         // Tabla "Visitas ya ingresadas hoy".
-        // NormalizarIngresadas arma las 7 columnas que muestra la pantalla sin depender de cómo se
-        // llamen en la consulta de BIZ. Antes, si la consulta no devolvía alguna (por ejemplo
-        // "Documento"), uc:Table tiraba una excepción en esa celda y la fila quedaba cortada.
         private void CargarIngresadas(string texto)
         {
             try
@@ -324,7 +294,6 @@ namespace Grupo08PrograAvanzada
             {
                 string documento = ValorColumna(origen, fila, "Documento", "nro_documento", "NroDocumento", "DNI");
 
-                // Filtro por documento: el buscador. Si la consulta de BIZ ya filtró, esto no cambia nada.
                 if (filtro.Length > 0 && documento.IndexOf(filtro, StringComparison.OrdinalIgnoreCase) < 0)
                     continue;
 
@@ -343,11 +312,6 @@ namespace Grupo08PrograAvanzada
             return vista;
         }
 
-        // Hora de egreso, en 3 pasos:
-        // 1) la columna de la consulta de BIZ (Egreso, fecha_hora_egreso...);
-        // 2) cualquier columna cuyo nombre contenga "egres" o "salid";
-        // 3) la tabla MOVIMIENTO, buscando por documento y por la hora de ingreso (LeerEgresosHoy, más abajo).
-        // Si en ningún lado hay una hora, queda "—": significa que el egreso no guardó la hora.
         private static string EgresoDeLaFila(DataTable origen, DataRow fila, DataTable egresos, string documento, string ingreso)
         {
             string directo = ValorColumna(origen, fila, "Egreso", "fecha_hora_egreso", "FechaHoraEgreso");
@@ -370,7 +334,6 @@ namespace Grupo08PrograAvanzada
                 .ToList();
             if (delDocumento.Count == 0) return "\u2014";
 
-            // Mismo ingreso (por hora); si no coincide y hay un solo egreso de esa persona hoy, ese.
             DataRow elegido = delDocumento.FirstOrDefault(r =>
                     Convert.ToDateTime(r["fecha_hora_ingreso"]).ToString("HH:mm") == ingreso)
                 ?? (delDocumento.Count == 1 ? delDocumento[0] : null);
@@ -380,10 +343,6 @@ namespace Grupo08PrograAvanzada
                 : Convert.ToDateTime(elegido["fecha_hora_egreso"]).ToString("HH:mm");
         }
 
-        // Lee los egresos de hoy directo de MOVIMIENTO, desde esta pantalla: no hace falta tocar BIZ.
-        // Usa Conexion.AbrirConexion() (ya devuelve la conexión abierta) y solo columnas que BIZ ya usa:
-        // Movimiento (id_persona, fecha_hora_ingreso, fecha_hora_egreso), Persona.id_cuenta, Cuenta.nro_documento.
-        // Si la consulta falla, muestra el motivo arriba y la tabla sigue sin esa columna.
         private DataTable LeerEgresosHoy()
         {
             try
@@ -415,9 +374,6 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        // Categoría de la persona en la tabla. Primero usa la columna de la consulta de BIZ (si existe
-        // y trae algo); si no, la busca por documento con los métodos que ya usa la pantalla
-        // (Persona.BuscarPersonaPorDocumento y Persona.ListarCategoriasDePersona, sin Propietario).
         private static string CategoriaDeLaFila(DataTable origen, DataRow fila, string documento)
         {
             string directa = ValorColumna(origen, fila, "Categoria", "Categoría", "categoria");
@@ -439,13 +395,12 @@ namespace Grupo08PrograAvanzada
             }
             catch (Exception)
             {
-                // Si falla la búsqueda de categoría no se rompe la tabla: queda "—".
+                // Si hay un error en la búsqueda de categoría no se rompe la tabla, queda "—".
             }
 
             return "\u2014";
         }
 
-        // Devuelve el valor de la primera columna que exista entre los candidatos; "—" si no hay ninguna o está vacía.
         private static string ValorColumna(DataTable tabla, DataRow fila, params string[] candidatos)
         {
             foreach (string nombre in candidatos)
@@ -464,7 +419,7 @@ namespace Grupo08PrograAvanzada
 
         protected void buscarIngresadas_BuscarClick(object sender, EventArgs e)
         {
-            // Nada que hacer: Page_Load ya recargó la tabla con el texto que se tipeó.
+            // Page_Load ya recargó la tabla con el texto que se tipeó.
         }
 
         // Iniciales para el avatar de la card. El nombre viene como "Apellido, Nombre".
@@ -478,10 +433,6 @@ namespace Grupo08PrograAvanzada
                              + (nombre.Length > 0 ? nombre.Substring(0, 1) : string.Empty);
             return iniciales.ToUpper();
         }
-
-        // ------------------------------------------------------------------
-        // Nuevo pre-acreditado — Paso 1: buscar a la persona
-        // ------------------------------------------------------------------
 
         protected void btnNuevoPreacreditado_ButtonClick(object sender, EventArgs e)
         {
@@ -500,8 +451,6 @@ namespace Grupo08PrograAvanzada
             AbrirModal(modalBuscar);
         }
 
-        // Todos los "Cancelar": al volver la página los modales quedan cerrados
-        // (se abren solo por JavaScript), así que no hay nada más que hacer.
         protected void btnCancelar_ButtonClick(object sender, EventArgs e)
         {
         }
@@ -523,7 +472,6 @@ namespace Grupo08PrograAvanzada
                 IdTipoDocumentoActual = int.Parse(cbTipoDocBuscar.Combo.SelectedValue);
                 TextoTipoDocumentoActual = cbTipoDocBuscar.Combo.SelectedItem.Text;
 
-                // 0 filas = la persona no existe (mismo contrato que VerificarDni)
                 DataTable dt = Persona.BuscarPersonaPorDocumento(nroDocumento);
 
                 if (dt.Rows.Count == 0)
@@ -537,10 +485,6 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        // ------------------------------------------------------------------
-        // Paso 2 (persona existente): solo lote y fecha/hora
-        // ------------------------------------------------------------------
-
         private void MostrarPersonaExistente(DataRow fila)
         {
             IdPersonaExistente = Convert.ToInt32(fila["id_persona"]);
@@ -553,7 +497,6 @@ namespace Grupo08PrograAvanzada
             cbLoteExistente.Combo.ClearSelection();
             lblErrorExistente.Text = string.Empty;
 
-            // Categorías válidas de la persona (sin Propietario): 0, 1 o varias
             DataTable categorias = Persona.ListarCategoriasDePersona(IdPersonaExistente);
 
             if (categorias.Rows.Count == 0)
@@ -571,7 +514,6 @@ namespace Grupo08PrograAvanzada
                 rblCategoriaExistente.DataBind();
                 rblCategoriaExistente.SelectedIndex = 0;
 
-                // Con una sola categoría se usa directo; con varias, el guardia elige
                 bool variasCategorias = categorias.Rows.Count > 1;
                 lblCategoriaExistente.Visible = variasCategorias;
                 rblCategoriaExistente.Visible = variasCategorias;
@@ -615,10 +557,6 @@ namespace Grupo08PrograAvanzada
                 ErrorEnModal(lblErrorExistente, ex.Message, modalExistente);
             }
         }
-
-        // ------------------------------------------------------------------
-        // Paso 2 (persona nueva): alta rápida + pre-acreditación
-        // ------------------------------------------------------------------
 
         private void MostrarPersonaNueva()
         {
@@ -680,25 +618,18 @@ namespace Grupo08PrograAvanzada
 
             try
             {
-                // >>> ARREGLO 2: error "idPersonaAutorizante" y "@telefono not supplied"
-                // 11 parámetros: es la firma que tiene Preacreditado.CrearPersonaYPreacreditar.
-                // Teléfono y foto van vacíos: se completan al registrar el ingreso en la garita.
-                // OJO: no pasar null. AddWithValue con null no envía el parámetro y SQL Server
-                // dice "expects the parameter '@telefono', which was not supplied".
-                // Vacío cuenta como "falta" en AbrirIngreso (IsNullOrWhiteSpace), así que se vuelve a pedir.
                 Preacreditado.CrearPersonaYPreacreditar(
                     nombres,
                     apellido,
                     int.Parse(cbPaisNueva.Combo.SelectedValue),
-                    string.Empty,                           // telefono
+                    string.Empty,
                     fechaNacimiento,
                     IdTipoDocumentoActual,
                     NroDocumentoActual,
-                    string.Empty,                           // fotoReferencia
+                    string.Empty,
                     int.Parse(rblCategoriaNueva.SelectedValue),
                     int.Parse(cbLoteNueva.Combo.SelectedValue),
                     fechaHora);
-                // <<< FIN ARREGLO 2
 
                 MostrarResultado("Persona creada y pre-acreditada correctamente.", true);
                 CargarPreacreditados();
@@ -708,10 +639,6 @@ namespace Grupo08PrograAvanzada
                 ErrorEnModal(lblErrorNueva, ex.Message, modalNueva);
             }
         }
-
-        // ------------------------------------------------------------------
-        // Registrar ingreso (botón de cada card)
-        // ------------------------------------------------------------------
 
         protected void btnRegistrarIngreso_ButtonClick(object sender, EventArgs e)
         {
@@ -726,7 +653,7 @@ namespace Grupo08PrograAvanzada
         {
             try
             {
-                DataRow[] filas = PreacreditadosHoy().Select("id_preacreditado = " + idPreacreditado);   // [ARREGLO 3: usa el helper]
+                DataRow[] filas = PreacreditadosHoy().Select("id_preacreditado = " + idPreacreditado);
                 if (filas.Length == 0)
                 {
                     MostrarResultado("Esa pre-acreditación ya no está disponible.", false);
@@ -738,12 +665,11 @@ namespace Grupo08PrograAvanzada
                 IdPreacreditadoActual = idPreacreditado;
                 IdPersonaIngreso = Convert.ToInt32(fila["id_persona_autorizada"]);
                 NroDocumentoIngreso = Convert.ToString(fila["Documento"]);
-                IdLoteIngreso = Convert.ToInt32(fila["Lote"]);   // id_lote: es lo que espera el SP
+                IdLoteIngreso = Convert.ToInt32(fila["Lote"]);
 
                 litIngresoResumen.Text = Server.HtmlEncode(fila["PersonaAutorizada"] + " · Doc. " + fila["Documento"]
                     + " · " + fila["LoteDescripcion"] + " · " + fila["Categoria"] + " · " + fila["FranjaHoy"]);
 
-                // Limpiar lo que haya quedado de una vez anterior
                 lblErrorIngreso.Text = string.Empty;
                 inTelefonoIngreso.Value = string.Empty;
                 inNotaIngreso.Value = string.Empty;
@@ -756,7 +682,6 @@ namespace Grupo08PrograAvanzada
                 inVigenciaLicencia.Value = string.Empty;
                 if (hdnFotoBase64 != null) hdnFotoBase64.Value = string.Empty;
 
-                // Datos pendientes: solo se pide lo que falta
                 bool faltaTelefono = string.IsNullOrWhiteSpace(Convert.ToString(fila["telefono"]));
                 bool faltaFoto = string.IsNullOrWhiteSpace(Convert.ToString(fila["foto_referencia"]));
 
@@ -767,7 +692,6 @@ namespace Grupo08PrograAvanzada
                     ? "Esta persona llegó pre-acreditada con lo mínimo. Completá lo que falta con lo que ves en la garita antes de registrar el ingreso."
                     : "Los datos de la persona ya están completos. Solo indicá con qué vehículo ingresa.";
 
-                // Vehículo: sus vehículos registrados + "otro" + "a pie"
                 DataTable vehiculos = Vehiculo.ListarVehiculosDePersona(IdPersonaIngreso);
                 rblVehiculo.Items.Clear();
                 foreach (DataRow v in vehiculos.Rows)
@@ -832,7 +756,6 @@ namespace Grupo08PrograAvanzada
 
             try
             {
-                // 1. Validar TODO antes de escribir en la base o en el disco
                 bool patenteEsNueva = false;
                 if (!aPie && !eligioVehiculoExistente)
                 {
@@ -842,7 +765,6 @@ namespace Grupo08PrograAvanzada
                         return;
                     }
 
-                    // Si la patente ya existe (de esta u otra persona) se usa directo: el SP valida su póliza
                     patenteEsNueva = !Vehiculo.ExistePatente(patenteNueva);
                     if (patenteEsNueva)
                     {
@@ -870,7 +792,6 @@ namespace Grupo08PrograAvanzada
                 int idGarita = Convert.ToInt32(Session["IdGarita"]);
                 string nota = string.IsNullOrWhiteSpace(inNotaIngreso.Value) ? null : inNotaIngreso.Value.Trim();
 
-                // 2. Datos pendientes (null = no se completó; ActualizarDatosDeContacto conserva lo que ya había)
                 string telefono = inTelefonoIngreso.Visible && !string.IsNullOrWhiteSpace(inTelefonoIngreso.Value)
                     ? inTelefonoIngreso.Value.Trim()
                     : null;
@@ -879,7 +800,6 @@ namespace Grupo08PrograAvanzada
                 if (telefono != null || rutaFoto != null)
                     Persona.ActualizarDatosDeContacto(IdPersonaIngreso, telefono, rutaFoto);
 
-                // 3. Vehículo, licencia y acceso
                 DataRow resultado;
                 if (aPie)
                 {
@@ -887,7 +807,7 @@ namespace Grupo08PrograAvanzada
                 }
                 else
                 {
-                    string patenteFinal = seleccion;   // patente del vehículo elegido de la lista
+                    string patenteFinal = seleccion;
                     if (!eligioVehiculoExistente)
                     {
                         patenteFinal = patenteNueva;
@@ -905,7 +825,6 @@ namespace Grupo08PrograAvanzada
                     resultado = Movimiento.IntentarAccederConVehiculo(patenteFinal, NroDocumentoIngreso, idUsuario, idGarita, IdLoteIngreso, nota, true);
                 }
 
-                // 4. Resultado del SP (codigo 0 = ingreso registrado)
                 if (resultado == null)
                 {
                     ErrorEnModal(lblErrorIngreso, "El sistema no devolvió una respuesta. Probá de nuevo.", modalIngreso);
@@ -923,7 +842,6 @@ namespace Grupo08PrograAvanzada
                 }
                 else
                 {
-                    // Rechazado: el mensaje ya viene en español y explica el motivo
                     ErrorEnModal(lblErrorIngreso, mensaje, modalIngreso);
                 }
             }
@@ -933,7 +851,6 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        // Copiado de NuevaPersona.aspx.cs (con guarda por si el bloque de foto todavía no está en el .aspx)
         private string GuardarFotoYObtenerRuta()
         {
             if (hdnFotoBase64 == null)
@@ -945,7 +862,7 @@ namespace Grupo08PrograAvanzada
 
             if (string.IsNullOrWhiteSpace(dataUrl))
             {
-                return null; // la columna admite NULL, así que sin foto no pasa nada
+                return null;
             }
 
             int idxComa = dataUrl.IndexOf(',');
@@ -975,11 +892,6 @@ namespace Grupo08PrograAvanzada
             return rutaRelativa;
         }
 
-        // ------------------------------------------------------------------
-        // Utilidades
-        // ------------------------------------------------------------------
-
-        // Los métodos de BIZ pueden devolver DataSet o DataTable: esto acepta cualquiera de los dos.
         private static DataTable Tabla(object resultado)
         {
             DataSet ds = resultado as DataSet;
@@ -995,7 +907,6 @@ namespace Grupo08PrograAvanzada
             combo.Items.Insert(0, new ListItem("Seleccioná...", string.Empty));
         }
 
-        // "36.480.215" -> "36480215" (en la base el documento se guarda sin puntos ni espacios)
         private static string LimpiarDocumento(string texto)
         {
             return (texto ?? string.Empty).Replace(".", string.Empty).Replace(" ", string.Empty).Replace("-", string.Empty).Trim();
@@ -1022,10 +933,6 @@ namespace Grupo08PrograAvanzada
             lblResultado.Visible = true;
         }
 
-        // >>> ARREGLO 1: los botones "no hacían nada" (el modal se abría antes de existir mostrarModal)
-        // Modal.ascx expone OverlayClientID. mostrarModal(id) está definido en Site.Master,
-        // DESPUÉS del </form>, y un startup script se escribe ANTES del </form>: si se llamara
-        // directo, la función todavía no existiría. Por eso se espera al evento load.
         private void AbrirModal(Componentes.Modal modal)
         {
             string js = "(function(){"
@@ -1036,6 +943,5 @@ namespace Grupo08PrograAvanzada
 
             ClientScript.RegisterStartupScript(GetType(), "abrir_" + modal.ID, js, true);
         }
-        // <<< FIN ARREGLO 1
     }
 }

@@ -382,6 +382,7 @@
     <Compile Include="RegistrarMovimientos.aspx.designer.cs">
       <DependentUpon>RegistrarMovimientos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reportes\InformeMovimientosPdf.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

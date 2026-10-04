@@ -7,10 +7,6 @@
 
     <uc:Card ID="cardLotes" runat="server" Tittle="Lotes del barrio">
         <Contenido>
-            <p class="card-subtitulo">
-                Sólo consulta
-            </p>
-
             <div class="acciones-header">
                 <uc:Button ID="btnVerPlano" runat="server" TextButton="Ver plano completo" />
             </div>

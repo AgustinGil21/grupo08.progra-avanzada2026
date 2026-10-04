@@ -159,7 +159,7 @@ namespace Grupo08PrograAvanzada
             lblSinResultados.Visible = dv.Count == 0;
 
             int sinTitular = dv.Cast<DataRowView>().Count(r => r["id_persona_titular"] == DBNull.Value);
-            litResumen.Text = $"{dv.Count} lotes · {sinTitular} sin titular asignado · alta y edición desde administración";
+            litResumen.Text = $"{dv.Count} lotes - {sinTitular} sin titular asignado";
         }
 
         private void RegistrarDatosMapa(DataTable dt)

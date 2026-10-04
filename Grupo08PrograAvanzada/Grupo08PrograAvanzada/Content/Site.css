@@ -521,6 +521,10 @@ textarea {
         color: #e9ecef;
 }
 
+.table-container table tbody tr:hover td {
+    color: #e9ecef;
+}
+
 .table-container-empty {
     display: block;
     text-align: center;

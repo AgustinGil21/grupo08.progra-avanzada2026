@@ -2,7 +2,6 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <div class="sidebar-logo"><i class="bi bi-shield-check"></i></div>
         <div>
             <div class="sidebar-title">Barrio Cerrado I</div>
             <div class="sidebar-subtitle"><asp:Literal ID="litSubtitulo" runat="server" /></div>
