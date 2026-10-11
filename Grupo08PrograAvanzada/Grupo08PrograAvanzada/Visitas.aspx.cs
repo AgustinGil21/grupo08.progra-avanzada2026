@@ -19,9 +19,11 @@ namespace Grupo08PrograAvanzada
         private const int ID_CATEGORIA_PROPIETARIO = 1;
         private const int ID_ESTADO_ACTIVO = 1;
         private const bool MOSTRAR_DIAGNOSTICO = false;
+        private const int DIAS_FUTUROS_MAX = 30;
+        private const int MINUTOS_PASO_HORA = 30;
+        private const string MENSAJE_FECHA_HORA = "Elegí la fecha y la hora de la visita.";
 
-        private const string MENSAJE_FECHA_HORA = "Ingresá la fecha y hora con el formato dd/mm/aaaa HHmm (ej.: 05/08/2026 0800).";
-
+        
         // Modal 1: buscar persona
         private Componentes.DropdownList cbTipoDocBuscar;
         private Componentes.Input inNroDocBuscar;
@@ -33,7 +35,7 @@ namespace Grupo08PrograAvanzada
         private Label lblCategoriaExistente;
         private RadioButtonList rblCategoriaExistente;
         private Componentes.DropdownList cbLoteExistente;
-        private Componentes.Input inFechaHoraExistente;
+        
         private Label lblErrorExistente;
         private Componentes.Button btnPreacreditar;
 
@@ -46,8 +48,11 @@ namespace Grupo08PrograAvanzada
         private Componentes.Input inFechaNacNueva;
         private RadioButtonList rblCategoriaNueva;
         private Componentes.DropdownList cbLoteNueva;
-        private Componentes.Input inFechaHoraNueva;
         private Label lblErrorNueva;
+        private Componentes.DropdownList cbFechaExistente;
+        private Componentes.DropdownList cbHoraExistente;
+        private Componentes.DropdownList cbFechaNueva;
+        private Componentes.DropdownList cbHoraNueva;
 
         // Modal 4: registrar ingreso
         private Literal litIngresoResumen;
@@ -85,7 +90,6 @@ namespace Grupo08PrograAvanzada
             lblCategoriaExistente = Ctl<Label>("lblCategoriaExistente");
             rblCategoriaExistente = Ctl<RadioButtonList>("rblCategoriaExistente");
             cbLoteExistente = Ctl<Componentes.DropdownList>("cbLoteExistente");
-            inFechaHoraExistente = Ctl<Componentes.Input>("inFechaHoraExistente");
             lblErrorExistente = Ctl<Label>("lblErrorExistente");
             btnPreacreditar = Ctl<Componentes.Button>("btnPreacreditar");
 
@@ -97,9 +101,11 @@ namespace Grupo08PrograAvanzada
             inFechaNacNueva = Ctl<Componentes.Input>("inFechaNacNueva");
             rblCategoriaNueva = Ctl<RadioButtonList>("rblCategoriaNueva");
             cbLoteNueva = Ctl<Componentes.DropdownList>("cbLoteNueva");
-            inFechaHoraNueva = Ctl<Componentes.Input>("inFechaHoraNueva");
             lblErrorNueva = Ctl<Label>("lblErrorNueva");
-
+            cbFechaExistente = Ctl<Componentes.DropdownList>("cbFechaExistente");
+            cbHoraExistente = Ctl<Componentes.DropdownList>("cbHoraExistente");
+            cbFechaNueva = Ctl<Componentes.DropdownList>("cbFechaNueva");
+            cbHoraNueva = Ctl<Componentes.DropdownList>("cbHoraNueva");
             litIngresoResumen = Ctl<Literal>("litIngresoResumen");
             litIngresoAviso = Ctl<Literal>("litIngresoAviso");
             pnlPendientes = Ctl<Panel>("pnlPendientes");
@@ -203,6 +209,9 @@ namespace Grupo08PrograAvanzada
             lotes.RowFilter = "id_persona_titular IS NOT NULL AND id_estado = " + ID_ESTADO_ACTIVO;
             Llenar(cbLoteExistente.Combo, lotes, "descripcion", "id_persona_titular");
             Llenar(cbLoteNueva.Combo, lotes, "descripcion", "id_persona_titular");
+
+            CargarFechasYHoras(cbFechaExistente, cbHoraExistente);
+            CargarFechasYHoras(cbFechaNueva, cbHoraNueva);
         }
 
         private static DataTable PreacreditadosHoy()
@@ -493,7 +502,8 @@ namespace Grupo08PrograAvanzada
             litExistenteDetalle.Text = Server.HtmlEncode(TextoTipoDocumentoActual + " " + NroDocumentoActual
                 + " · " + fila["Nacionalidad"] + " · Categoría " + fila["Categoria"]);
 
-            inFechaHoraExistente.Value = string.Empty;
+            cbFechaExistente.Combo.ClearSelection();
+            cbHoraExistente.Combo.ClearSelection();
             cbLoteExistente.Combo.ClearSelection();
             lblErrorExistente.Text = string.Empty;
 
@@ -534,9 +544,14 @@ namespace Grupo08PrograAvanzada
             }
 
             DateTime fechaHora;
-            if (!TryParseFechaHora(inFechaHoraExistente.Value, out fechaHora))
+            if (!TryArmarFechaHora(cbFechaExistente.Combo, cbHoraExistente.Combo, out fechaHora))
             {
                 ErrorEnModal(lblErrorExistente, MENSAJE_FECHA_HORA, modalExistente);
+                return;
+            }
+            if (fechaHora < DateTime.Now)
+            {
+                ErrorEnModal(lblErrorExistente, "La fecha y hora no pueden ser anteriores a este momento.", modalExistente);
                 return;
             }
 
@@ -571,11 +586,14 @@ namespace Grupo08PrograAvanzada
             inFechaNacNueva.Value = string.Empty;
             rblCategoriaNueva.ClearSelection();
             cbLoteNueva.Combo.ClearSelection();
-            inFechaHoraNueva.Value = string.Empty;
+            cbFechaNueva.Combo.ClearSelection();
+            cbHoraNueva.Combo.ClearSelection();
             lblErrorNueva.Text = string.Empty;
 
             AbrirModal(modalNueva);
         }
+
+
 
         protected void btnCrearYPreacreditar_ButtonClick(object sender, EventArgs e)
         {
@@ -610,9 +628,14 @@ namespace Grupo08PrograAvanzada
             }
 
             DateTime fechaHora;
-            if (!TryParseFechaHora(inFechaHoraNueva.Value, out fechaHora))
+            if (!TryArmarFechaHora(cbFechaNueva.Combo, cbHoraNueva.Combo, out fechaHora))
             {
                 ErrorEnModal(lblErrorNueva, MENSAJE_FECHA_HORA, modalNueva);
+                return;
+            }
+            if (fechaHora < DateTime.Now)
+            {
+                ErrorEnModal(lblErrorNueva, "La fecha y hora no pueden ser anteriores a este momento.", modalNueva);
                 return;
             }
 
@@ -640,6 +663,40 @@ namespace Grupo08PrograAvanzada
             }
         }
 
+
+        private static void CargarFechasYHoras(Componentes.DropdownList cbFecha, Componentes.DropdownList cbHora)
+        {
+            var fechas = new DataTable();
+            fechas.Columns.Add("texto", typeof(string));
+            fechas.Columns.Add("valor", typeof(string));
+            for (int i = 0; i <= DIAS_FUTUROS_MAX; i++)
+            {
+                DateTime dia = DateTime.Today.AddDays(i);
+                string texto = dia.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + (i == 0 ? " (hoy)" : string.Empty);
+                fechas.Rows.Add(texto, dia.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            }
+            Llenar(cbFecha.Combo, fechas, "texto", "valor");
+
+            var horas = new DataTable();
+            horas.Columns.Add("texto", typeof(string));
+            horas.Columns.Add("valor", typeof(string));
+            for (int min = 0; min < 24 * 60; min += MINUTOS_PASO_HORA)
+            {
+                string hhmm = TimeSpan.FromMinutes(min).ToString(@"hh\:mm");
+                horas.Rows.Add(hhmm.Replace(":", string.Empty), hhmm);
+            }
+            Llenar(cbHora.Combo, horas, "texto", "valor");
+        }
+
+        private static bool TryArmarFechaHora(DropDownList cbFecha, DropDownList cbHora, out DateTime fechaHora)
+        {
+            fechaHora = DateTime.MinValue;
+            if (string.IsNullOrEmpty(cbFecha.SelectedValue) || string.IsNullOrEmpty(cbHora.SelectedValue))
+                return false;
+
+            return DateTime.TryParseExact(cbFecha.SelectedValue + " " + cbHora.SelectedValue, "yyyy-MM-dd HH:mm",
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHora);
+        }
         protected void btnRegistrarIngreso_ButtonClick(object sender, EventArgs e)
         {
             var boton = (Componentes.Button)sender;
@@ -660,7 +717,15 @@ namespace Grupo08PrograAvanzada
                     CargarPreacreditados();
                     return;
                 }
+
+
                 DataRow fila = filas[0];
+
+                if (Convert.ToDateTime(fila["fecha_hora"]).Date != DateTime.Today)
+                {
+                    MostrarResultado("Esta pre-acreditación es para otro día: el ingreso solo se registra el día de la visita.", false);
+                    return;
+                }
 
                 IdPreacreditadoActual = idPreacreditado;
                 IdPersonaIngreso = Convert.ToInt32(fila["id_persona_autorizada"]);
@@ -910,12 +975,6 @@ namespace Grupo08PrograAvanzada
         private static string LimpiarDocumento(string texto)
         {
             return (texto ?? string.Empty).Replace(".", string.Empty).Replace(" ", string.Empty).Replace("-", string.Empty).Trim();
-        }
-
-        private static bool TryParseFechaHora(string texto, out DateTime fechaHora)
-        {
-            return DateTime.TryParseExact((texto ?? string.Empty).Trim(), "dd/MM/yyyy HHmm",
-                CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHora);
         }
 
         private void ErrorEnModal(Label etiqueta, string mensaje, Componentes.Modal modal)

@@ -12,9 +12,10 @@
 
     <asp:Label ID="lblResultado" runat="server" Visible="false" CssClass="d-block mb-3 fw-semibold" />
 
-    <h2 class="h5 mb-3">Pre-acreditados de hoy</h2>
-    <asp:Label ID="lblSinPreacreditados" runat="server" Visible="false" CssClass="text-muted d-block mb-3"
-        Text="No hay pre-acreditados para hoy." />
+   <h2 class="h5 mb-3">Pre-acreditados vigentes</h2>
+<asp:Label ID="lblSinPreacreditados" runat="server" Visible="false" CssClass="text-muted d-block mb-3"
+    Text="No hay pre-acreditados vigentes." />
+
     <div class="row g-3 mb-5">
         <asp:Repeater ID="rptPreacreditados" runat="server">
             <ItemTemplate>
@@ -29,14 +30,22 @@
                         </div>
                         <div class="visita-detalle">
                             Persona del lote<br />
+
                             <span class="visita-valor"><%# Eval("PersonaDelLote") %></span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <span class="badge text-bg-success">Vigente</span>
-                            <asp:HiddenField ID="hidIdPreacreditado" runat="server" Value='<%# Eval("id_preacreditado") %>' />
-                            <uc:Button ID="btnRegistrarIngreso" runat="server" TextButton="Registrar ingreso" TypeButton="Save"
-                                ButtonSize="Small" OnButtonClick="btnRegistrarIngreso_ButtonClick" />
+                        <div class="visita-detalle">
+                            Fecha y hora<br />
+                            <span class="visita-valor"><%# Eval("fecha_hora", "{0:dd/MM/yyyy HHmm}") %></span>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+
+                            <span class="badge text-bg-success">Vigente</span>
+                        <asp:HiddenField ID="hidIdPreacreditado" runat="server" Value='<%# Eval("id_preacreditado") %>' />
+                        <uc:Button ID="btnRegistrarIngreso" runat="server" TextButton="Registrar ingreso" TypeButton="Save"
+                        ButtonSize="Small" OnButtonClick="btnRegistrarIngreso_ButtonClick" />
+
+                        </div>
+
                     </div>
                 </div>
             </ItemTemplate>
@@ -84,8 +93,8 @@
                 RepeatDirection="Horizontal" CssClass="d-block mb-3" />
 
             <uc:DropdownList ID="cbLoteExistente" runat="server" Titulo="Lote destino *" />
-            <uc:Input ID="inFechaHoraExistente" runat="server" Label="Fecha y hora de la visita *"
-                Placeholder="dd/mm/aaaa HHmm (ej.: 05/08/2026 0800)" />
+            <uc:DropdownList ID="cbFechaExistente" runat="server" Titulo="Fecha de la visita *" />
+            <uc:DropdownList ID="cbHoraExistente" runat="server" Titulo="Hora de la visita *" />
             <asp:Label ID="lblErrorExistente" runat="server" CssClass="text-danger d-block" />
 
             <div class="d-flex justify-content-end gap-2 mt-3">
@@ -111,7 +120,7 @@
                 <div class="fw-semibold"><asp:Literal ID="litNuevaDocumento" runat="server" /></div>
             </div>
 
-            <uc:DropdownList ID="cbPaisNueva" runat="server" Titulo="Nacionalidad *" />
+           <uc:DropdownList ID="cbPaisNueva" runat="server" Titulo="Nacionalidad *" />
             <uc:Input ID="inApellidoNueva" runat="server" Label="Apellido *" />
             <uc:Input ID="inNombresNueva" runat="server" Label="Nombres *" />
             <uc:Input ID="inFechaNacNueva" runat="server" Label="Fecha de nacimiento *" Type="Date" />
@@ -120,11 +129,10 @@
             <asp:RadioButtonList ID="rblCategoriaNueva" runat="server" RepeatLayout="Flow"
                 RepeatDirection="Horizontal" CssClass="d-block mb-3" />
             <uc:DropdownList ID="cbLoteNueva" runat="server" Titulo="Lote destino *" />
-            <uc:Input ID="inFechaHoraNueva" runat="server" Label="Fecha y hora de la visita *"
-                Placeholder="dd/mm/aaaa HHmm (ej.: 05/08/2026 0800)" />
+            <uc:DropdownList ID="cbFechaNueva" runat="server" Titulo="Fecha de la visita *" />
+            <uc:DropdownList ID="cbHoraNueva" runat="server" Titulo="Hora de la visita *" />
 
-            <asp:Label ID="lblErrorNueva" runat="server" CssClass="text-danger d-block" />
-
+<asp:Label ID="lblErrorNueva" runat="server" CssClass="text-danger d-block" />
             <div class="d-flex justify-content-end gap-2 mt-3">
                 <uc:Button ID="btnCancelarNueva" runat="server" TextButton="Cancelar" TypeButton="Cancel"
                     OnButtonClick="btnCancelar_ButtonClick" />
