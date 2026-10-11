@@ -65,7 +65,7 @@ namespace BIZ
                            ELSE 'Domingo'
                       END
             ) fr
-            WHERE CAST(pre.fecha_hora AS date) = CAST(GETDATE() AS date)
+            WHERE CAST(pre.fecha_hora AS date) >= CAST(GETDATE() AS date)
               AND pre.id_estado = @idEstado
             ORDER BY pre.fecha_hora;";
 
@@ -86,7 +86,7 @@ namespace BIZ
             }
             catch (Exception ex)
             {
-                throw new Exception("No se pudieron listar los preacreditados de hoy: " + ex.Message);
+                throw new Exception("No se pudieron listar los preacreditados vigentes: " + ex.Message);
             }
         }
 
