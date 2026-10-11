@@ -572,7 +572,6 @@ namespace Grupo08PrograAvanzada
                 ErrorEnModal(lblErrorExistente, ex.Message, modalExistente);
             }
         }
-
         private void MostrarPersonaNueva()
         {
             string documento = TextoTipoDocumentoActual + " " + NroDocumentoActual;
@@ -592,8 +591,6 @@ namespace Grupo08PrograAvanzada
 
             AbrirModal(modalNueva);
         }
-
-
 
         protected void btnCrearYPreacreditar_ButtonClick(object sender, EventArgs e)
         {
@@ -930,31 +927,12 @@ namespace Grupo08PrograAvanzada
                 return null;
             }
 
-            int idxComa = dataUrl.IndexOf(',');
-            string encabezado = dataUrl.Substring(0, idxComa);
-            string base64 = dataUrl.Substring(idxComa + 1);
-
-            string extension = encabezado.Contains("png") ? ".png" : ".jpg";
-            byte[] bytes = Convert.FromBase64String(base64);
-
-            string carpeta = Server.MapPath("~/Uploads/Personas/");
-            if (!System.IO.Directory.Exists(carpeta))
+            if (!dataUrl.StartsWith("data:image/") || !dataUrl.Contains(";base64,"))
             {
-                System.IO.Directory.CreateDirectory(carpeta);
+                throw new Exception("La foto tiene un formato inválido.");
             }
 
-            string nombreArchivo = Guid.NewGuid().ToString("N") + extension;
-            string rutaFisica = System.IO.Path.Combine(carpeta, nombreArchivo);
-            System.IO.File.WriteAllBytes(rutaFisica, bytes);
-
-            string rutaRelativa = "/Uploads/Personas/" + nombreArchivo;
-
-            if (rutaRelativa.Length > 500)
-            {
-                throw new Exception("La ruta generada para la foto es demasiado larga.");
-            }
-
-            return rutaRelativa;
+            return dataUrl;
         }
 
         private static DataTable Tabla(object resultado)
