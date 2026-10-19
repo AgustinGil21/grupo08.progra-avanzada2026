@@ -23,7 +23,6 @@ namespace Grupo08PrograAvanzada
         private const int MINUTOS_PASO_HORA = 30;
         private const string MENSAJE_FECHA_HORA = "Elegí la fecha y la hora de la visita.";
 
-        
         // Modal 1: buscar persona
         private Componentes.DropdownList cbTipoDocBuscar;
         private Componentes.Input inNroDocBuscar;
@@ -35,7 +34,7 @@ namespace Grupo08PrograAvanzada
         private Label lblCategoriaExistente;
         private RadioButtonList rblCategoriaExistente;
         private Componentes.DropdownList cbLoteExistente;
-        
+
         private Label lblErrorExistente;
         private Componentes.Button btnPreacreditar;
 
@@ -257,7 +256,6 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-        // Tabla "Visitas ya ingresadas hoy".
         private void CargarIngresadas(string texto)
         {
             try
@@ -404,7 +402,6 @@ namespace Grupo08PrograAvanzada
             }
             catch (Exception)
             {
-                // Si hay un error en la búsqueda de categoría no se rompe la tabla, queda "—".
             }
 
             return "\u2014";
@@ -428,10 +425,8 @@ namespace Grupo08PrograAvanzada
 
         protected void buscarIngresadas_BuscarClick(object sender, EventArgs e)
         {
-            // Page_Load ya recargó la tabla con el texto que se tipeó.
         }
 
-        // Iniciales para el avatar de la card. El nombre viene como "Apellido, Nombre".
         protected string Iniciales(object nombreCompleto)
         {
             string[] partes = Convert.ToString(nombreCompleto).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -572,6 +567,7 @@ namespace Grupo08PrograAvanzada
                 ErrorEnModal(lblErrorExistente, ex.Message, modalExistente);
             }
         }
+
         private void MostrarPersonaNueva()
         {
             string documento = TextoTipoDocumentoActual + " " + NroDocumentoActual;
@@ -660,7 +656,6 @@ namespace Grupo08PrograAvanzada
             }
         }
 
-
         private static void CargarFechasYHoras(Componentes.DropdownList cbFecha, Componentes.DropdownList cbHora)
         {
             var fechas = new DataTable();
@@ -694,6 +689,7 @@ namespace Grupo08PrograAvanzada
             return DateTime.TryParseExact(cbFecha.SelectedValue + " " + cbHora.SelectedValue, "yyyy-MM-dd HH:mm",
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHora);
         }
+
         protected void btnRegistrarIngreso_ButtonClick(object sender, EventArgs e)
         {
             var boton = (Componentes.Button)sender;
@@ -714,7 +710,6 @@ namespace Grupo08PrograAvanzada
                     CargarPreacreditados();
                     return;
                 }
-
 
                 DataRow fila = filas[0];
 
@@ -852,7 +847,6 @@ namespace Grupo08PrograAvanzada
 
                 int idUsuario = Convert.ToInt32(Session["Id_usuario"]);
                 int idGarita = Convert.ToInt32(Session["IdGarita"]);
-                string nota = string.IsNullOrWhiteSpace(inNotaIngreso.Value) ? null : inNotaIngreso.Value.Trim();
 
                 string telefono = inTelefonoIngreso.Visible && !string.IsNullOrWhiteSpace(inTelefonoIngreso.Value)
                     ? inTelefonoIngreso.Value.Trim()
@@ -865,7 +859,7 @@ namespace Grupo08PrograAvanzada
                 DataRow resultado;
                 if (aPie)
                 {
-                    resultado = Movimiento.IntentarAccederSinVehiculo(NroDocumentoIngreso, idUsuario, idGarita, IdLoteIngreso, nota, true);
+                    resultado = Movimiento.IntentarAccederSinVehiculo(NroDocumentoIngreso, idUsuario, idGarita);
                 }
                 else
                 {
@@ -884,7 +878,7 @@ namespace Grupo08PrograAvanzada
                     if (pedirLicencia)
                         Persona.DarDeAltaLicencia(IdPersonaIngreso, inNroLicencia.Value.Trim(), vigenciaLicencia);
 
-                    resultado = Movimiento.IntentarAccederConVehiculo(patenteFinal, NroDocumentoIngreso, idUsuario, idGarita, IdLoteIngreso, nota, true);
+                    resultado = Movimiento.IntentarAccederConVehiculo(patenteFinal, NroDocumentoIngreso, idUsuario, idGarita);
                 }
 
                 if (resultado == null)

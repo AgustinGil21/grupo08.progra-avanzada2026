@@ -127,6 +127,30 @@ namespace BIZ
             }
         }
 
+        public static string ObtenerFotoReferencia(string nroDocumento)
+        {
+            string q = @"
+            SELECT TOP 1 p.foto_referencia
+            FROM Persona p
+            INNER JOIN Cuenta c ON c.id_cuenta = p.id_cuenta
+            WHERE c.nro_documento = @nroDocumento;";
+
+            try
+            {
+                using (var CN = Conexion.AbrirConexion())
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@nroDocumento", nroDocumento ?? "");
+                    object valor = cmd.ExecuteScalar();
+                    return valor == null || valor == DBNull.Value ? null : Convert.ToString(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo obtener la foto de la persona: " + ex.Message);
+            }
+        }
+
         public static DataTable ListarCategoriasDePersona(int idPersona)
         {
             var dt = new DataTable();

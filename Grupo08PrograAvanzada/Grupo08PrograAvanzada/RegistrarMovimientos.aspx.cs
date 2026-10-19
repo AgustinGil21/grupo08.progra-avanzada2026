@@ -20,6 +20,9 @@ namespace Grupo08PrograAvanzada
         private Input txtDocumento;
         private Componentes.Button btnBuscarPersona;
 
+        // Control para la foto de la persona
+        private Image imgFotoReferencia;
+
         private Literal litInfoIngreso;
         private Input txtNotaEgreso;
         private Componentes.Button btnConfirmarEgreso;
@@ -40,6 +43,9 @@ namespace Grupo08PrograAvanzada
         {
             txtDocumento = (Input)ControlFinder.BuscarControl(this, "txtDocumento");
             btnBuscarPersona = (Componentes.Button)ControlFinder.BuscarControl(this, "btnBuscar");
+
+            // Buscamos el control de la imagen en el HTML (cambiar el ID si en el .aspx se llama distinto)
+            imgFotoReferencia = (Image)ControlFinder.BuscarControl(this, "imgFotoReferencia");
 
             litInfoIngreso = (Literal)ControlFinder.BuscarControl(this, "litInfoIngreso");
             txtNotaEgreso = (Input)ControlFinder.BuscarControl(this, "txtNotaEgreso");
@@ -103,10 +109,11 @@ namespace Grupo08PrograAvanzada
 
         protected void btnConfirmarEgreso_ButtonClick(object sender, EventArgs e)
         {
-            int idMovimiento = (int)ViewState["IdMovimientoAbierto"];
+            string documento = (string)ViewState["Documento"];
+            string patente = ViewState["PatenteAbierta"] as string;
 
             DataRow resultado = Movimiento.RegistrarEgreso(
-                ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(), idMovimiento, txtNotaEgreso.Value);
+                patente, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
 
             bool registrado = (bool)resultado["registrado"];
             litResultadoEgreso.Text = registrado
@@ -125,6 +132,23 @@ namespace Grupo08PrograAvanzada
 
             ViewState["Documento"] = documento;
 
+            // --- LÓGICA DE FOTO DE REFERENCIA ---
+            if (imgFotoReferencia != null)
+            {
+                string fotoBase64 = Persona.ObtenerFotoReferencia(documento);
+                if (!string.IsNullOrEmpty(fotoBase64))
+                {
+                    imgFotoReferencia.ImageUrl = fotoBase64;
+                    imgFotoReferencia.Visible = true;
+                }
+                else
+                {
+                    // Si no tiene foto cargada, se oculta el control o podrías asignarle un avatar por defecto
+                    imgFotoReferencia.Visible = false;
+                }
+            }
+            // ------------------------------------
+
             DataTable abierto = Movimiento.TieneMovimientoAbierto(documento);
 
             pnlVerificacion.Visible = false;
@@ -134,6 +158,7 @@ namespace Grupo08PrograAvanzada
             {
                 DataRow fila = abierto.Rows[0];
                 ViewState["IdMovimientoAbierto"] = fila["id_movimiento"];
+                ViewState["PatenteAbierta"] = fila["patente"] != DBNull.Value ? fila["patente"].ToString() : null;
 
                 pnlIngreso.Visible = false;
                 pnlEgreso.Visible = true;
@@ -161,14 +186,12 @@ namespace Grupo08PrograAvanzada
                     return;
                 }
                 resultado = Movimiento.IntentarAccederConVehiculo(
-                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(),
-                    idLote: null, nota: null, registrar: false);
+                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
             }
             else
             {
                 resultado = Movimiento.IntentarAccederSinVehiculo(
-                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(),
-                    idLote: null, nota: null, registrar: false);
+                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
             }
 
             MostrarResultadoVerificacion(resultado);
@@ -177,22 +200,17 @@ namespace Grupo08PrograAvanzada
         protected void btnConfirmarIngreso_ButtonClick(object sender, EventArgs e)
         {
             string documento = (string)ViewState["Documento"];
-            int? idLote = ddlLoteDestino.Combo.SelectedValue != ""
-            ? (int?)int.Parse(ddlLoteDestino.Combo.SelectedValue) : null;
-
             DataRow resultado;
 
             if (chkConVehiculo.Checked)
             {
                 resultado = Movimiento.IntentarAccederConVehiculo(
-                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(),
-                    idLote, txtNotaIngreso.Value, registrar: true);
+                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
             }
             else
             {
                 resultado = Movimiento.IntentarAccederSinVehiculo(
-                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(),
-                    idLote, txtNotaIngreso.Value, registrar: true);
+                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
             }
 
             bool permitido = (bool)resultado["permitido"];

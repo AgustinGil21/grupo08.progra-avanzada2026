@@ -14,11 +14,13 @@ namespace BIZ
                    m.id_movimiento,
                    m.fecha_hora_ingreso,
                    m.id_garita_ingreso,
-                   g.descripcion AS garita_ingreso
+                   g.descripcion AS garita_ingreso,
+                   v.patente
             FROM dbo.Movimiento m
             INNER JOIN dbo.Persona p ON p.id_persona = m.id_persona
             INNER JOIN dbo.Cuenta c  ON c.id_cuenta = p.id_cuenta
             LEFT JOIN dbo.Garita g   ON g.id_garita = m.id_garita_ingreso
+            LEFT JOIN dbo.Vehiculo v ON v.id_vehiculo = m.id_vehiculo
             WHERE c.nro_documento = @nroDocumento
               AND m.fecha_hora_ingreso IS NOT NULL
               AND m.fecha_hora_egreso IS NULL
@@ -45,8 +47,7 @@ namespace BIZ
             }
         }
 
-        public static DataRow IntentarAccederSinVehiculo(string nroDocumento, int idUsuario, int idGarita,
-            int? idLote, string nota, bool registrar)
+        public static DataRow IntentarAccederSinVehiculo(string nroDocumento, int idUsuario, int idGarita)
         {
             var dt = new DataTable();
 
@@ -60,9 +61,6 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
                     cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
                     cmd.Parameters.AddWithValue("@id_garita", idGarita);
-                    cmd.Parameters.AddWithValue("@id_lote", (object)idLote ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@nota", (object)nota ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@registrar", registrar);
 
                     using (var da = new SqlDataAdapter(cmd))
                     {
@@ -81,8 +79,7 @@ namespace BIZ
             }
         }
 
-        public static DataRow IntentarAccederConVehiculo(string patente, string nroDocumento, int idUsuario,
-            int idGarita, int? idLote, string nota, bool registrar)
+        public static DataRow IntentarAccederConVehiculo(string patente, string nroDocumento, int idUsuario, int idGarita)
         {
             var dt = new DataTable();
 
@@ -97,9 +94,6 @@ namespace BIZ
                     cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
                     cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
                     cmd.Parameters.AddWithValue("@id_garita", idGarita);
-                    cmd.Parameters.AddWithValue("@id_lote", (object)idLote ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@nota", (object)nota ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@registrar", registrar);
 
                     using (var da = new SqlDataAdapter(cmd))
                     {
@@ -118,7 +112,8 @@ namespace BIZ
             }
         }
 
-        public static DataRow RegistrarEgreso(int idUsuario, int idGarita, int idMovimiento, string nota)
+        // patente vacia o null = sale a pie
+        public static DataRow RegistrarEgreso(string patente, string nroDocumento, int idUsuario, int idGarita)
         {
             var dt = new DataTable();
 
@@ -129,10 +124,11 @@ namespace BIZ
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("@patente",
+                        string.IsNullOrWhiteSpace(patente) ? (object)DBNull.Value : patente.Trim());
+                    cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
                     cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
                     cmd.Parameters.AddWithValue("@id_garita", idGarita);
-                    cmd.Parameters.AddWithValue("@id_movimiento", idMovimiento);
-                    cmd.Parameters.AddWithValue("@nota", (object)nota ?? DBNull.Value);
 
                     using (var da = new SqlDataAdapter(cmd))
                     {
