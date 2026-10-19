@@ -198,8 +198,6 @@
                 <uc:Input ID="inVigenciaLicencia" runat="server" Label="Vigencia licencia *" Type="Date" />
             </asp:Panel>
 
-            <uc:Input ID="inNotaIngreso" runat="server" Label="Nota del guardia"
-                Placeholder="Ej.: ingresa con dos acompañantes; deja paquete en garita." />
             <asp:Label ID="lblErrorIngreso" runat="server" CssClass="text-danger d-block" />
 
             <div class="d-flex justify-content-end gap-2 mt-3">

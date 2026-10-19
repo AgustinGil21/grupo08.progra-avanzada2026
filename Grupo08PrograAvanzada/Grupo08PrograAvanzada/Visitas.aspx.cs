@@ -70,7 +70,6 @@ namespace Grupo08PrograAvanzada
         private Panel pnlLicencia;
         private Componentes.Input inNroLicencia;
         private Componentes.Input inVigenciaLicencia;
-        private Componentes.Input inNotaIngreso;
         private Label lblErrorIngreso;
 
         private T Ctl<T>(string id) where T : Control
@@ -121,7 +120,6 @@ namespace Grupo08PrograAvanzada
             pnlLicencia = Ctl<Panel>("pnlLicencia");
             inNroLicencia = Ctl<Componentes.Input>("inNroLicencia");
             inVigenciaLicencia = Ctl<Componentes.Input>("inVigenciaLicencia");
-            inNotaIngreso = Ctl<Componentes.Input>("inNotaIngreso");
             lblErrorIngreso = Ctl<Label>("lblErrorIngreso");
         }
 
@@ -165,11 +163,6 @@ namespace Grupo08PrograAvanzada
         {
             get { return Estado("NroDocumentoIngreso", string.Empty); }
             set { ViewState["NroDocumentoIngreso"] = value; }
-        }
-        private int IdLoteIngreso
-        {
-            get { return Estado("IdLoteIngreso", 0); }
-            set { ViewState["IdLoteIngreso"] = value; }
         }
         private bool LicenciaVigenteIngreso
         {
@@ -722,14 +715,12 @@ namespace Grupo08PrograAvanzada
                 IdPreacreditadoActual = idPreacreditado;
                 IdPersonaIngreso = Convert.ToInt32(fila["id_persona_autorizada"]);
                 NroDocumentoIngreso = Convert.ToString(fila["Documento"]);
-                IdLoteIngreso = Convert.ToInt32(fila["Lote"]);
 
                 litIngresoResumen.Text = Server.HtmlEncode(fila["PersonaAutorizada"] + " · Doc. " + fila["Documento"]
                     + " · " + fila["LoteDescripcion"] + " · " + fila["Categoria"] + " · " + fila["FranjaHoy"]);
 
                 lblErrorIngreso.Text = string.Empty;
                 inTelefonoIngreso.Value = string.Empty;
-                inNotaIngreso.Value = string.Empty;
                 inPatenteNueva.Value = string.Empty;
                 inMarcaModelo.Value = string.Empty;
                 cbCompania.Combo.ClearSelection();

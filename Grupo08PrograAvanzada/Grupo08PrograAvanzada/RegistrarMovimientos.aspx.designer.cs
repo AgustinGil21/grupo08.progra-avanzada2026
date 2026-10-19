@@ -76,23 +76,5 @@ namespace Grupo08PrograAvanzada
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::Grupo08PrograAvanzada.Componentes.Card ucCardVerificacion;
-
-        /// <summary>
-        /// Control pnlDatosMovimiento.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlDatosMovimiento;
-
-        /// <summary>
-        /// Control ucCardDatosMovimiento.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::Grupo08PrograAvanzada.Componentes.Card ucCardDatosMovimiento;
     }
 }
