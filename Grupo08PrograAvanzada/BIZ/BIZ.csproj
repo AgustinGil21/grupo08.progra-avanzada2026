@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -42,14 +45,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsistenteConsultas.cs" />
+    <Compile Include="AsistenteHerramientas.cs" />
+    <Compile Include="AsistenteIA.cs" />
     <Compile Include="Auth.cs" />
     <Compile Include="CompaniaSeguro.cs" />
+    <Compile Include="ConsultaElegida.cs" />
     <Compile Include="Contrasenia.cs" />
+    <Compile Include="ConversacionAsistente.cs" />
     <Compile Include="Cuenta.cs" />
     <Compile Include="Estado.cs" />
     <Compile Include="Lote.cs" />
     <Compile Include="Mailer.cs" />
+    <Compile Include="MensajeChat.cs" />
     <Compile Include="Movimiento.cs" />
+    <Compile Include="OllamaCliente.cs" />
     <Compile Include="ParametroSistema.cs" />
     <Compile Include="Preacreditado.cs" />
     <Compile Include="Recuperacion.cs" />
