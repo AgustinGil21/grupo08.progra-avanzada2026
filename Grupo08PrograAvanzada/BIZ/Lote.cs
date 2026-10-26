@@ -183,5 +183,45 @@ namespace BIZ
                 throw new Exception("No se pudo asignar el titular del lote: " + ex.Message);
             }
         }
+
+        public static int? ObtenerLoteSugerido(string nroDocumento)
+        {
+            const string q = @"
+            SELECT TOP 1 id_lote
+            FROM (
+                SELECT l.id_lote, 1 AS prioridad
+                FROM dbo.Lote l
+                INNER JOIN dbo.Persona p ON p.id_persona = l.id_persona_titular
+                INNER JOIN dbo.Cuenta c  ON c.id_cuenta  = p.id_cuenta
+                WHERE c.nro_documento = @nroDocumento
+
+                UNION ALL
+
+                SELECT l.id_lote, 2 AS prioridad
+                FROM dbo.Preacreditado pre
+                INNER JOIN dbo.Persona p ON p.id_persona = pre.id_persona_autorizada
+                INNER JOIN dbo.Cuenta c  ON c.id_cuenta  = p.id_cuenta
+                INNER JOIN dbo.Lote l    ON l.id_persona_titular = pre.id_persona_autorizante
+                WHERE c.nro_documento = @nroDocumento
+                  AND pre.id_estado = 5
+                  AND CAST(pre.fecha_hora AS DATE) = CAST(GETDATE() AS DATE)
+            ) x
+            ORDER BY prioridad, id_lote;";
+
+            try
+            {
+                using (var CN = Conexion.AbrirConexion())
+                using (var cmd = new System.Data.SqlClient.SqlCommand(q, CN))
+                {
+                    cmd.Parameters.AddWithValue("@nroDocumento", nroDocumento);
+                    object valor = cmd.ExecuteScalar();
+                    return valor == null || valor == DBNull.Value ? (int?)null : (int)valor;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo obtener el lote sugerido: " + ex.Message);
+            }
+        }
     }
 }

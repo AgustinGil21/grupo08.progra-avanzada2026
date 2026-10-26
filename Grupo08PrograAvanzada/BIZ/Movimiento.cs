@@ -47,31 +47,69 @@ namespace BIZ
             }
         }
 
-        public static DataRow IntentarAccederSinVehiculo(string nroDocumento, int idUsuario, int idGarita)
+        public static DataRow IntentarAccederSinVehiculo(string nroDocumento, int idUsuario, int idGarita, int? idLoteDestino)
         {
             var dt = new DataTable();
 
             try
             {
                 using (var CN = Conexion.AbrirConexion())
-                using (var cmd = new SqlCommand("dbo.IntentarAccederSinVehiculo", CN))
+                using (var tx = CN.BeginTransaction())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
-                    cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                    cmd.Parameters.AddWithValue("@id_garita", idGarita);
-
-                    using (var da = new SqlDataAdapter(cmd))
+                    try
                     {
-                        da.Fill(dt);
+                        using (var cmd = new SqlCommand("dbo.IntentarAccederSinVehiculo", CN, tx))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
+                            cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
+                            cmd.Parameters.AddWithValue("@id_garita", idGarita);
+
+                            using (var da = new SqlDataAdapter(cmd))
+                            {
+                                da.Fill(dt);
+                            }
+                        }
+
+                        if (dt.Rows.Count == 0)
+                            throw new Exception("El procedimiento no devolvio ningun resultado.");
+
+                        DataRow resultado = dt.Rows[0];
+
+                        if ((bool)resultado["permitido"])
+                        {
+                            int? idLoteCalculado = resultado["id_lote"] == DBNull.Value
+                                ? (int?)null : (int)resultado["id_lote"];
+                            int? idLoteFinal = idLoteDestino ?? idLoteCalculado;
+
+                            if (idLoteFinal == null)
+                                throw new Exception("Indicá el lote destino.");
+
+                            if (idLoteFinal != idLoteCalculado)
+                            {
+                                using (var cmd = new SqlCommand("dbo.AsignarLoteDestino", CN, tx))
+                                {
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Parameters.AddWithValue("@id_movimiento", (int)resultado["id_movimiento"]);
+                                    cmd.Parameters.AddWithValue("@id_lote", idLoteFinal.Value);
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                resultado["id_lote"] = idLoteFinal.Value;
+                            }
+                        }
+
+                        tx.Commit();
+                        return resultado;
+                    }
+                    catch
+                    {
+                        // Si el SP ya hizo ROLLBACK por dentro, la transaccion quedo cerrada y Rollback tira error
+                        try { tx.Rollback(); } catch { }
+                        throw;
                     }
                 }
-
-                if (dt.Rows.Count == 0)
-                    throw new Exception("El procedimiento no devolvio ningun resultado.");
-
-                return dt.Rows[0];
             }
             catch (Exception ex)
             {
@@ -79,32 +117,70 @@ namespace BIZ
             }
         }
 
-        public static DataRow IntentarAccederConVehiculo(string patente, string nroDocumento, int idUsuario, int idGarita)
+
+        public static DataRow IntentarAccederConVehiculo(string patente, string nroDocumento, int idUsuario, int idGarita, int? idLoteDestino)
         {
             var dt = new DataTable();
 
             try
             {
                 using (var CN = Conexion.AbrirConexion())
-                using (var cmd = new SqlCommand("dbo.IntentarAccederConVehiculo", CN))
+                using (var tx = CN.BeginTransaction())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@patente", patente);
-                    cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
-                    cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                    cmd.Parameters.AddWithValue("@id_garita", idGarita);
-
-                    using (var da = new SqlDataAdapter(cmd))
+                    try
                     {
-                        da.Fill(dt);
+                        using (var cmd = new SqlCommand("dbo.IntentarAccederConVehiculo", CN, tx))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@patente", patente);
+                            cmd.Parameters.AddWithValue("@nro_documento", nroDocumento);
+                            cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
+                            cmd.Parameters.AddWithValue("@id_garita", idGarita);
+
+                            using (var da = new SqlDataAdapter(cmd))
+                            {
+                                da.Fill(dt);
+                            }
+                        }
+
+                        if (dt.Rows.Count == 0)
+                            throw new Exception("El procedimiento no devolvio ningun resultado.");
+
+                        DataRow resultado = dt.Rows[0];
+
+                        if ((bool)resultado["permitido"])
+                        {
+                            int? idLoteCalculado = resultado["id_lote"] == DBNull.Value
+                                ? (int?)null : (int)resultado["id_lote"];
+                            int? idLoteFinal = idLoteDestino ?? idLoteCalculado;
+
+                            if (idLoteFinal == null)
+                                throw new Exception("Indicá el lote destino.");
+
+                            if (idLoteFinal != idLoteCalculado)
+                            {
+                                using (var cmd = new SqlCommand("dbo.AsignarLoteDestino", CN, tx))
+                                {
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Parameters.AddWithValue("@id_movimiento", (int)resultado["id_movimiento"]);
+                                    cmd.Parameters.AddWithValue("@id_lote", idLoteFinal.Value);
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                resultado["id_lote"] = idLoteFinal.Value;
+                            }
+                        }
+
+                        tx.Commit();
+                        return resultado;
+                    }
+                    catch
+                    {
+                        try { tx.Rollback(); } catch { }
+                        throw;
                     }
                 }
-
-                if (dt.Rows.Count == 0)
-                    throw new Exception("El procedimiento no devolvio ningun resultado.");
-
-                return dt.Rows[0];
             }
             catch (Exception ex)
             {
