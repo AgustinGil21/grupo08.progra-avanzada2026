@@ -104,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AccesoDenegado.aspx" />
+    <Content Include="AsistenteIA.ashx" />
+    <Content Include="Componentes\AsistenteIA.ascx" />
     <Content Include="Componentes\AvisoEstado.ascx" />
     <Content Include="Componentes\Buscar.ascx" />
     <Content Include="Componentes\Button.ascx" />
@@ -131,7 +133,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\AsistenteIA.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\asistente-ia.js" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -219,6 +223,16 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AsistenteIA.ashx.cs">
+      <DependentUpon>AsistenteIA.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Componentes\AsistenteIA.ascx.cs">
+      <DependentUpon>AsistenteIA.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Componentes\AsistenteIA.ascx.designer.cs">
+      <DependentUpon>AsistenteIA.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Componentes\AvisoEstado.ascx.cs">
       <DependentUpon>AvisoEstado.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

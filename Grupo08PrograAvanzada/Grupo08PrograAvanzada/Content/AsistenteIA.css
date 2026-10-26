@@ -1,0 +1,354 @@
+﻿/* Asistente IA: widget flotante del panel de administracion */
+.asistente {
+    --asis-verde: #22b573;
+    --asis-fondo: #131a23;
+    --asis-superficie: #1a2230;
+    --asis-superficie-2: #232c38;
+    --asis-borde: #2e3846;
+    --asis-texto: #e7ecf2;
+    --asis-texto-suave: #8a97a8;
+    --asis-rojo: #f87171;
+    --asis-rojo-fondo: #3a1f22;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    font-size: 14px;
+    color: var(--asis-texto);
+}
+
+.asistente svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---------- Burbuja flotante ---------- */
+.asistente-burbuja {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: none;
+    background: var(--asis-verde);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+.asistente-burbuja svg { width: 28px; height: 28px; }
+
+.asistente.desconectado .asistente-burbuja {
+    background: var(--asis-superficie-2);
+    color: var(--asis-texto-suave);
+}
+
+.asistente.abierto .asistente-burbuja {
+    background: var(--asis-superficie);
+    color: var(--asis-texto-suave);
+    border: 1px solid var(--asis-borde);
+}
+
+.asistente-punto {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--asis-texto-suave);
+    flex-shrink: 0;
+}
+
+.asistente.conectado .asistente-punto { background: var(--asis-verde); }
+
+.asistente-punto-burbuja {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 14px;
+    height: 14px;
+    border: 3px solid var(--asis-fondo);
+}
+
+.asistente.abierto .asistente-punto-burbuja { display: none; }
+
+/* ---------- Panel ---------- */
+.asistente-panel {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    bottom: 80px;
+    width: 420px;
+    max-width: calc(100vw - 32px);
+    height: 600px;
+    max-height: calc(100vh - 120px);
+    background: var(--asis-fondo);
+    border: 1px solid var(--asis-borde);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, .45);
+    overflow: hidden;
+}
+
+.asistente.abierto .asistente-panel { display: flex; }
+
+.asistente-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--asis-superficie);
+    border-bottom: 1px solid var(--asis-borde);
+}
+
+.asistente-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(34, 181, 115, .15);
+    color: var(--asis-verde);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.asistente.desconectado .asistente-header .asistente-avatar {
+    background: var(--asis-superficie-2);
+    color: var(--asis-texto-suave);
+}
+
+.asistente-titulos {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.asistente-titulo { font-size: 16px; font-weight: 600; }
+
+.asistente-estado {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--asis-texto-suave);
+}
+
+.asistente-icono-btn {
+    display: flex;
+    padding: 4px;
+    background: none;
+    border: none;
+    color: var(--asis-texto-suave);
+    cursor: pointer;
+}
+
+.asistente-icono-btn:hover { color: var(--asis-texto); }
+
+/* ---------- Mensajes ---------- */
+.asistente-mensajes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.asistente-fila {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.asistente-fila.usuario { justify-content: flex-end; }
+
+.asistente-fila .asistente-avatar { width: 28px; height: 28px; }
+.asistente-fila .asistente-avatar svg { width: 16px; height: 16px; }
+
+.asistente-contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 80%;
+}
+
+/* pre-line: el modelo responde con saltos de linea y listas que empiezan con "- " */
+.asistente-msg {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--asis-superficie);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.asistente-msg strong { font-weight: 600; color: #fff; }
+
+.asistente-fila.usuario .asistente-msg {
+    max-width: 80%;
+    background: var(--asis-verde);
+    color: #fff;
+}
+
+.asistente-msg-titulo { font-weight: 600; margin-bottom: 6px; }
+
+.asistente-msg-detalle {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--asis-texto-suave);
+}
+
+.asistente-msg-detalle + .asistente-msg-detalle { margin-top: 2px; }
+
+.asistente-lista-fila {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 2px 0;
+    font-size: 13px;
+}
+
+.asistente-lista-fila span:last-child { white-space: nowrap; }
+
+/* Error */
+.asistente-fila.error .asistente-avatar,
+.asistente-fila.error .asistente-msg {
+    background: var(--asis-rojo-fondo);
+    color: var(--asis-rojo);
+}
+
+.asistente-reintentar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: none;
+    border: 1px solid var(--asis-borde);
+    border-radius: 999px;
+    color: var(--asis-verde);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.asistente-reintentar svg { width: 14px; height: 14px; }
+
+/* Pensando */
+.asistente-pensando { display: flex; gap: 4px; padding: 14px; }
+
+.asistente-pensando span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--asis-texto-suave);
+    animation: asistente-punto 1.2s infinite ease-in-out;
+}
+
+.asistente-pensando span:nth-child(2) { animation-delay: .15s; }
+.asistente-pensando span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes asistente-punto {
+    0%, 80%, 100% { opacity: .3; transform: translateY(0); }
+    40% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ---------- Desconectado ---------- */
+.asistente-aviso {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 40px;
+    text-align: center;
+    color: var(--asis-texto-suave);
+}
+
+.asistente-aviso svg { width: 32px; height: 32px; }
+.asistente-aviso p { margin: 0; }
+
+.asistente.desconectado .asistente-aviso { display: flex; }
+.asistente.desconectado .asistente-mensajes,
+.asistente.desconectado .asistente-chips { display: none; }
+
+/* ---------- Chips y footer ---------- */
+.asistente-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 16px 12px;
+}
+
+.asistente-chip {
+    padding: 5px 12px;
+    background: var(--asis-superficie);
+    border: 1px solid var(--asis-borde);
+    border-radius: 999px;
+    color: var(--asis-texto-suave);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.asistente-chip:hover:not(:disabled) {
+    color: var(--asis-texto);
+    border-color: var(--asis-verde);
+}
+
+.asistente-chip:disabled { opacity: .5; cursor: default; }
+
+.asistente-footer {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--asis-superficie);
+    border-top: 1px solid var(--asis-borde);
+}
+
+.asistente-input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 16px;
+    background: var(--asis-fondo);
+    border: 1px solid var(--asis-borde);
+    border-radius: 999px;
+    color: var(--asis-texto);
+    font: inherit;
+    outline: none;
+}
+
+.asistente-input:focus { border-color: var(--asis-verde); }
+.asistente-input::placeholder { color: var(--asis-texto-suave); }
+.asistente-input:disabled { opacity: .6; }
+
+.asistente-enviar {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--asis-verde);
+    color: #fff;
+    cursor: pointer;
+}
+
+.asistente-enviar:disabled {
+    background: var(--asis-superficie-2);
+    color: var(--asis-texto-suave);
+    cursor: default;
+}
+
+@media (max-width: 480px) {
+    .asistente { right: 16px; bottom: 16px; }
+}

@@ -55,6 +55,8 @@
         </div>
 
     </form>
+    <%-- Fuera del form: apretar Enter en el chat no tiene que hacer postback de la pagina --%>
+    <uc:AsistenteIA ID="AsistenteIA1" runat="server" />
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
