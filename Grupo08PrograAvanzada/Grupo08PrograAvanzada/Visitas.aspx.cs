@@ -850,7 +850,7 @@ namespace Grupo08PrograAvanzada
                 DataRow resultado;
                 if (aPie)
                 {
-                    resultado = Movimiento.IntentarAccederSinVehiculo(NroDocumentoIngreso, idUsuario, idGarita);
+                    resultado = Movimiento.IntentarAccederSinVehiculo(NroDocumentoIngreso, idUsuario, idGarita, null);
                 }
                 else
                 {
@@ -869,7 +869,7 @@ namespace Grupo08PrograAvanzada
                     if (pedirLicencia)
                         Persona.DarDeAltaLicencia(IdPersonaIngreso, inNroLicencia.Value.Trim(), vigenciaLicencia);
 
-                    resultado = Movimiento.IntentarAccederConVehiculo(patenteFinal, NroDocumentoIngreso, idUsuario, idGarita);
+                    resultado = Movimiento.IntentarAccederConVehiculo(patenteFinal, NroDocumentoIngreso, idUsuario, idGarita, null);
                 }
 
                 if (resultado == null)

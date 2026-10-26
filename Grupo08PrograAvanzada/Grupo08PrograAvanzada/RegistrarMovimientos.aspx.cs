@@ -32,6 +32,7 @@ namespace Grupo08PrograAvanzada
         private Panel pnlPatente;
         private Input txtPatente;
         private Componentes.Button btnVerificar;
+        private DropdownList ddlLoteDestino;
 
         private Literal litResultadoVerificacion;
 
@@ -52,6 +53,7 @@ namespace Grupo08PrograAvanzada
             pnlPatente = (Panel)ControlFinder.BuscarControl(this, "pnlPatente");
             txtPatente = (Input)ControlFinder.BuscarControl(this, "txtPatente");
             btnVerificar = (Componentes.Button)ControlFinder.BuscarControl(this, "btnVerificar");
+            ddlLoteDestino = (DropdownList)ControlFinder.BuscarControl(this, "ddlLoteDestino");
 
             litResultadoVerificacion = (Literal)ControlFinder.BuscarControl(this, "litResultadoVerificacion");
 
@@ -148,11 +150,41 @@ namespace Grupo08PrograAvanzada
 
             pnlEgreso.Visible = false;
             pnlIngreso.Visible = true;
+            CargarLotes(documento);
+        }
+
+        private void CargarLotes(string documento)
+        {
+            var lotes = new DataView(Lote.ListarLotes().Tables[0],
+            "id_estado = 1 AND id_persona_titular IS NOT NULL", "id_lote",
+            DataViewRowState.CurrentRows);
+
+            var combo = ddlLoteDestino.Combo;
+            combo.Items.Clear();
+            combo.Items.Add(new ListItem("Elegí el lote destino", ""));
+
+            foreach (DataRowView lote in lotes)
+            {
+                combo.Items.Add(new ListItem(lote["descripcion"] + " · " + lote["Titular"], lote["id_lote"].ToString()));
+            }
+
+            int? sugerido = Lote.ObtenerLoteSugerido(documento);
+            if (sugerido.HasValue && combo.Items.FindByValue(sugerido.Value.ToString()) != null)
+                combo.SelectedValue = sugerido.Value.ToString();
         }
 
         protected void btnVerificar_ButtonClick(object sender, EventArgs e)
         {
             string documento = (string)ViewState["Documento"];
+
+            if (ddlLoteDestino.Combo.SelectedValue == "")
+            {
+                pnlVerificacion.Visible = true;
+                litResultadoVerificacion.Text = "<div class=\"verificacion-rechazo\">Elegí el lote destino.</div>";
+                return;
+            }
+            int idLote = int.Parse(ddlLoteDestino.Combo.SelectedValue);
+
             DataRow resultado;
 
             if (chkConVehiculo.Checked)
@@ -163,12 +195,12 @@ namespace Grupo08PrograAvanzada
                     return;
                 }
                 resultado = Movimiento.IntentarAccederConVehiculo(
-                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
+                    txtPatente.Value, documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(), idLote);
             }
             else
             {
                 resultado = Movimiento.IntentarAccederSinVehiculo(
-                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual());
+                    documento, ObtenerIdUsuarioActual(), ObtenerIdGaritaActual(), idLote);
             }
 
             MostrarResultadoVerificacion(resultado);

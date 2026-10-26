@@ -40,6 +40,7 @@
                     <asp:Panel ID="pnlPatente" runat="server" Visible="false">
                         <uc:Input ID="txtPatente" runat="server" Label="Patente" Placeholder="AB123CD" />
                     </asp:Panel>
+                    <uc:DropdownList ID="ddlLoteDestino" runat="server" Titulo="Lote destino" />
                     <uc:Button ID="btnVerificar" runat="server" TextButton="Registrar ingreso" TypeButton="Save" />
                 </Contenido>
             </uc:Card>
